@@ -756,7 +756,7 @@ export default {
     getFeedback: function () {
       var overallRawData = document.getElementById("rawData").innerHTML;
       var overallSlicedDataArray = "[" + overallRawData.slice(0, -1) + "]";
-      const dataSource = JSON.parse(overallSlicedDataArray);
+      const dataSource = overallSlicedDataArray
       const instance = this;
       const client = axios.create({
         headers: {
