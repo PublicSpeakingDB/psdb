@@ -1356,9 +1356,11 @@ div {
 }
 
 #feedback {
-  color: #40d0e0;
+  color: #ffea66;
   font-size: 25px;
-  text-align: left;
+  text-align: center;
+  background-color: #6b206a;
+  padding: 50px;
 }
 
 #messageThree {
