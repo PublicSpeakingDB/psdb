@@ -767,7 +767,7 @@ export default {
       const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "Analyze this data about a person’s public speaking. Using best practice of public speaking give the person feedback on what they did well and what they can improve on. Data: " +
+          "Analyze this data taken from a speech and explain the dynamics of the speech. Data: " +
           dataSource,
         temperature: 0,
         max_tokens: 850,
