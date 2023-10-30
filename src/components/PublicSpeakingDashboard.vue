@@ -229,6 +229,7 @@ export default {
       firstSummary: true,
       dataSample: "",
       tickerNumber: 0,
+      cancelCall: true,
     };
   },
 
@@ -442,6 +443,7 @@ export default {
       ) {
         this.msg3 = "";
         if (this.stop == false) {
+          this.cancelCall = false;
           this.showTime = false;
           this.initialTime = Date.now();
           this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
@@ -667,14 +669,17 @@ export default {
         clearInterval(this.volumeInterval);
         this.volumeInterval = null;
       }
-      this.summarizeData();
-      this.visualizeData();
-      clearInterval(this.grabTimeInterval);
-      clearInterval(this.renderDataInterval);
-      clearInterval(this.summarizeDataInterval);
-      setTimeout(() => {
-        this.getFeedback();
-      }, 1000);
+      if (this.cancelCall == false) {
+        this.summarizeData();
+        this.visualizeData();
+        clearInterval(this.grabTimeInterval);
+        clearInterval(this.renderDataInterval);
+        clearInterval(this.summarizeDataInterval);
+        setTimeout(() => {
+          this.getFeedback();
+        }, 1000);
+        this.cancelCall = true;
+      }
       this.initiateVoiceControl();
       //clearInterval(this.analyzeFaceInterval)
       //this.analyzingFace = false
