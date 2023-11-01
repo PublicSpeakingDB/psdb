@@ -773,6 +773,7 @@ export default {
       const dataSource = JSON.stringify(overallSlicedDataArray);
       const workingValue = numberOfObjects - 1;
       const instance = this;
+      const actualTime = instance.workingTime;
 
       if (instance.firstSummary == false) {
         instance.dataSample = dataSource.substring(
@@ -812,7 +813,7 @@ export default {
           instance.showFeedback = false;
           const rawResultA = result.data.choices[0].text + " ";
           instance.dataSummary = instance.dataSummary +=
-            "$" + instance.workingTime + " " + rawResultA;
+            "$" + actualTime + " " + rawResultA + "\n\n";
           instance.feedback = instance.dataSummary;
           // let div = document.getElementById("feedback");
           // let p = document.createElement("p");
@@ -839,7 +840,7 @@ export default {
         prompt:
           "Give overall summary as well as the averages for data values from the following outputs. Each statement follows a '$' symbol, indicating a timetamp for the section of the speech that the statement corresponds to. Outputs: " +
           instance.dataSummary,
-        temperature: 1,
+        temperature: 0,
         max_tokens: 2107,
         top_p: 1,
         frequency_penalty: 0,
@@ -1447,9 +1448,10 @@ div {
 #feedback {
   color: #ffea66;
   font-size: 25px;
-  text-align: center;
+  text-align: left;
   background-color: #6b206a;
   padding: 50px;
+  white-space: pre-wrap;
 }
 
 #messageThree {
