@@ -234,7 +234,7 @@ export default {
   },
 
   created: function () {
-    if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
+    if ("webkitSpeechRecognition" in window) {
       console.log("Landing page loaded");
       console.log("Speech recognition supported");
     } else {
@@ -250,9 +250,7 @@ export default {
     begin: function () {
       //initiate speech recognition and ask for microphone permission
       this.analyzeFace();
-      window.SpeechRecognition =
-        window.webkitSpeechRecognition || window.SpeechRecognition;
-      let recognition = new window.SpeechRecognition();
+      let recognition = new window.webkitSpeechRecognition();
       recognition.start();
       this.show = false;
       this.msg2 = "";
