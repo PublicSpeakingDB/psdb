@@ -389,12 +389,8 @@ export default {
     initiateVoiceControl: function () {
       //start listening for words and making a transcript of detected words
       console.log("Voice recognition initiated");
-      window.SpeechRecognition = window.webkitSpeechRecognition; //|| window.SpeechRecognition;
-      window.SpeechGrammarList = window.webkitSpeechGrammarList; //|| window.SpeechGrammarList;
-      window.SpeechRecognitionEvent = window.webkitSpeechRecognitionEvent; //|| window.SpeechRecognitionEvent;
-
       let finalTranscript = "";
-      let recognition = new window.SpeechRecognition();
+      let recognition = new window.webkitSpeechRecognition();
       recognition.interimResults = true;
       recognition.maxAlternatives = 10;
       recognition.continuous = true;
