@@ -234,7 +234,7 @@ export default {
   },
 
   created: function () {
-    if ("webkitSpeechRecognition" in window) {
+    if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
       console.log("Landing page loaded");
       console.log("Speech recognition supported");
     } else {
@@ -250,7 +250,9 @@ export default {
     begin: function () {
       //initiate speech recognition and ask for microphone permission
       this.analyzeFace();
-      let recognition = new window.webkitSpeechRecognition();
+      window.SpeechRecognition =
+        window.webkitSpeechRecognition || window.SpeechRecognition;
+      let recognition = new window.SpeechRecognition();
       recognition.start();
       this.show = false;
       this.msg2 = "";
@@ -389,8 +391,12 @@ export default {
     initiateVoiceControl: function () {
       //start listening for words and making a transcript of detected words
       console.log("Voice recognition initiated");
+      window.SpeechRecognition = window.webkitSpeechRecognition; //|| window.SpeechRecognition;
+      window.SpeechGrammarList = window.webkitSpeechGrammarList; //|| window.SpeechGrammarList;
+      window.SpeechRecognitionEvent = window.webkitSpeechRecognitionEvent; //|| window.SpeechRecognitionEvent;
+
       let finalTranscript = "";
-      let recognition = new window.webkitSpeechRecognition();
+      let recognition = new window.SpeechRecognition();
       recognition.interimResults = true;
       recognition.maxAlternatives = 10;
       recognition.continuous = true;
@@ -416,6 +422,7 @@ export default {
               var elem = document.getElementById("output");
               elem.scrollTop = elem.scrollHeight;
               console.log("Detected speech:" + this.workingOutput);
+              recognition.start();
             }
           } else {
             interimTranscript += transcript;
@@ -452,12 +459,6 @@ export default {
           this.visualizeData();
           console.log("app started");
           this.show5 = true;
-
-          recognition.onspeechend = function () {
-            recognition.abort();
-            recognition.start();
-            console.log("Speech recognition has stopped and restarted.");
-          };
 
           // if (this.analyzingFace == false){this.analyzeFace()}
         }
