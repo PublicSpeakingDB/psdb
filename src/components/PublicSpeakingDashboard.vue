@@ -30,7 +30,7 @@
         <label for="speakingTime" alt="Choose Desired Speech Length:"></label>
         <select name="speakingTime" id="speakingTime">
           <option value="nope" selected>
-            Choose Target Speaking Time - (Gives 30 and 15 Sec Warnings Before
+            Choose Target Speaking Time  -  (Gives 30 and 15 Sec Warnings Before
             Selected Time)
           </option>
           <option value="60000">1 Min</option>
