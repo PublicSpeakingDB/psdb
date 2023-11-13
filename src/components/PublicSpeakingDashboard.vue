@@ -416,7 +416,6 @@ export default {
               var elem = document.getElementById("output");
               elem.scrollTop = elem.scrollHeight;
               console.log("Detected speech:" + this.workingOutput);
-              recognition.start();
             }
           } else {
             interimTranscript += transcript;
@@ -453,6 +452,12 @@ export default {
           this.visualizeData();
           console.log("app started");
           this.show5 = true;
+
+          recognition.onspeechend = function () {
+            recognition.abort();
+            recognition.start();
+            console.log("Speech recognition has stopped and restarted.");
+          };
 
           // if (this.analyzingFace == false){this.analyzeFace()}
         }
