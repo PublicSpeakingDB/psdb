@@ -237,19 +237,6 @@ export default {
     if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
       console.log("Landing page loaded");
       console.log("Speech recognition supported");
-      
-      const startButton = document.getElementById('start');
-  const stopButton = document.getElementById('stop');
-
-  startButton.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    this.startVoiceControl();
-  });
-
-  stopButton.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    this.stopVoiceControl();
-  });
     } else {
       console.log("Landing page loaded");
       console.log("Speech recognition not supported.");
