@@ -57,7 +57,7 @@
         "
       >
         Begin</button
-      ><button id="start" v-if="!show3" v-on:click="initiateVoiceControl">
+      ><button id="start" v-if="!show3" v-on:click="begin2">
         Start</button
       ><button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">
         Stop</button
@@ -220,6 +220,7 @@ export default {
       continuous: true,
       speechAgain: false,
       API: process.env.VUE_APP_ROOT_API2,
+      API2: process.env.VUE_APP_ROOT_API3,
       feedback: "",
       feedback2: "",
       showFeedback: true,
@@ -230,10 +231,15 @@ export default {
       dataSample: "",
       tickerNumber: 0,
       cancelCall: true,
+      original: false, 
+      mediaRecorder: null,
+      socket: null,
+      transcripts: []
     };
   },
 
-  created: function () {
+created() {
+  if (this.original == true) {
     if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
       console.log("Landing page loaded");
       console.log("Speech recognition supported");
@@ -244,9 +250,107 @@ export default {
         "Public Speaking Dashboard is not supported by this browser and/or device. Currently, Public Speaking Dashboard only works on desktop and in the Chrome browser.";
       this.showBegin = false;
     }
+    }
   },
 
   methods: {
+  
+begin2: async function () {
+if (this.stop == false) {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    if (!MediaRecorder.isTypeSupported('audio/webm')) {
+      alert('Unsupported browser');
+      return;
+    }
+
+    this.mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+
+    const DG_URL = 'wss://api.deepgram.com/v1/listen?language=en';
+    const DG_KEY = this.API2;
+    this.socket = new WebSocket(DG_URL, ['token', DG_KEY]);
+    this.socket.onopen = () => this.startStreaming();
+    this.socket.onmessage = (message) => this.handleResponse(message);
+    
+    if (
+        this.textEmotionSelected == true ||
+        this.WPMSelected == true ||
+        this.voiceEmotionSelected == true ||
+        this.faceEmotionSelected == true
+      ) {
+        this.msg3 = "";
+        if (this.stop == false) {
+          this.cancelCall = false;
+          this.showTime = false;
+          this.initialTime = Date.now();
+          this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
+          this.renderDataInterval = window.setInterval(this.renderData, 1000);
+          this.summarizeDataInterval = window.setInterval(
+            this.summarizeData,
+            15000
+          );
+
+          this.startVolumeMeter();
+          document.getElementById("container").style.display = "inline";
+          this.showStop = false;
+          this.visualizeData();
+          console.log("app started");
+          this.show5 = true;
+			this.stop = true;
+          // if (this.analyzingFace == false){this.analyzeFace()}
+        }
+
+      } else {
+        this.msg2 =
+          "No input data selected. Try selecting words per minute or another parameter.";
+      }
+  } catch (error) {
+    alert(error);
+  }
+  }
+},
+
+startStreaming: function () {
+  this.mediaRecorder.addEventListener('dataavailable', (event) => {
+    if (event.data.size > 0 && this.socket.readyState == 1) {
+      this.socket.send(event.data);
+    }
+  });
+
+  this.mediaRecorder.start(250); // Start recording in chunks of 250ms
+},
+
+handleResponse: function (message) {
+  const received = JSON.parse(message.data);
+  const alternatives = received.channel && received.channel.alternatives;
+  if (alternatives && alternatives.length > 0) {
+    const transcript = alternatives[0].transcript;
+    if (transcript) {
+      this.transcripts.push(transcript);
+      console.log("deepgram " + transcript);
+      
+      if (this.workingTime) {
+              this.workingOutput = transcript;
+              var node = document.createElement("li");
+              node.appendChild(document.createTextNode(" " + this.workingTime + ": " + this.workingOutput));
+              document.querySelector("ul").appendChild(node);
+              var elem = document.getElementById("output");
+              elem.scrollTop = elem.scrollHeight;
+              console.log("Detected speech:" + this.workingOutput);
+              
+              
+              this.wordsSpoken = transcript;
+              this.output = this.output += this.wordsSpoken
+              this.wordCount = this.countWords(this.output);
+              this.totalWords = this.wordCount;
+      
+      }
+      
+    }
+  }
+},
+
+  
     begin: function () {
       //initiate speech recognition and ask for microphone permission
       this.analyzeFace();
@@ -450,10 +554,7 @@ export default {
           this.initialTime = Date.now();
           this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
           this.renderDataInterval = window.setInterval(this.renderData, 1000);
-          this.summarizeDataInterval = window.setInterval(
-            this.summarizeData,
-            15000
-          );
+          this.summarizeDataInterval = window.setInterval(this.summarizeData, 15000);
 
           this.startVolumeMeter();
           document.getElementById("container").style.display = "inline";
@@ -660,7 +761,8 @@ export default {
 
     stopVoiceControl: function () {
       //reset speech recognition so it can stop and clear original timers
-      this.stop = true;
+      this.mediaRecorder.stop();
+      this.stop = false;
       this.time1 = false;
       if (this.time2 == true) {
         this.dataNamer = this.timeDifference;
@@ -677,12 +779,16 @@ export default {
         clearInterval(this.grabTimeInterval);
         clearInterval(this.renderDataInterval);
         clearInterval(this.summarizeDataInterval);
+          this.showTime = false;
+          console.log("app stopped");
+          this.stop = false;
+          this.show5 = false;
         setTimeout(() => {
           this.getFeedback();
         }, 1000);
         this.cancelCall = true;
       }
-      this.initiateVoiceControl();
+      //this.initiateVoiceControl();
       //clearInterval(this.analyzeFaceInterval)
       //this.analyzingFace = false
     },
