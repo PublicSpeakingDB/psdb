@@ -600,6 +600,14 @@ handleResponse: function (message) {
           .getUserMedia(constraints)
           .then(function (mediaStream) {
             video.srcObject = mediaStream;
+            
+            //for ios?
+            video.onloadedmetadata = function() {
+            video.play()
+        }
+        //
+            
+            
           })
           .catch(function (err) {
             console.log(err.name + ": " + err.message);
