@@ -57,7 +57,7 @@
         "
       >
         Begin</button
-      ><button id="start" v-if="!show3" v-on:click="begin2">
+      ><button id="start" v-if="!showStart" v-on:click="begin3">
         Start</button
       ><button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">
         Stop</button
@@ -155,6 +155,8 @@ export default {
       registerWPMInterval: "",
       getEmotionStatsInterval: "",
       summarizeDataInterval: "",
+      voiceInterval: "",
+      deepGramTimeOut: "",  
       initialTime: 0,
       time: "00:00",
       timeElapsed: 0,
@@ -177,6 +179,7 @@ export default {
       showProcess: true,
       showBegin: true,
       showStop: true,
+      showStart: true,
       loading: true,
       show4: true,
       show5: true,
@@ -231,29 +234,53 @@ export default {
       dataSample: "",
       tickerNumber: 0,
       cancelCall: true,
-      original: false, 
+      android: false, 
       mediaRecorder: null,
       socket: null,
-      transcripts: []
+      transcripts: [], 
+      voiceInstance: null
     };
   },
 
 created() {
-  if (this.original == true) {
-    if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
-      console.log("Landing page loaded");
-      console.log("Speech recognition supported");
-    } else {
-      console.log("Landing page loaded");
-      console.log("Speech recognition not supported.");
-      this.msg2 =
-        "Public Speaking Dashboard is not supported by this browser and/or device. Currently, Public Speaking Dashboard only works on desktop and in the Chrome browser.";
-      this.showBegin = false;
-    }
-    }
+
+	var isAndroid = /(android)/i.test(navigator.userAgent);
+	if (isAndroid) {
+		this.android = true
+		console.log("using alternate speech recognition")
+	}
+	else {
+		if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
+			console.log("Landing page loaded");
+			console.log("Speech recognition supported");
+		} else {
+			console.log("Landing page loaded");
+			console.log("Speech recognition not supported.");
+			this.msg2 =
+			"Public Speaking Dashboard is not supported by this browser and/or device. Currently, Public Speaking Dashboard only works on desktop and in the Chrome browser.";
+			this.showBegin = false;
+		}
+	}
   },
 
   methods: {
+  
+  begin3: function () {
+  
+	this.showStart = true
+	this.showStop = false
+  
+	if (this.android == true){
+		this.stop = false;
+		this.deepGramTimeOut = window.setTimeout(this.stopVoiceControl, 15000);
+		this.begin2()
+	}
+	if (this.android == false) {
+		this.stop = false;
+		this.initiateVoiceControl()
+	}
+  
+  },
   
 begin2: async function () {
 if (this.stop == false) {
@@ -263,7 +290,6 @@ if (this.stop == false) {
       alert('Unsupported browser');
       return;
     }
-
     this.mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
 
     const DG_URL = 'wss://api.deepgram.com/v1/listen?language=en';
@@ -285,10 +311,7 @@ if (this.stop == false) {
           this.initialTime = Date.now();
           this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
           this.renderDataInterval = window.setInterval(this.renderData, 1000);
-          this.summarizeDataInterval = window.setInterval(
-            this.summarizeData,
-            15000
-          );
+          this.summarizeDataInterval = window.setInterval(this.summarizeData, 15000);
 
           this.startVolumeMeter();
           document.getElementById("container").style.display = "inline";
@@ -328,6 +351,8 @@ handleResponse: function (message) {
     if (transcript) {
       this.transcripts.push(transcript);
       console.log("deepgram " + transcript);
+      window.clearTimeout(this.deepGramTimeOut);
+      this.deepGramTimeOut = window.setTimeout(this.stopVoiceControl, 15000);
       
       if (this.workingTime) {
               this.workingOutput = transcript;
@@ -336,8 +361,6 @@ handleResponse: function (message) {
               document.querySelector("ul").appendChild(node);
               var elem = document.getElementById("output");
               elem.scrollTop = elem.scrollHeight;
-              console.log("Detected speech:" + this.workingOutput);
-              
               
               this.wordsSpoken = transcript;
               this.output = this.output += this.wordsSpoken
@@ -359,6 +382,7 @@ handleResponse: function (message) {
       let recognition = new window.SpeechRecognition();
       recognition.start();
       this.show = false;
+      this.showStart = false;
       this.msg2 = "";
       this.msg3 =
         "Choose a desired speech length. Click start. Then, click stop when finished.";
@@ -494,17 +518,17 @@ handleResponse: function (message) {
 
     initiateVoiceControl: function () {
       //start listening for words and making a transcript of detected words
-      console.log("Voice recognition initiated");
-      window.SpeechRecognition = window.webkitSpeechRecognition; //|| window.SpeechRecognition;
+      console.log("Voice this.voiceInstance initiated");
+      window.SpeechRecognition = window.webkitSpeechRecognition; //|| window.Speechthis.voiceInstance;
       window.SpeechGrammarList = window.webkitSpeechGrammarList; //|| window.SpeechGrammarList;
-      window.SpeechRecognitionEvent = window.webkitSpeechRecognitionEvent; //|| window.SpeechRecognitionEvent;
+      window.SpeechRecognitionEvent = window.webkitSpeechRecognitionEvent; //|| window.Speechthis.voiceInstanceEvent;
 
       let finalTranscript = "";
-      let recognition = new window.SpeechRecognition();
-      recognition.interimResults = true;
-      recognition.maxAlternatives = 10;
-      recognition.continuous = true;
-      (recognition.onresult = (event) => {
+      this.voiceInstance = new window.SpeechRecognition();
+      this.voiceInstance.interimResults = true;
+      this.voiceInstance.maxAlternatives = 10;
+      this.voiceInstance.continuous = true;
+      (this.voiceInstance.onresult = (event) => {
         let interimTranscript = "";
         for (
           let i = event.resultIndex, len = event.results.length;
@@ -525,8 +549,8 @@ handleResponse: function (message) {
               document.querySelector("ul").appendChild(node);
               var elem = document.getElementById("output");
               elem.scrollTop = elem.scrollHeight;
-              console.log("Detected speech:" + this.workingOutput);
-              recognition.start();
+              console.log("SpeechRecognition: " + this.workingOutput);
+
             }
           } else {
             interimTranscript += transcript;
@@ -537,24 +561,28 @@ handleResponse: function (message) {
         this.wordCount = this.countWords(this.output);
         this.totalWords = this.wordCount;
       }),
-        recognition.start();
         
 
+this.voiceInstance.addEventListener("end", () => {
 
-      if (
-        this.textEmotionSelected == true ||
-        this.WPMSelected == true ||
-        this.voiceEmotionSelected == true ||
-        this.faceEmotionSelected == true
-      ) {
+if (this.stop == false) {
+  this.stopVoiceControl()
+  console.log("SpeechRecognition app stopped")
+  }
+    console.log("SpeechRecognition app stopped")
+});
+
         this.msg3 = "";
+
         if (this.stop == false) {
+        this.voiceInstance.start()
           this.cancelCall = false;
           this.showTime = false;
           this.initialTime = Date.now();
           this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
           this.renderDataInterval = window.setInterval(this.renderData, 1000);
           this.summarizeDataInterval = window.setInterval(this.summarizeData, 15000);
+          //this.voiceInterval = window.setInterval(this.voiceInstance.start(), 25000);
 
           this.startVolumeMeter();
           document.getElementById("container").style.display = "inline";
@@ -565,18 +593,6 @@ handleResponse: function (message) {
 
           // if (this.analyzingFace == false){this.analyzeFace()}
         }
-        if (this.stop == true) {
-          recognition.stop();
-          clearInterval(this.grabTimeInterval);
-          this.showTime = false;
-          console.log("app stopped");
-          this.stop = false;
-          this.show5 = false;
-        }
-      } else {
-        this.msg2 =
-          "No input data selected. Try selecting words per minute or another parameter.";
-      }
     },
 
     analyzeFace: function () {
@@ -770,13 +786,13 @@ handleResponse: function (message) {
 
     getReadabilityStats: function () {
       this.readability = rs.gunningFog(this.workingOutput);
-      console.log(this.readability + " " + this.workingOutput);
     },
 
     stopVoiceControl: function () {
       //reset speech recognition so it can stop and clear original timers
-      this.mediaRecorder.stop();
-      this.stop = false;
+      this.showStart = false
+      this.showStop = true
+      this.stop = true;
       this.time1 = false;
       if (this.time2 == true) {
         this.dataNamer = this.timeDifference;
@@ -793,16 +809,27 @@ handleResponse: function (message) {
         clearInterval(this.grabTimeInterval);
         clearInterval(this.renderDataInterval);
         clearInterval(this.summarizeDataInterval);
+        //clearInterval(this.voiceInterval);
           this.showTime = false;
-          console.log("app stopped");
-          this.stop = false;
+          this.stop = true;
           this.show5 = false;
+          this.showTime = false;
+          this.show5 = false;
+			if (this.android == false){
+				this.voiceInstance.stop();
+			}
+			
+			if (this.android == true) {
+			this.mediaRecorder.stop();
+			console.log("android app stopped");
+		}
         setTimeout(() => {
           this.getFeedback();
         }, 1000);
         this.cancelCall = true;
       }
-      //this.initiateVoiceControl();
+      
+
       //clearInterval(this.analyzeFaceInterval)
       //this.analyzingFace = false
     },
@@ -833,7 +860,6 @@ handleResponse: function (message) {
         this.constructJSON();
         this.visualizeData();
         this.resetWorkingOutput();
-        console.log("JSON and charts constructed");
       });
     },
 
