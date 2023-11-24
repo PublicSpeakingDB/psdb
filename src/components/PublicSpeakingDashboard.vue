@@ -317,7 +317,7 @@ startStreaming: function () {
     }
   });
 
-  this.mediaRecorder.start(250); // Start recording in chunks of 250ms
+  this.mediaRecorder.start(50); // Start recording in chunks of 250ms
 },
 
 handleResponse: function (message) {
@@ -599,6 +599,12 @@ handleResponse: function (message) {
         navigator.mediaDevices
           .getUserMedia(constraints)
           .then(function (mediaStream) {
+          //ios attributes
+			video.setAttribute("autoplay", "true");
+			video.setAttribute("playsinline", "true");
+			video.setAttribute("muted", "true");
+			video.setAttribute("loop", "true");
+			//
             video.srcObject = mediaStream;
             
             //for ios?
