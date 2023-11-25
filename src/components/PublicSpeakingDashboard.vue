@@ -19,6 +19,8 @@
     <p v-if="showProcess" id="messageTwo">
       {{ msg2 }}
     </p>
+    <p v-if="showModal" id="modal">Public Speaking Dashboard does not collect user data or use cookies.<br>
+    However, third party services are used for transcription and analysis. <br> Terms of use for those third party services can be found <a href="https://deepgram.com/terms">here</a> and <a href="https://openai.com/policies/terms-of-use">here</a>.</p>
     <p v-if="showProcess" id="messageThree">
       {{ msg3 }}
     </p>
@@ -104,26 +106,29 @@
 		<span v-if="!showTextEmotion" id="textEmotionChart"></span>
  -->
 
-    <footer id="footer">
+   <footer id="footer" v-if="showFooter">
       <section id="version">
-        Version 0.1 (Beta)<br />
+        Version 0.1 (Beta)
         <div id="bugs">
-          <section>
-            If you find a bug please report it here:
-            <a
-              href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW"
-              >Bug/Error Report Form</a
-            >
-          </section>
           <br />
           Known Bugs and Limitations: <br />
           <section>
-            - Current version of app works only Google Chrome on desktop
+            - Current version of app works best on Google Chrome browser on desktop. Other browsers are unstable. 
+          </section>
+           <section>
+            - App will work on Google Chrome browser on iOS and Android. Other browsers are unstable. 
           </section>
           <section>
             - User needs to speak for at least 20 seconds before meaningful
             results are produced.
           </section>
+          <section><br>
+            If you find a bug please report it here:
+            <a
+              href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW"
+              >Bug/Error Report Form</a
+            >
+          </section><br><br>
         </div>
       </section>
     </footer>
@@ -187,6 +192,8 @@ export default {
       showTextEmotion: true,
       showTime: true,
       showData: true,
+      showFooter: true, 
+      showModal: true, 
       WPMSelected: false,
       WPMColor: "#CBC3E3",
       textEmotionSelected: false,
@@ -382,10 +389,9 @@ handleResponse: function (message) {
       let recognition = new window.SpeechRecognition();
       recognition.start();
       this.show = false;
-      this.showStart = false;
-      this.msg2 = "";
       this.msg3 =
         "Choose a desired speech length. Click start. Then, click stop when finished.";
+        this.showModal = false
       console.log("Dashboard page loaded");
     },
 
@@ -681,6 +687,7 @@ if (this.stop == false) {
               this.loading = true;
               this.show3 = false;
               this.showProcess = true;
+              this.showStart = false;
             }
           }
 
@@ -1625,7 +1632,7 @@ div {
 }
 
 #start {
-  background-color: #cbc3e3;
+  background-color: lightgreen;
   border: none;
   height: 50px;
   width: 100px;
@@ -1637,11 +1644,11 @@ div {
 }
 
 #start:hover {
-  background-color: lightgreen;
+  background-color: #cbc3e3;
 }
 
 #stop {
-  background-color: #cbc3e3;
+  background-color: #ff726f;
   border: none;
   height: 50px;
   width: 100px;
@@ -1653,11 +1660,11 @@ div {
 }
 
 #stop:hover {
-  background-color: #ff726f;
+  background-color: #cbc3e3;
 }
 
 #reset {
-  background-color: #cbc3e3;
+  background-color: lightyellow;
   border: none;
   height: 50px;
   width: 100px;
@@ -1669,7 +1676,7 @@ div {
 }
 
 #reset:hover {
-  background-color: lightyellow;
+  background-color: #cbc3e3;
 }
 
 #pdf {
@@ -1934,7 +1941,6 @@ video {
 
 #loadingContainer {
   color: #fdfd96;
-  margin-bottom: 150%;
   font-size: 50px;
 }
 
@@ -1946,12 +1952,14 @@ video {
   font-size: 20px;
   color: #c300ff;
 }
-
+#modal {
+color: white; 
+}
 #footer {
   display: flex;
   position: float;
   bottom: 0;
-  margin-top: 27%;
+  margin-top: 5%;
   height: 3rem;
   text-align: left;
 }
@@ -1965,5 +1973,10 @@ video {
   size: A3 landscape;
   counter-increment: page;
   margin: none;
+}
+* {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari 6 – 15.3, Edge */
+    color-adjust: exact !important;                 /* Firefox 48 – 96 */
+    print-color-adjust: exact !important;           /* Firefox 97+, Safari 15.4+ */
 }
 </style>
