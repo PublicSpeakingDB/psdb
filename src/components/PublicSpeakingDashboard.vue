@@ -2204,8 +2204,9 @@ video {
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  background-color: #c300ff; 
-  color: white; 
+  background-color: #f48d79; 
+  color: black;
+  font-size: 25px;
 }
 
 /* The Close Button */
