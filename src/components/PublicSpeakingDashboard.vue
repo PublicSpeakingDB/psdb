@@ -1,10 +1,8 @@
 <template>
   <div id="body" class="dashboard">
     <p v-if="!loading" id="loadingContainer">
-      Initializing <br /><img
-        id="loading"
-        src="https://media.giphy.com/media/Ky5F5Rhn1WRVZmvE5W/giphy.gif"
-      /><br /><span id="initialMessage"
+      Initializing <br /><section class="loader"></section><br /><span
+        id="initialMessage"
         >(Make sure your webcam is facing you.)</span
       >
     </p>
@@ -19,8 +17,13 @@
     <p v-if="showProcess" id="messageTwo">
       {{ msg2 }}
     </p>
-    <p v-if="showModal" id="modal">Public Speaking Dashboard does not collect user data or use cookies.<br>
-    However, third party services are used for transcription and analysis. <br> Terms of use for those third party services can be found <a href="https://deepgram.com/terms">here</a> and <a href="https://openai.com/policies/terms-of-use">here</a>.</p>
+    <p v-if="showModal" id="modal">
+      Public Speaking Dashboard does not collect user data or use cookies.
+      However, third party services are used for transcription and analysis.
+      Terms of use for those third party services can be found
+      <a href="https://deepgram.com/terms">here</a> and
+      <a href="https://openai.com/policies/terms-of-use">here</a>.
+    </p>
     <p v-if="showProcess" id="messageThree">
       {{ msg3 }}
     </p>
@@ -32,7 +35,7 @@
         <label for="speakingTime" alt="Choose Desired Speech Length:"></label>
         <select name="speakingTime" id="speakingTime">
           <option value="nope" selected>
-            Choose Target Speaking Time  -  (Gives 30 and 15 Sec Warnings Before
+            Choose Target Speaking Time - (Gives 30 and 15 Sec Warnings Before
             Selected Time)
           </option>
           <option value="60000">1 Min</option>
@@ -59,8 +62,7 @@
         "
       >
         Begin</button
-      ><button id="start" v-if="!showStart" v-on:click="begin3">
-        Start</button
+      ><button id="start" v-if="!showStart" v-on:click="begin3">Start</button
       ><button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">
         Stop</button
       ><button id="reset" v-if="!show3" v-on:click="reset">Reset</button
@@ -106,29 +108,33 @@
 		<span v-if="!showTextEmotion" id="textEmotionChart"></span>
  -->
 
-   <footer id="footer" v-if="showFooter">
+    <footer id="footer" v-if="showFooter">
       <section id="version">
         Version 0.1 (Beta)
         <div id="bugs">
           <br />
           Known Bugs and Limitations: <br />
           <section>
-            - Current version of app works best on Google Chrome browser on desktop. Other browsers are unstable. 
+            - Current version of app works best on Google Chrome browser on
+            desktop. Other browsers are unstable.
           </section>
-           <section>
-            - App will work on Google Chrome browser on iOS and Android. Other browsers are unstable. 
+          <section>
+            - App will work on Google Chrome browser on iOS and Android. Other
+            browsers are unstable.
           </section>
           <section>
             - User needs to speak for at least 20 seconds before meaningful
             results are produced.
           </section>
-          <section><br>
+          <section>
+            <br />
             If you find a bug please report it here:
             <a
               href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW"
               >Bug/Error Report Form</a
             >
-          </section><br><br>
+          </section>
+          <br /><br />
         </div>
       </section>
     </footer>
@@ -161,7 +167,7 @@ export default {
       getEmotionStatsInterval: "",
       summarizeDataInterval: "",
       voiceInterval: "",
-      deepGramTimeOut: "",  
+      deepGramTimeOut: "",
       initialTime: 0,
       time: "00:00",
       timeElapsed: 0,
@@ -192,8 +198,8 @@ export default {
       showTextEmotion: true,
       showTime: true,
       showData: true,
-      showFooter: true, 
-      showModal: true, 
+      showFooter: true,
+      showModal: true,
       WPMSelected: false,
       WPMColor: "#CBC3E3",
       textEmotionSelected: false,
@@ -241,146 +247,157 @@ export default {
       dataSample: "",
       tickerNumber: 0,
       cancelCall: true,
-      android: false, 
+      android: false,
       mediaRecorder: null,
       socket: null,
-      transcripts: [], 
-      voiceInstance: null
+      transcripts: [],
+      voiceInstance: null,
     };
   },
 
-created() {
-
-	var isAndroid = /(android)/i.test(navigator.userAgent);
-	if (isAndroid) {
-		this.android = true
-		console.log("using alternate speech recognition")
-	}
-	else {
-		if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
-			console.log("Landing page loaded");
-			console.log("Speech recognition supported");
-		} else {
-			console.log("Landing page loaded");
-			console.log("Speech recognition not supported.");
-			this.msg2 =
-			"Public Speaking Dashboard is not supported by this browser and/or device. Currently, Public Speaking Dashboard only works on desktop and in the Chrome browser.";
-			this.showBegin = false;
-		}
-	}
+  created() {
+    var isAndroid = /(android)/i.test(navigator.userAgent);
+    if (isAndroid) {
+      this.android = true;
+      console.log("using alternate speech recognition");
+    } else {
+      if (
+        "SpeechRecognition" in window ||
+        "webkitSpeechRecognition" in window
+      ) {
+        console.log("Landing page loaded");
+        console.log("Speech recognition supported");
+      } else {
+        console.log("Landing page loaded");
+        console.log("Speech recognition not supported.");
+        this.msg2 =
+          "Public Speaking Dashboard is not supported by this browser and/or device. Currently, Public Speaking Dashboard only works on desktop and in the Chrome browser.";
+        this.showBegin = false;
+      }
+    }
   },
 
   methods: {
-  
-  begin3: function () {
-  
-	this.showStart = true
-	this.showStop = false
-  
-	if (this.android == true){
-		this.stop = false;
-		this.deepGramTimeOut = window.setTimeout(this.stopVoiceControl, 15000);
-		this.begin2()
-	}
-	if (this.android == false) {
-		this.stop = false;
-		this.initiateVoiceControl()
-	}
-  
-  },
-  
-begin2: async function () {
-if (this.stop == false) {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    if (!MediaRecorder.isTypeSupported('audio/webm')) {
-      alert('Unsupported browser');
-      return;
-    }
-    this.mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+    begin3: function () {
+      this.showStart = true;
+      this.showStop = false;
 
-    const DG_URL = 'wss://api.deepgram.com/v1/listen?language=en';
-    const DG_KEY = this.API2;
-    this.socket = new WebSocket(DG_URL, ['token', DG_KEY]);
-    this.socket.onopen = () => this.startStreaming();
-    this.socket.onmessage = (message) => this.handleResponse(message);
-    
-    if (
-        this.textEmotionSelected == true ||
-        this.WPMSelected == true ||
-        this.voiceEmotionSelected == true ||
-        this.faceEmotionSelected == true
-      ) {
-        this.msg3 = "";
-        if (this.stop == false) {
-          this.cancelCall = false;
-          this.showTime = false;
-          this.initialTime = Date.now();
-          this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
-          this.renderDataInterval = window.setInterval(this.renderData, 1000);
-          this.summarizeDataInterval = window.setInterval(this.summarizeData, 15000);
+      if (this.android == true) {
+        this.stop = false;
+        this.deepGramTimeOut = window.setTimeout(this.stopVoiceControl, 15000);
+        this.begin2();
+      }
+      if (this.android == false) {
+        this.stop = false;
+        this.initiateVoiceControl();
+      }
+    },
 
-          this.startVolumeMeter();
-          document.getElementById("container").style.display = "inline";
-          this.showStop = false;
-          this.visualizeData();
-          console.log("app started");
-          this.show5 = true;
-			this.stop = true;
-          // if (this.analyzingFace == false){this.analyzeFace()}
+    begin2: async function () {
+      if (this.stop == false) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+          if (!MediaRecorder.isTypeSupported("audio/webm")) {
+            alert("Unsupported browser");
+            return;
+          }
+          this.mediaRecorder = new MediaRecorder(stream, {
+            mimeType: "audio/webm",
+          });
+
+          const DG_URL = "wss://api.deepgram.com/v1/listen?language=en";
+          const DG_KEY = this.API2;
+          this.socket = new WebSocket(DG_URL, ["token", DG_KEY]);
+          this.socket.onopen = () => this.startStreaming();
+          this.socket.onmessage = (message) => this.handleResponse(message);
+
+          if (
+            this.textEmotionSelected == true ||
+            this.WPMSelected == true ||
+            this.voiceEmotionSelected == true ||
+            this.faceEmotionSelected == true
+          ) {
+            this.msg3 = "";
+            if (this.stop == false) {
+              this.cancelCall = false;
+              this.showTime = false;
+              this.initialTime = Date.now();
+              this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
+              this.renderDataInterval = window.setInterval(
+                this.renderData,
+                1000
+              );
+              this.summarizeDataInterval = window.setInterval(
+                this.summarizeData,
+                15000
+              );
+
+              this.startVolumeMeter();
+              document.getElementById("container").style.display = "inline";
+              this.showStop = false;
+              this.visualizeData();
+              console.log("app started");
+              this.show5 = true;
+              this.stop = true;
+              // if (this.analyzingFace == false){this.analyzeFace()}
+            }
+          } else {
+            this.msg2 =
+              "No input data selected. Try selecting words per minute or another parameter.";
+          }
+        } catch (error) {
+          alert(error);
         }
-
-      } else {
-        this.msg2 =
-          "No input data selected. Try selecting words per minute or another parameter.";
       }
-  } catch (error) {
-    alert(error);
-  }
-  }
-},
+    },
 
-startStreaming: function () {
-  this.mediaRecorder.addEventListener('dataavailable', (event) => {
-    if (event.data.size > 0 && this.socket.readyState == 1) {
-      this.socket.send(event.data);
-    }
-  });
+    startStreaming: function () {
+      this.mediaRecorder.addEventListener("dataavailable", (event) => {
+        if (event.data.size > 0 && this.socket.readyState == 1) {
+          this.socket.send(event.data);
+        }
+      });
 
-  this.mediaRecorder.start(50); // Start recording in chunks of 250ms
-},
+      this.mediaRecorder.start(50); // Start recording in chunks of 250ms
+    },
 
-handleResponse: function (message) {
-  const received = JSON.parse(message.data);
-  const alternatives = received.channel && received.channel.alternatives;
-  if (alternatives && alternatives.length > 0) {
-    const transcript = alternatives[0].transcript;
-    if (transcript) {
-      this.transcripts.push(transcript);
-      console.log("deepgram " + transcript);
-      window.clearTimeout(this.deepGramTimeOut);
-      this.deepGramTimeOut = window.setTimeout(this.stopVoiceControl, 15000);
-      
-      if (this.workingTime) {
-              this.workingOutput = transcript;
-              var node = document.createElement("li");
-              node.appendChild(document.createTextNode(" " + this.workingTime + ": " + this.workingOutput));
-              document.querySelector("ul").appendChild(node);
-              var elem = document.getElementById("output");
-              elem.scrollTop = elem.scrollHeight;
-              
-              this.wordsSpoken = transcript;
-              this.output = this.output += this.wordsSpoken
-              this.wordCount = this.countWords(this.output);
-              this.totalWords = this.wordCount;
-      
+    handleResponse: function (message) {
+      const received = JSON.parse(message.data);
+      const alternatives = received.channel && received.channel.alternatives;
+      if (alternatives && alternatives.length > 0) {
+        const transcript = alternatives[0].transcript;
+        if (transcript) {
+          this.transcripts.push(transcript);
+          console.log("deepgram " + transcript);
+          window.clearTimeout(this.deepGramTimeOut);
+          this.deepGramTimeOut = window.setTimeout(
+            this.stopVoiceControl,
+            15000
+          );
+
+          if (this.workingTime) {
+            this.workingOutput = transcript;
+            var node = document.createElement("li");
+            node.appendChild(
+              document.createTextNode(
+                " " + this.workingTime + ": " + this.workingOutput
+              )
+            );
+            document.querySelector("ul").appendChild(node);
+            var elem = document.getElementById("output");
+            elem.scrollTop = elem.scrollHeight;
+
+            this.wordsSpoken = transcript;
+            this.output = this.output += this.wordsSpoken;
+            this.wordCount = this.countWords(this.output);
+            this.totalWords = this.wordCount;
+          }
+        }
       }
-      
-    }
-  }
-},
+    },
 
-  
     begin: function () {
       //initiate speech recognition and ask for microphone permission
       this.analyzeFace();
@@ -391,7 +408,7 @@ handleResponse: function (message) {
       this.show = false;
       this.msg3 =
         "Choose a desired speech length. Click start. Then, click stop when finished.";
-        this.showModal = false
+      this.showModal = false;
       console.log("Dashboard page loaded");
     },
 
@@ -556,7 +573,6 @@ handleResponse: function (message) {
               var elem = document.getElementById("output");
               elem.scrollTop = elem.scrollHeight;
               console.log("SpeechRecognition: " + this.workingOutput);
-
             }
           } else {
             interimTranscript += transcript;
@@ -567,38 +583,38 @@ handleResponse: function (message) {
         this.wordCount = this.countWords(this.output);
         this.totalWords = this.wordCount;
       }),
-        
+        this.voiceInstance.addEventListener("end", () => {
+          if (this.stop == false) {
+            this.stopVoiceControl();
+            console.log("SpeechRecognition app stopped");
+          }
+          console.log("SpeechRecognition app stopped");
+        });
 
-this.voiceInstance.addEventListener("end", () => {
+      this.msg3 = "";
 
-if (this.stop == false) {
-  this.stopVoiceControl()
-  console.log("SpeechRecognition app stopped")
-  }
-    console.log("SpeechRecognition app stopped")
-});
+      if (this.stop == false) {
+        this.voiceInstance.start();
+        this.cancelCall = false;
+        this.showTime = false;
+        this.initialTime = Date.now();
+        this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
+        this.renderDataInterval = window.setInterval(this.renderData, 1000);
+        this.summarizeDataInterval = window.setInterval(
+          this.summarizeData,
+          15000
+        );
+        //this.voiceInterval = window.setInterval(this.voiceInstance.start(), 25000);
 
-        this.msg3 = "";
+        this.startVolumeMeter();
+        document.getElementById("container").style.display = "inline";
+        this.showStop = false;
+        this.visualizeData();
+        console.log("app started");
+        this.show5 = true;
 
-        if (this.stop == false) {
-        this.voiceInstance.start()
-          this.cancelCall = false;
-          this.showTime = false;
-          this.initialTime = Date.now();
-          this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
-          this.renderDataInterval = window.setInterval(this.renderData, 1000);
-          this.summarizeDataInterval = window.setInterval(this.summarizeData, 15000);
-          //this.voiceInterval = window.setInterval(this.voiceInstance.start(), 25000);
-
-          this.startVolumeMeter();
-          document.getElementById("container").style.display = "inline";
-          this.showStop = false;
-          this.visualizeData();
-          console.log("app started");
-          this.show5 = true;
-
-          // if (this.analyzingFace == false){this.analyzeFace()}
-        }
+        // if (this.analyzingFace == false){this.analyzeFace()}
+      }
     },
 
     analyzeFace: function () {
@@ -621,21 +637,19 @@ if (this.stop == false) {
         navigator.mediaDevices
           .getUserMedia(constraints)
           .then(function (mediaStream) {
-          //ios attributes
-			video.setAttribute("autoplay", "true");
-			video.setAttribute("playsinline", "true");
-			video.setAttribute("muted", "true");
-			video.setAttribute("loop", "true");
-			//
+            //ios attributes
+            video.setAttribute("autoplay", "true");
+            video.setAttribute("playsinline", "true");
+            video.setAttribute("muted", "true");
+            video.setAttribute("loop", "true");
+            //
             video.srcObject = mediaStream;
-            
+
             //for ios?
-            video.onloadedmetadata = function() {
-            video.play()
-        }
-        //
-            
-            
+            video.onloadedmetadata = function () {
+              video.play();
+            };
+            //
           })
           .catch(function (err) {
             console.log(err.name + ": " + err.message);
@@ -797,8 +811,8 @@ if (this.stop == false) {
 
     stopVoiceControl: function () {
       //reset speech recognition so it can stop and clear original timers
-      this.showStart = false
-      this.showStop = true
+      this.showStart = false;
+      this.showStop = true;
       this.stop = true;
       this.time1 = false;
       if (this.time2 == true) {
@@ -817,25 +831,24 @@ if (this.stop == false) {
         clearInterval(this.renderDataInterval);
         clearInterval(this.summarizeDataInterval);
         //clearInterval(this.voiceInterval);
-          this.showTime = false;
-          this.stop = true;
-          this.show5 = false;
-          this.showTime = false;
-          this.show5 = false;
-			if (this.android == false){
-				this.voiceInstance.stop();
-			}
-			
-			if (this.android == true) {
-			this.mediaRecorder.stop();
-			console.log("android app stopped");
-		}
+        this.showTime = false;
+        this.stop = true;
+        this.show5 = false;
+        this.showTime = false;
+        this.show5 = false;
+        if (this.android == false) {
+          this.voiceInstance.stop();
+        }
+
+        if (this.android == true) {
+          this.mediaRecorder.stop();
+          console.log("android app stopped");
+        }
         setTimeout(() => {
           this.getFeedback();
         }, 1000);
         this.cancelCall = true;
       }
-      
 
       //clearInterval(this.analyzeFaceInterval)
       //this.analyzingFace = false
@@ -1953,7 +1966,7 @@ video {
   color: #c300ff;
 }
 #modal {
-color: white; 
+  color: white;
 }
 #footer {
   display: flex;
@@ -1975,8 +1988,69 @@ color: white;
   margin: none;
 }
 * {
-    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari 6 – 15.3, Edge */
-    color-adjust: exact !important;                 /* Firefox 48 – 96 */
-    print-color-adjust: exact !important;           /* Firefox 97+, Safari 15.4+ */
+  -webkit-print-color-adjust: exact !important; /* Chrome, Safari 6 – 15.3, Edge */
+  color-adjust: exact !important; /* Firefox 48 – 96 */
+  print-color-adjust: exact !important; /* Firefox 97+, Safari 15.4+ */
+}
+
+.loader {
+
+  margin: auto;
+  width: 50%;
+  /* the colors */
+  --c1: #71c68b;
+  --c2: #f48d79;
+  --c3: #c300ff;
+  --c4: #fdfd96;
+  /**/
+
+  width: 180px; /* control the size */
+  aspect-ratio: 8/5;
+  --_g: no-repeat radial-gradient(#000 68%, #0000 71%);
+  -webkit-mask: var(--_g), var(--_g), var(--_g);
+  -webkit-mask-size: 25% 40%;
+  background: conic-gradient(var(--c1) 50%, var(--c2) 0) no-repeat,
+    conic-gradient(var(--c3) 50%, var(--c4) 0) no-repeat;
+  background-size: 200% 50%;
+  animation: back 4s infinite steps(1), load 2s infinite;
+}
+
+@keyframes load {
+  0% {
+    -webkit-mask-position: 0% 0%, 50% 0%, 100% 0%;
+  }
+  16.67% {
+    -webkit-mask-position: 0% 100%, 50% 0%, 100% 0%;
+  }
+  33.33% {
+    -webkit-mask-position: 0% 100%, 50% 100%, 100% 0%;
+  }
+  50% {
+    -webkit-mask-position: 0% 100%, 50% 100%, 100% 100%;
+  }
+  66.67% {
+    -webkit-mask-position: 0% 0%, 50% 100%, 100% 100%;
+  }
+  83.33% {
+    -webkit-mask-position: 0% 0%, 50% 0%, 100% 100%;
+  }
+  100% {
+    -webkit-mask-position: 0% 0%, 50% 0%, 100% 0%;
+  }
+}
+@keyframes back {
+  0%,
+  100% {
+    background-position: 0% 0%, 0% 100%;
+  }
+  25% {
+    background-position: 100% 0%, 0% 100%;
+  }
+  50% {
+    background-position: 100% 0%, 100% 100%;
+  }
+  75% {
+    background-position: 0% 0%, 100% 100%;
+  }
 }
 </style>
