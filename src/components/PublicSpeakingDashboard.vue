@@ -1211,7 +1211,7 @@ window.onclick = function(event) {
       const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "Sumarize the following data. The data represents values taken from a section of a speech. Explain to the speaker their speech dynamics while quoting the specific content that corresponds to the other included data about the section of the speech. Data: " +
+          "Summarize the following data, which contains values taken from a section of a speech. Explain to the speaker their speech dynamics while quoting the specific content that corresponds to the other included data about the section of the speech. Do not offer suggestions for improvement. Data: " +
           instance.dataSample,
         temperature: 0,
         max_tokens: 900,
