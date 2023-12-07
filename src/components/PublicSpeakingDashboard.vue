@@ -1211,7 +1211,7 @@ window.onclick = function(event) {
       const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "Summarize the following data, which contains values taken from an isolated section of a speech. Explain to the speaker their speech dynamics while quoting the specific content of the speech. Do not include suggestions for improvement. Data: " +
+          "Summarize the following data, which contains values taken from an isolated section of a speech. Explain to the speaker their speech dynamics while quoting the specific content of the speech. Do not include suggestions for improvement or make evaluations of whether the speaker is doing well or poorly. Data: " +
           instance.dataSample,
         temperature: 0,
         max_tokens: 900,
@@ -1226,7 +1226,7 @@ window.onclick = function(event) {
           instance.showFeedback = false;
           const rawResultA = result.data.choices[0].text + " ";
           instance.dataSummary = instance.dataSummary +=
-            "$" + actualTime + " " + rawResultA + "\n\n";
+            "#" + actualTime + " " + rawResultA + "\n\n";
           instance.feedback = instance.dataSummary;
           // let div = document.getElementById("feedback");
           // let p = document.createElement("p");
@@ -1251,7 +1251,7 @@ window.onclick = function(event) {
       const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "Give overall summary as well as the averages for data values from the following outputs. Each statement follows a '$' symbol, indicating a timetamp for the section of the speech that the statement corresponds to. Outputs: " +
+          "Give an overall summary as well as the averages for data values from the following outputs. Each statement follows a '#' symbol, indicating a timetamp for the section of the speech that the statement corresponds to. Outputs: " +
           instance.dataSummary,
         temperature: 0,
         max_tokens: 2107,
