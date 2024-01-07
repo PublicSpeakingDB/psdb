@@ -210,7 +210,7 @@
             browsers are unstable.
           </section>
           <section>
-            - User needs to speak for at least 20 seconds before meaningful
+            - User needs to speak for at least 30 seconds before meaningful
             results are produced.
           </section>
           <section>
@@ -829,11 +829,15 @@ window.onclick = function(event) {
         this.totalWords = this.wordCount;
       }),
         this.voiceInstance.addEventListener("end", () => {
-          if (this.stop == false) {
+          if (this.stop == true) {
             this.stopVoiceControl();
             console.log("SpeechRecognition app stopped");
           }
-          console.log("SpeechRecognition app stopped");
+          if (this.stop == false) {
+            this.voiceInstance.start();
+            console.log("SpeechRecognition restarted");
+          }
+          
         });
 
       this.msg3 = "";
@@ -847,7 +851,7 @@ window.onclick = function(event) {
         this.renderDataInterval = window.setInterval(this.renderData, 1000);
         this.summarizeDataInterval = window.setInterval(
           this.summarizeData,
-          15000
+          30000
         );
         //this.voiceInterval = window.setInterval(this.voiceInstance.start(), 25000);
 
@@ -1092,6 +1096,7 @@ window.onclick = function(event) {
         setTimeout(() => {
           this.getFeedback();
         }, 1000);
+
         this.cancelCall = true;
       }
 
@@ -1251,10 +1256,10 @@ window.onclick = function(event) {
       const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "Give an overall summary as well as the averages for data values from the following outputs. Each statement follows a '#' symbol, indicating a timetamp for the section of the speech that the statement corresponds to. Outputs: " +
-          instance.dataSummary,
+          "Give an overall summary of the data and points made in the following statements. Each of the statements are separated from one another by timestamps indicated with #'s. Keep the summary under 100 words but include specific averages and data ranges in the summary. Statements: "+
+          instance.dataSummary + " ",
         temperature: 0,
-        max_tokens: 2107,
+        max_tokens: 288,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
