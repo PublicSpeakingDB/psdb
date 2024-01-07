@@ -39,15 +39,20 @@
             Selected Time)
           </option>
           <option value="60000">1 Min</option>
+          <option value="120000">2 Min</option>
           <option value="180000">3 Min</option>
           <option value="300000">5 Min</option>
+          <option value="360000">6 Min</option>
+          <option value="420000">7 Min</option>
+          <option value="480000">8 Min</option>
+          <option value="540000">9 Min</option>
           <option value="600000">10 Min</option>
-          <option value="900000">15 Min</option>
+          <!-- <option value="900000">15 Min</option>
           <option value="1200000">20 Min</option>
           <option value="1500000">25 Min</option>
           <option value="1800000">30 Min</option>
           <option value="2700000">45 Min</option>
-          <option value="3600000">60 Min</option>
+          <option value="3600000">60 Min</option> -->
         </select>
       </span>
       <button
@@ -212,6 +217,10 @@
           <section>
             - User needs to speak for at least 30 seconds before meaningful
             results are produced.
+          </section>
+          <section>
+            - System will only reliably give an overall summary for speeches shorter
+            than 10 minutes.
           </section>
           <section>
             <br />
