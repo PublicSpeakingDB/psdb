@@ -1265,7 +1265,7 @@ window.onclick = function(event) {
       const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "Give an overall summary of the data and points made in the following statements. Each of the statements are separated from one another by timestamps indicated with #'s. Keep the summary under 100 words but include specific averages and data ranges in the summary. Statements: "+
+          "Give an overall summary of the data and points made in the following statements. Each of the statements describes a specific section of a speech, with each section separated by timestamps indicated with #'s. Keep the summary under 100 words but include specific averages and ranges for the data points spoken to in the statements. Statements: "+
           instance.dataSummary + " ",
         temperature: 0,
         max_tokens: 288,
