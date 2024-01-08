@@ -102,7 +102,7 @@
   <div class="modal-content">
     <span id="modalBoxCloseOverall" class="close">&times;</span>
     <h2>How Public Speaking Dashboard Works</h2>
-    <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance.</p>
+    <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
     
   </div>
 
@@ -380,7 +380,7 @@ export default {
 
       if (this.android == true) {
         this.stop = false;
-        this.deepGramTimeOut = window.setTimeout(this.stopVoiceControl, 15000);
+        this.deepGramTimeOut = window.setTimeout(this.stopVoiceControl, 30000);
         this.begin2();
       }
       if (this.android == false) {
@@ -628,7 +628,7 @@ window.onclick = function(event) {
           window.clearTimeout(this.deepGramTimeOut);
           this.deepGramTimeOut = window.setTimeout(
             this.stopVoiceControl,
-            15000
+            30000
           );
 
           if (this.workingTime) {
@@ -2264,6 +2264,9 @@ video {
   background-color: #f48d79; 
   color: black;
   font-size: 25px;
+
+  height: 75%; 
+  overflow-y: scroll;
 }
 
 /* The Close Button */
