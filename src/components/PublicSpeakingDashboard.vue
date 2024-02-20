@@ -860,7 +860,7 @@ window.onclick = function(event) {
         this.renderDataInterval = window.setInterval(this.renderData, 1000);
         this.summarizeDataInterval = window.setInterval(
           this.summarizeData,
-          30000
+          15000
         );
         //this.voiceInterval = window.setInterval(this.voiceInstance.start(), 25000);
 
@@ -1222,14 +1222,14 @@ window.onclick = function(event) {
         },
       });
 
-      const params = {
+          const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "Summarize the following data, which contains values taken from an isolated section of a speech. Explain to the speaker their speech dynamics while quoting the specific content of the speech. Do not include suggestions for improvement or make evaluations of whether the speaker is doing well or poorly. Data: " +
+          "Summarize the following data, which contains values taken from an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the speech. Do not offer advice for improvement. Do no offer evaluations of whether the speaker performed well or poorly. Do not analyze the data for the speaker. Do not give an overall statement about the speaker's dynamics. Data: " +
           instance.dataSample,
         temperature: 0,
-        max_tokens: 900,
-        top_p: 1,
+        max_tokens: 250,
+        top_p: 0,
         frequency_penalty: 0,
         presence_penalty: 0,
       };
@@ -1255,30 +1255,34 @@ window.onclick = function(event) {
 
     getFeedback: function () {
       const instance = this;
-      console.log("final input" + instance.dataSummary);
+      console.log("final input" + instance.feedback);
       const client = axios.create({
         headers: {
           Authorization: "Bearer " + instance.API,
         },
       });
 
-      const params = {
-        model: "gpt-3.5-turbo-instruct",
-        prompt:
-          "Give an overall summary of the data and points made in the following statements. Each of the statements describes a specific section of a speech, with each section separated by timestamps indicated with #'s. Keep the summary under 100 words but include specific averages and ranges for the data points spoken to in the statements. Statements: "+
-          instance.dataSummary + " ",
+          const params = {
+            model: "gpt-3.5-turbo-16k",
+            messages: [
+              {
+                role: "user",
+                content:
+          "Give a brief 150 word summary of the data reported in the following statements about a speech. Include overall averages for numbers and ranges reported in the statements. Do not offer advice or suggestions for improvement. If there are no statements say respond with 'not enough data to return overall feedback'. Statements: " +
+          instance.dataSummary 
+              }],
         temperature: 0,
-        max_tokens: 288,
-        top_p: 1,
+        max_tokens: 250,
+        top_p: 0,
         frequency_penalty: 0,
         presence_penalty: 0,
       };
 
       client
-        .post("https://api.openai.com/v1/completions", params)
+        .post("https://api.openai.com/v1/chat/completions", params)
         .then((result) => {
           instance.showFeedback2 = false;
-          const rawResultA = result.data.choices[0].text;
+          const rawResultA = result.data.choices[0].message.content;
           instance.feedback2 = rawResultA;
           console.log("final output" + rawResultA);
         })
