@@ -1225,11 +1225,11 @@ window.onclick = function(event) {
           const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "Summarize the following data, which contains values taken from an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the speech. Do not offer advice for improvement. Do no offer evaluations of whether the speaker performed well or poorly. Do not analyze the data for the speaker. Do not give an overall statement about the speaker's dynamics. Data: " +
+          "Summarize the following data, which contains values taken from an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. Do not offer advice for improvement. Do no offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not give an overall statement about the speaker's dynamics. Data: " +
           instance.dataSample,
         temperature: 0,
         max_tokens: 250,
-        top_p: 0,
+        top_p: .5,
         frequency_penalty: 0,
         presence_penalty: 0,
       };
@@ -1268,7 +1268,7 @@ window.onclick = function(event) {
               {
                 role: "user",
                 content:
-          "Give a brief 150 word summary of the data reported in the following statements about a speech. Include overall averages for numbers and ranges reported in the statements. Do not offer advice or suggestions for improvement. If there are no statements say respond with 'not enough data to return overall feedback'. Statements: " +
+          "Give a brief overall summary of the following statements about a speech. Keep the summary under one hundred and fifty words. Include overall averages for numbers and ranges reported in the statements. Do not offer advice or suggestions for improvement. If there are no statements respond with 'not enough data to return overall feedback'. Statements: " +
           instance.dataSummary 
               }],
         temperature: 0,
