@@ -1225,7 +1225,7 @@ window.onclick = function(event) {
           const params = {
         model: "gpt-3.5-turbo-instruct",
         prompt:
-          "In under one hundred and fifty words, summarize the following data, which contains values taken from an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. Do not offer advice for improvement. Do no offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not give an overall statement about the speaker's dynamics. Data: " +
+          "Summarize the following data, which contains values taken from an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. Do not offer advice for improvement. Do no offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not give an overall statement about the speaker's dynamics. Keep the summary under one hundred and fifty wrds. Data: " +
           instance.dataSample,
         temperature: 0,
         max_tokens: 250,
