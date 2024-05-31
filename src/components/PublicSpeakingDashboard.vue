@@ -1128,7 +1128,6 @@ window.onclick = function(event) {
         this.volumeInterval = null;
       }
       if (this.cancelCall == false) {
-        this.summarizeData();
         this.visualizeData();
         clearInterval(this.grabTimeInterval);
         clearInterval(this.renderDataInterval);
@@ -1148,8 +1147,11 @@ window.onclick = function(event) {
           console.log("android app stopped");
         }
         setTimeout(() => {
+          this.summarizeData();
+          setTimeout(() => {
           this.getFeedback();
-        }, 1000);
+        }, 2000);
+        }, 3000);
 
         this.cancelCall = true;
       }
@@ -1269,7 +1271,7 @@ window.onclick = function(event) {
 
           const params = {
             model: 'open-mistral-7b',
-            messages: [{role: 'user', content: "Read the following data and give a summary that describes some key take-aways from it. Keep the summary under seventy five words. The data contains information about an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. Do not offer advice for improvement. Do not offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not conjecture about what the speaker's intentions are. Do not give an overall statement about the speaker's dynamics. Do not make commentary on data that is not present. Omit from the response any sentences that include the words, 'the data does not provide.' Note only the included data. Do not mention anything beyond what is included in the data. Keep the response under seventy five words. Data: " +
+            messages: [{role: 'user', content: "Read the following data and give a summary that describes some key take-aways from it. Keep the summary under seventy five words. The data contains information about an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. When refering to facial emotions, refer to them as their corresponding emotions. Report only the numbers in the data. Do not assign units of measure to them. Do not offer advice for improvement. Do not offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not conjecture about what the speaker's intentions are. Do not give an overall statement about the speaker's dynamics. Do not make commentary on data that is not present. Omit from the summary any sentences that include the words, 'the data does not provide' or 'is not provided'. Note only the included data. Do not mention anything beyond what is included in the data. Keep the response under seventy five words. Data: " +
             instance.dataSample}],
             temperature: 0,
       };
@@ -1281,7 +1283,7 @@ window.onclick = function(event) {
           instance.showFeedback = false;
           const rawResultA = result.data.choices[0].message.content + " ";
           instance.dataSummary = instance.dataSummary +=
-            "#" + actualTime + " " + rawResultA + "\n\n";
+            "#" + "00:" + actualTime + " " + rawResultA + "\n\n";
           instance.feedback = instance.dataSummary;
           // let div = document.getElementById("feedback");
           // let p = document.createElement("p");
@@ -1305,7 +1307,7 @@ window.onclick = function(event) {
 
           const params = {
             model: 'open-mistral-7b',
-            messages: [{role: 'user', content: "Give a brief overall summary of the following statements about a speech. The statements represent descriptions of data chunks about the speech. Keep the summary under two hundred words. Include overall averages for numbers and ranges reported in the statements. Do not offer advice or suggestions for improvement. If there are no statements respond with 'not enough data to return overall feedback'. Note only the included data. Do not mention anything beyond what is included in the data. Statements: " +
+            messages: [{role: 'user', content: "Give a brief overall summary of the following statements about a specific speech. The statements represent descriptions of data chunks about the speech. Keep the summary under two hundred words. Include overall averages for numbers and ranges reported in the statements. Refer to the speech as 'the speech'. Do not offer advice or suggestions for improvement. If there are no statements respond with 'not enough data to return overall feedback'. Note only the included data. Do not mention anything beyond what is included in the data. Statements: " +
           instance.dataSummary}],
             temperature: 0,
             
@@ -1911,10 +1913,10 @@ div {
 }
 
 #feedback {
-  color: #ffea66;
+  color: white;
   font-size: 25px;
   text-align: left;
-  background-color: #6b206a;
+  background-color: #f508f176;
   padding: 50px;
   white-space: pre-wrap;
 }
@@ -2255,7 +2257,7 @@ video {
 }
 
 #specificAndOverallFeedback {
-  color: #ffbf00;
+  color: #71c68b;
 }
 
 #initialMessage {
