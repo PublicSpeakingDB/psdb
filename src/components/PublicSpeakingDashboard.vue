@@ -17,13 +17,7 @@
     <p v-if="showProcess" id="messageTwo">
       {{ msg2 }}
     </p>
-    <p v-if="showModal" id="modal">
-      Public Speaking Dashboard does not collect user data or use cookies.
-      However, third party services are used for transcription and analysis.
-      Terms of use for those third party services can be found
-      <a href="https://deepgram.com/terms">here</a> and
-      <a href="https://openai.com/policies/terms-of-use">here</a>.
-    </p>
+    
     <p v-if="showProcess" id="messageThree">
       {{ msg3 }}
     </p>
@@ -94,6 +88,18 @@
       </button></span
     >
 <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
+
+<!-- The Modal -->
+<div id="modalBoxSave" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+   
+    <h2>Be Sure to Save!</h2>
+    <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p>
+    <span id="modalBoxCloseSave" class="close2">Got It</span>
+  </div>
+</div>
 
 <!-- The Modal -->
 <div id="modalBoxOverall" class="modal">
@@ -200,14 +206,23 @@
 		<span v-if="!showTextEmotion" id="textEmotionChart"></span>
  -->
 
+
     <footer id="footer" v-if="showFooter">
       <section id="version">
         Version 0.1 (Beta)
+        
         <div id="bugs">
           <br />
-          Known Bugs and Limitations: <br />
+          <section v-if="showModal" id="modal">
+            Public Speaking Dashboard does not collect user data or use cookies.
+            However, third party services are used for transcription and analysis.
+            Terms of use for those third party services can be found
+            <a href="https://deepgram.com/terms">here</a> and
+            <a href="https://mistral.ai/terms/">here</a>.
+          </section><br>
+          <b>Known Bugs and Limitations:</b> <br />
           <section>
-            - Current version of app works best on Google Chrome browser on
+            - Current version of app works best on the latest Google Chrome browser on
             desktop. Other browsers are unstable.
           </section>
           <section>
@@ -229,6 +244,7 @@
               href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW"
               >Bug/Error Report Form</a
             >
+            
           </section>
           <br /><br />
         </div>
@@ -388,6 +404,34 @@ export default {
         this.initiateVoiceControl();
       }
     },
+
+
+    
+
+    Savemodal: function () {
+        // Get the modal
+        var modal = document.getElementById("modalBoxSave");
+
+        // Get the button that opens the modal
+        // Get the <span> element that closes the modal
+        var span = document.getElementById("modalBoxCloseSave");
+
+
+          modal.style.display = "block";
+
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+      },
     
     Feedbackmodal: function () {
         // Get the modal
@@ -960,6 +1004,7 @@ window.onclick = function(event) {
               this.show3 = false;
               this.showProcess = true;
               this.showStart = false;
+              this.Savemodal();
             }
           }
 
@@ -1223,22 +1268,18 @@ window.onclick = function(event) {
       });
 
           const params = {
-        model: "gpt-3.5-turbo-instruct",
-        prompt:
-          "Summarize the following data, which contains values taken from an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. Do not offer advice for improvement. Do no offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not give an overall statement about the speaker's dynamics. Keep the summary under one hundred and fifty wrds. Data: " +
-          instance.dataSample,
-        temperature: 0,
-        max_tokens: 250,
-        top_p: .5,
-        frequency_penalty: 0,
-        presence_penalty: 0,
+            model: 'open-mistral-7b',
+            messages: [{role: 'user', content: "Read the following data and give a summary that describes some key take-aways from it. Keep the summary under seventy five words. The data contains information about an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. Do not offer advice for improvement. Do not offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not conjecture about what the speaker's intentions are. Do not give an overall statement about the speaker's dynamics. Do not make commentary on data that is not present. Omit from the response any sentences that include the words, 'the data does not provide.' Note only the included data. Do not mention anything beyond what is included in the data. Keep the response under seventy five words. Data: " +
+            instance.dataSample}],
+            temperature: 0,
       };
 
       client
-        .post("https://api.openai.com/v1/completions", params)
+        .post("https://api.mistral.ai/v1/chat/completions", params)
         .then((result) => {
+          console.log(result.data)
           instance.showFeedback = false;
-          const rawResultA = result.data.choices[0].text + " ";
+          const rawResultA = result.data.choices[0].message.content + " ";
           instance.dataSummary = instance.dataSummary +=
             "#" + actualTime + " " + rawResultA + "\n\n";
           instance.feedback = instance.dataSummary;
@@ -1263,24 +1304,17 @@ window.onclick = function(event) {
       });
 
           const params = {
-            model: "gpt-3.5-turbo-16k",
-            messages: [
-              {
-                role: "user",
-                content:
-          "Give a brief overall summary of the following statements about a speech. Keep the summary under one hundred and fifty words. Include overall averages for numbers and ranges reported in the statements. Do not offer advice or suggestions for improvement. If there are no statements respond with 'not enough data to return overall feedback'. Statements: " +
-          instance.dataSummary 
-              }],
-        temperature: 0,
-        max_tokens: 250,
-        top_p: 0,
-        frequency_penalty: 0,
-        presence_penalty: 0,
+            model: 'open-mistral-7b',
+            messages: [{role: 'user', content: "Give a brief overall summary of the following statements about a speech. The statements represent descriptions of data chunks about the speech. Keep the summary under two hundred words. Include overall averages for numbers and ranges reported in the statements. Do not offer advice or suggestions for improvement. If there are no statements respond with 'not enough data to return overall feedback'. Note only the included data. Do not mention anything beyond what is included in the data. Statements: " +
+          instance.dataSummary}],
+            temperature: 0,
+            
       };
 
       client
-        .post("https://api.openai.com/v1/chat/completions", params)
+        .post("https://api.mistral.ai/v1/chat/completions", params)
         .then((result) => {
+          console.log(result)
           instance.showFeedback2 = false;
           const rawResultA = result.data.choices[0].message.content;
           instance.feedback2 = rawResultA;
@@ -2242,7 +2276,7 @@ video {
 
 #bugs {
   color: white;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .modal {
@@ -2275,15 +2309,32 @@ video {
 
 /* The Close Button */
 .close {
-  color: white; 
   float: right;
+  color: white; 
   font-size: 28px;
   font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-  color: #f48d79; 
+  color: gray; 
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.close2 {
+  color: white; 
+  font-size: 28px;
+  font-weight: bold;
+  border-style: solid; 
+  padding: 5px; 
+  margin: auto;
+  width: 50%;
+}
+
+.close2:hover,
+.close2:focus {
+  color: black; 
   text-decoration: none;
   cursor: pointer;
 }
