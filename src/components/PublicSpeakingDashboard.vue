@@ -108,7 +108,7 @@
   <div class="modal-content">
     <span id="modalBoxCloseOverall" class="close">&times;</span>
     <h2>How Public Speaking Dashboard Works</h2>
-    <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
+    <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to automated transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
     
   </div>
 
@@ -143,7 +143,7 @@
   <div class="modal-content">
     <span id="modalBoxCloseVolume" class="close">&times;</span>
     <h2>Volume</h2>
-    <p>Volume is captured by sampling the microphone volume once a second.<br><br>Use this data to think about your speech "dynamics," the "ups" and "downs" throughout your speech. <br><br>While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it.</p>
+    <p>Volume is captured by sampling the microphone volume once a second.<br><br>Use this data to think about your speech "dynamics," the ups and downs throughout your speech. <br><br>While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it.</p>
     
   </div>
 
@@ -158,7 +158,7 @@
   <div class="modal-content">
     <span id="modalBoxCloseFace" class="close">&times;</span>
     <h2>Expressions in Face</h2>
-    <p>This data is captured by assessing key areas of the face to register a given emotional state once a second.<br><br>Use this data to think about the "congruence" (or not) between your words spoken and your facial expressions.<br><br>Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Keep in mind that a "neutral" facial expression is not negative; it can be a desirable expression in many speaking contexts.<br><br>It is important to keep in mind that, because the system samples your facial expressions once a second, it can sometimes register "micro-expressions," or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences."</p>
+    <p>This data is captured by assessing key areas of the face to register a given emotional state once a second.<br><br>Use this data to think about the "congruence" (or not) between your words spoken and your facial expressions.<br><br>Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Keep in mind that a "neutral" facial expression is not negative; it can be a desirable expression in many speaking contexts.<br><br>It is important to keep in mind that, because the system samples your facial expressions once a second, it can sometimes register "micro-expressions," or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences.</p>
     
   </div>
 
@@ -173,7 +173,7 @@
   <div class="modal-content">
     <span id="modalBoxCloseWords" class="close">&times;</span>
     <h2>Complexity of Words Spoken</h2>
-    <p>Word complexity is calcuated by dividing words by number of syllables--the more syllables per word, the higher the complexity score.<br><br>Use this data to think about your understandability and impact.<br><br>Language that is too "chewy" for your audience might impact their ability to understand. But, language that isn't "chewy" enough might be less impactful.</p>
+    <p>Word complexity is calcuated by dividing words by number of syllables--the more syllables per word, the higher the complexity score.<br><br>Use this data to think about your understandability and impact.<br><br>Language that is too "chewy" for your audience might impact their ability to understand. But, language that isn't chewy enough might be less impactful.</p>
     
   </div>
 
@@ -197,7 +197,7 @@
   <div class="modal-content">
     <span id="modalBoxCloseFeedback" class="close">&times;</span>
     <h2>Feedback</h2>
-    <p>Feedback is generated by having a bot summarize the data in fifteen second "chunks." From here, another bot summarizes those specific feedback points to give overall feedback.<br><br> It is important to keep in mind that the bots can sometimes give inaccurate feedback (they're bots after all).<br><br>Use the feedback to better understand your own data, but don't take the bots' assessments as absolutely correct.</p>
+    <p>Feedback is generated by having a bot summarize the data in 20 or 30 second "chunks." (20 second chunks for speeches under 3 minutes, and 30 second chunks for speeches longer than 3 minutes.)<br><br>From here, another bot summarizes those specific feedback points to give overall feedback.<br><br>It is important to keep in mind that the bots can sometimes give inaccurate feedback (they're bots after all).<br><br>Use the feedback to better understand your own data, but don't take the bots' assessments as absolutely correct.</p>
     
   </div>
 
@@ -364,6 +364,7 @@ export default {
       socket: null,
       transcripts: [],
       voiceInstance: null,
+      dataSummaryTime: 20000
     };
   },
 
@@ -393,6 +394,18 @@ export default {
     begin3: function () {
       this.showStart = true;
       this.showStop = false;
+      var selectedTime = document.getElementById("speakingTime").value;
+      if (selectedTime >= 180001)
+      {
+        this.dataSummaryTime = 30000
+
+      }
+
+      if (selectedTime <= 18000)
+      {
+        this.dataSummaryTime = 20000
+
+      }
 
       if (this.android == true) {
         this.stop = false;
@@ -622,14 +635,14 @@ window.onclick = function(event) {
               this.cancelCall = false;
               this.showTime = false;
               this.initialTime = Date.now();
-              this.grabTimeInterval = window.setInterval(this.grabTime, 1000);
+              this.grabTimeInterval = window.setInterval(this.grabTime, 1000);              
               this.renderDataInterval = window.setInterval(
                 this.renderData,
                 1000
               );
               this.summarizeDataInterval = window.setInterval(
                 this.summarizeData,
-                15000
+                this.dataSummaryTime
               );
 
               this.startVolumeMeter();
@@ -904,7 +917,7 @@ window.onclick = function(event) {
         this.renderDataInterval = window.setInterval(this.renderData, 1000);
         this.summarizeDataInterval = window.setInterval(
           this.summarizeData,
-          15000
+          this.dataSummaryTime
         );
         //this.voiceInterval = window.setInterval(this.voiceInstance.start(), 25000);
 
