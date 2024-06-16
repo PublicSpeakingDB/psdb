@@ -1172,10 +1172,11 @@ window.onclick = function(event) {
         }
         setTimeout(() => {
           this.summarizeData();
+        }, 1000);
           setTimeout(() => {
           this.getFeedback();
-        }, 2000);
         }, 3000);
+        
 
         this.cancelCall = true;
       }
@@ -1331,7 +1332,7 @@ window.onclick = function(event) {
 
           const params = {
             model: 'open-mistral-7b',
-            messages: [{role: 'user', content: "Give a brief overall summary of the following statements about a specific speech. The statements represent descriptions of data chunks about the speech. Keep the summary under two hundred words. Include overall averages for numbers and ranges reported in the statements. Refer to the speech as 'the speech'. Do not offer advice or suggestions for improvement. If there are no statements respond with 'not enough data to return overall feedback'. Note only the included data. Do not mention anything beyond what is included in the data. Statements: " +
+            messages: [{role: 'user', content: "Give a brief overall summary of the following statements about a specific speech. The statements represent descriptions of data chunks about the speech. Keep the summary under two hundred words. Include overall averages for numbers and ranges reported in the statements. Refer to the speech as 'the speech'. Do not offer advice or suggestions for improvement. If there are no statements respond with 'not enough data to return overall feedback'. Note only the included data. Do not mention anything beyond what is included in the data. Do not refere to volume in decibels. Statements: " +
           instance.dataSummary}],
             temperature: 0,
             
