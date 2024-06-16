@@ -6,6 +6,10 @@
         >(Make sure your webcam is facing you.)</span
       >
     </p>
+    <span id="container"
+ ><div id="video-container" class="video-container">
+   <video id="video" autoplay width="150" height="150"></video></div
+></span>
     <h1 v-if="showProcess" id="mainTitle">
       <img
         id="talking"
@@ -69,13 +73,10 @@
         Save
       </button></span
     >
+    
     <!--<br><button id="next" v-if="!show" v-on:click="next">Next</button>--><br />
     <span id="rawData"></span>
     <button v-if="!showTime" class="title" id="timer">{{ time }}</button>
-    <span id="container"
-      ><div id="video-container" class="video-container">
-        <video id="video" autoplay width="150" height="150"></video></div
-    ></span>
     <span v-if="!show3" id="volume-visualizer-wrapper"
       ><button id="volume-visualizer"></button
     ></span>
@@ -88,7 +89,10 @@
       </button></span
     >
 <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
-
+<span id="container"
+ ><div id="video-container" class="video-container">
+   <video id="video" autoplay width="150" height="150"></video></div
+></span>
 <!-- The Modal -->
 <div id="modalBoxSave" class="modal">
 
@@ -111,8 +115,11 @@
     <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to automated transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
     
   </div>
-
 </div>
+<span id="container"
+ ><div id="video-container" class="video-container">
+   <video id="video" autoplay width="150" height="150"></video></div
+></span>
 
     <!--FEEDBACK SECTION-->
 
@@ -181,11 +188,11 @@
     <h1 v-if="!showFeedback" id="specificAndOverallFeedback">
       Specific Feedback
     </h1>
-    <p v-if="!showFeedback" id="feedback">{{ feedback }}</p>
+    <p v-if="!showFeedback" class="feedback">{{ feedback }}</p>
     <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">
       Overall Feedback
     </h1>
-    <p v-if="!showFeedback2" id="feedback">{{ feedback2 }}</p>
+    <p v-if="!showFeedback2" class="feedback">{{ feedback2 }}</p>
     
     
     <section><button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback">More About Feedback</button></section>
@@ -206,7 +213,7 @@
 		<span v-if="!showTextEmotion" id="textEmotionChart"></span>
  -->
 
-
+ 
     <footer id="footer" v-if="showFooter">
       <section id="version">
         Version 0.1 (Beta)
@@ -392,6 +399,7 @@ export default {
 
   methods: {
     begin3: function () {
+      this.msg=""
       this.showStart = true;
       this.showStop = false;
       var selectedTime = document.getElementById("speakingTime").value;
@@ -721,6 +729,9 @@ window.onclick = function(event) {
         "Choose a desired speech length. Click start. Then, click stop when finished.";
       this.showModal = false;
       console.log("Dashboard page loaded");
+      setTimeout(() => {
+      document.getElementById("container").style.display = "inline";
+    }, "2000");
     },
 
     startVolumeMeter: function () {
@@ -1346,7 +1357,24 @@ window.onclick = function(event) {
     },
 
     pdfResults: function () {
+
+      var feedBackEls = document.getElementsByClassName("feedback");
+      document.getElementById("container").style.position = "static"
+
+      document.querySelector('[data-title="Autoscale"]').click()
+
+      for(var i=0;i<feedBackEls.length;i++){
+        feedBackEls[i].style.height = 100+"%";
+      }
+
       window.print();
+
+      for(var i2=0;i2<feedBackEls.length;i2++){
+        feedBackEls[i2].style.height = 200+"px";
+      }
+       document.getElementById("container").style.position = "fixed"
+       document.querySelector('[data-title="Autoscale"]').click()
+
     },
 
     visualizeData: function () {
@@ -1925,13 +1953,15 @@ div {
   font-size: 25px;
 }
 
-#feedback {
+.feedback {
   color: white;
   font-size: 25px;
   text-align: left;
   background-color: #f508f176;
   padding: 50px;
   white-space: pre-wrap;
+  overflow: auto;
+  height: 200px;
 }
 
 #messageThree {
@@ -2222,17 +2252,20 @@ a {
 }
 #container {
   height: 200px;
-  margin-bottom: 0px;
+  margin-top:-60px;
   display: none;
-  margin-top: -100px;
+  position: fixed;
+  right: -30px; 
+  z-index: 1;
 }
 
 .video-container {
   position: relative;
   margin-top: 0px;
   background-color: #222831;
-  width: 80%;
+  width: 60%;
   display: inline-block;
+ 
 }
 
 canvas {
@@ -2306,6 +2339,7 @@ video {
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  z-index: 2; 
 }
 
 /* Modal Content */
