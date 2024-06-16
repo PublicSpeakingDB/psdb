@@ -731,7 +731,7 @@ window.onclick = function(event) {
       console.log("Dashboard page loaded");
       setTimeout(() => {
       document.getElementById("container").style.display = "inline";
-    }, "2000");
+    }, "4000");
     },
 
     startVolumeMeter: function () {
