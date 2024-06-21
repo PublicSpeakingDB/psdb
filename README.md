@@ -138,6 +138,7 @@ VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
 ### s. After a few minutes, your instance of Public Speaking Dashboard will be available at the link<br>
 The link will be something like: yourreallygreatsite.netlify.app
 <br>
+<br>
 _It is important to note that deploying the app like this exposes your API keys to anyone who is using the app. Be sure to only share the link with intended audiences, and set "spend limits" on your API keys that you are comfortable with, should someone get ahold of your keys._
 <br><br><br><br>
 
