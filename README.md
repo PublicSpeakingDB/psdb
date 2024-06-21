@@ -21,7 +21,7 @@
 
 ## 6. "Fork" the PSDB Repository
 ### a. While signed into your GitHub account, navigate to the publicspeakingDB/psdb repository (linked at the upper left of the page)
-### b. Click "fork" 
+### b. Click "Fork" 
 
 ## 7. Create a Netlify Account (this will be used to serve the app)
 [Netlify](https://www.netlify.com/)
@@ -29,19 +29,19 @@
 
 ## . Deploy Public Speaking Dashboard to Netlify
 
-# a. Navigate to dashboard
+### a. Navigate to dashboard
 ⬇️
 
-# b. Click "Add new site"
+### b. Click "Add new site"
 ⬇️
 
-# c. Select "Import an existing project" 
+### c. Select "Import an existing project" 
 ⬇️
 
-# d. Select "Github"
+### d. Select "Github"
 ⬇️
 
-# e. Select the "/psdb" repository 
+### e. Select the "/psdb" repository 
 ⬇️
 
 npm run build
