@@ -97,13 +97,10 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
   
   ### h. Click "Add environment variables" and "Add" two variables<br>
     Do not edit the key name--copy it verbatim. For the value, copy and paste your Mistral and DeepGram API keys accordingly<br>
-
-    
     ```
     VUE_APP_ROOT_API2=yourMistralAPIKeyCode
     VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
     ```
-    
     ⬇️
   
   ### i. Click "Deploy"<br>
