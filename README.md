@@ -142,7 +142,6 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 _It is important to note that deploying the app like this exposes your API keys to anyone who is using the app. Be sure to only share the link with intended audiences, and set "spend limits" on your API keys that you are comfortable with._
 <br><br><br><br>
 
-
 ---
 
 <br><br><br><br>
@@ -180,5 +179,8 @@ npm run lint
 Customize configuration
 [Configuration documentation](https://cli.vuejs.org/config/) 
 
+<br><br><br><br> 
+---
+<br><br><br><br>
 # Attribution Credits and Dependencies for Public Speaking Dashboard
 <iframe scr="https://github.com/PublicSpeakingDB/psdb/blob/main/package-lock.json"></iframe>
