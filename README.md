@@ -135,7 +135,7 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
     ⬇️
   
   ### s. After a few minutes, your instance of Public Speaking Dashboard will be available at the link <br>
-    The link will be something like: yourreallygreatsite.netlify.app <br>
+    The link will be something like: yourreallygreatsite.netlify.app <br><br>
       🎉
 <br>
 <br>
