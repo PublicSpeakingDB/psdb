@@ -179,3 +179,6 @@ npm run lint
 
 Customize configuration
 [Configuration documentation](https://cli.vuejs.org/config/) 
+
+# Attribution Credits and Dependencies for Public Speaking Dashboard
+<iframe scr="https://github.com/PublicSpeakingDB/psdb/blob/main/package-lock.json"></iframe>
