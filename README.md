@@ -1,6 +1,6 @@
 Public Speaking Dashboard is an open-source public speaking tool. It is shared under a Creative Commons license. Please feel free to copy and use the source code. Also, please feel free to remix and experiment with the base code. 
 
-
+---
 [![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]
 
 This work is licensed under a
@@ -11,23 +11,19 @@ This work is licensed under a
 [cc-by-nc]: https://creativecommons.org/licenses/by-nc/4.0/
 [cc-by-nc-image]: https://licensebuttons.net/l/by-nc/4.0/88x31.png
 [cc-by-nc-shield]: https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg
-
+---
 
 Find instructions below for cloning your own instance of Public Speaking Dashboard or for running the app locally. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 # Creating your own instance of Public Speaking Dashboard on Netlify
 
 ## 1. Create a Mistral AI Account (this will be the AI "back end" of the app)
