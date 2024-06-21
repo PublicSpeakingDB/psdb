@@ -39,7 +39,7 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 # Creating your own instance of Public Speaking Dashboard on Netlify
 
 ## 1. Create a Mistral AI Account (this will be the AI "back end" of the app)
-  ### a.[Mistral AI](https://mistral.ai/)<br>
+  ### a. [Mistral AI](https://mistral.ai/)<br>
   ⬇️
 
 ## 2. Generate a Mistral AI API Key 
@@ -96,13 +96,14 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
     ⬇️
   
   ### h. Click "Add environment variables" and "Add" two variables<br>
-  
     Do not edit the key name--copy it verbatim. For the value, copy and paste your Mistral and DeepGram API keys accordingly<br>
+
     
     ```
     VUE_APP_ROOT_API2=yourMistralAPIKeyCode
     VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
     ```
+    
     ⬇️
   
   ### i. Click "Deploy"<br>
