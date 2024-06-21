@@ -40,26 +40,26 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 
 ## 1. Create a Mistral AI Account (this will be the AI "back end" of the app)
   ### a. [Mistral AI](https://mistral.ai/)<br>
-  ⬇️
+      ⬇️
 
 ## 2. Generate a Mistral AI API Key 
   ### a. [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup)<br>
   Save the key somewhere safe. <br>
-  ⬇️
+    ⬇️
 
 ## 3. Create a DeepGram Account (this is used for voice transcription on mobile)
   ### a. [DeepGram](https://deepgram.com/)<br>
-  ⬇️
+    ⬇️
 
 ## 4. Generate a DeepGram API Key
   ### a. [Instructions](https://developers.deepgram.com/docs/create-additional-api-keys) <br>
   Save the key somewhere safe. <br>
-  ⬇️
-
+    ⬇️
+    
 ## 5. Create a GitHub Account (this is how you will access the source code of Public Speaking Dashboard)
   ### a. [GitHub](https://github.com/)<br>
-  ⬇️
-
+    ⬇️
+    
 ## 6. "Fork" the PSDB Repository
 
   ### a. While signed into your GitHub account, navigate to the publicspeakingDB/psdb repository (linked at the upper left of the page)<br>
@@ -70,8 +70,8 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 
 ## 7. Create a Netlify Account (this will be used to serve the app)
   ### a. [Netlify](https://www.netlify.com/)<br>
-  ⬇️
-
+    ⬇️
+    
 ## 8. Deploy Public Speaking Dashboard to Netlify<br>
 
   ### a. While signed into GitHub, navigate to dashboard<br>
@@ -101,8 +101,9 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
     VUE_APP_ROOT_API2=yourMistralAPIKeyCode
     VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
     ```
-    ⬇️
-  
+    <br>
+      ⬇️  
+      
   ### i. Click "Deploy"<br>
     ⬇️
   
@@ -134,8 +135,8 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
     ⬇️
   
   ### s. After a few minutes, your instance of Public Speaking Dashboard will be available at the link <br>
-    The link will be something like: yourreallygreatsite.netlify.app
-    🎉
+    The link will be something like: yourreallygreatsite.netlify.app <br>
+      🎉
 <br>
 <br>
 _It is important to note that deploying the app like this exposes your API keys to anyone who is using the app. Be sure to only share the link with intended audiences, and set "spend limits" on your API keys that you are comfortable with._
