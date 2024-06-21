@@ -39,25 +39,25 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 # Creating your own instance of Public Speaking Dashboard on Netlify
 
 ## 1. Create a Mistral AI Account (this will be the AI "back end" of the app)
-  [Mistral AI](https://mistral.ai/)<br>
+  ### a.[Mistral AI](https://mistral.ai/)<br>
   ⬇️
 
 ## 2. Generate a Mistral AI API Key 
-  [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup)<br>
+  ### a. [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup)<br>
   Save the key somewhere safe. <br>
   ⬇️
 
 ## 3. Create a DeepGram Account (this is used for voice transcription on mobile)
-  [DeepGram](https://deepgram.com/)<br>
+  ### a. [DeepGram](https://deepgram.com/)<br>
   Save the key somewhere safe. <br>
   ⬇️
 
 ## 4. Generate a DeepGram API Key
-  [Instructions](https://developers.deepgram.com/docs/create-additional-api-keys) <br>
+  ### a. [Instructions](https://developers.deepgram.com/docs/create-additional-api-keys) <br>
   ⬇️
 
 ## 5. Create a GitHub Account (this is how you will access the source code of Public Speaking Dashboard)
-  [GitHub](https://github.com/)<br>
+  ### a. [GitHub](https://github.com/)<br>
   ⬇️
 
 ## 6. "Fork" the PSDB Repository
@@ -69,7 +69,7 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
     ⬇️
 
 ## 7. Create a Netlify Account (this will be used to serve the app)
-  [Netlify](https://www.netlify.com/)<br>
+  ### a. [Netlify](https://www.netlify.com/)<br>
   ⬇️
 
 ## 8. Deploy Public Speaking Dashboard to Netlify<br>
