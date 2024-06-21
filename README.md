@@ -6,10 +6,12 @@
 
 ## 2. Generate a Mistral AI API Key 
 [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup)
+Save the key somewhere safe. 
 ⬇️
 
 ## 3. Create a DeepGram Account (this is used for voice transcription on mobile)
 [DeepGram](https://deepgram.com/)
+Save the key somewhere safe. 
 ⬇️
 
 ## 4. Generate a DeepGram API Key
@@ -18,10 +20,15 @@
 
 ## 5. Create a GitHub Account (this is how you will access the source code of Public Speaking Dashboard)
 [GitHub](https://github.com/)
+⬇️
 
 ## 6. "Fork" the PSDB Repository
+
 ### a. While signed into your GitHub account, navigate to the publicspeakingDB/psdb repository (linked at the upper left of the page)
-### b. Click "Fork" 
+⬇️
+
+### b. Click "Fork" (you should now see the /psdb repository in the list of repositories on your account)
+⬇️
 
 ## 7. Create a Netlify Account (this will be used to serve the app)
 [Netlify](https://www.netlify.com/)
@@ -29,7 +36,7 @@
 
 ## . Deploy Public Speaking Dashboard to Netlify
 
-### a. Navigate to dashboard
+### a. While signed into GitHub, navigate to dashboard
 ⬇️
 
 ### b. Click "Add new site"
@@ -44,12 +51,51 @@
 ### e. Select the "/psdb" repository 
 ⬇️
 
-npm run build
+### f. Name the site whatever you wish
+⬇️
+
+### g. Leave all other settings at their default values
+⬇️
+
+### h. Click "Add environment variables" and "Add" two variables
+
+Do not edit the key name--copy it verbatim. For the value, copy and paste your Mistral and DeepGram API keys accordingly
+
 ```
+VUE_APP_ROOT_API2=yourMistralAPIKeyCode
+VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
 ```
-VUE_APP_ROOT_API2=yourMistralAPIKey
-VUE_APP_ROOT_API3=yourDeepGramAPIKey
-```
+⬇️
+
+### i. Click "Deploy"
+
+### j. Navigate back to the main dashboard
+
+### k. Click "Site configuration" 
+
+### l. Click "Build & deploy" 
+
+### m. Click "Dependency management"
+
+### n. Select "Node 16.x"
+
+### 0. Click "Save" 
+
+### p. Navigate to "Deploys" 
+
+### q. Click "Clear cache and deploy site" 
+
+### r. Navigate to "Site overview" 
+
+### s. After a few minutes, your instance of Public Speaking Dashboard will be available at the link
+The linke will be somethign like yourreallygreatsite.netlify.app
+
+_It is important to note that deploying the app like this exposes your API keys to anyone who is using the app. Be sure to only share the link with intended audiences, and set "spend limits" on your API keys that you are comfortable with, should someone get ahold of your keys._
+
+
+
+
+
 
 ---
 
