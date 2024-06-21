@@ -49,11 +49,11 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 
 ## 3. Create a DeepGram Account (this is used for voice transcription on mobile)
   ### a. [DeepGram](https://deepgram.com/)<br>
-  Save the key somewhere safe. <br>
   ⬇️
 
 ## 4. Generate a DeepGram API Key
   ### a. [Instructions](https://developers.deepgram.com/docs/create-additional-api-keys) <br>
+  Save the key somewhere safe. <br>
   ⬇️
 
 ## 5. Create a GitHub Account (this is how you will access the source code of Public Speaking Dashboard)
