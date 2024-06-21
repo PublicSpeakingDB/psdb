@@ -183,4 +183,4 @@ Customize configuration
 ---
 <br><br><br><br>
 # Attribution Credits and Dependencies for Public Speaking Dashboard
-<iframe scr="https://github.com/PublicSpeakingDB/psdb/blob/main/package-lock.json"></iframe>
+<iframe width="75%" height="25%" src="https://raw.githubusercontent.com/PublicSpeakingDB/psdb/main/package-lock.json"></iframe>
