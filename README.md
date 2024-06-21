@@ -74,36 +74,45 @@ VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
 ⬇️
 
 ### i. Click "Deploy"
+⬇️
 
 ### j. Navigate back to the main dashboard
+⬇️
 
-### k. Click "Site configuration" 
+### k. Click "Site configuration"
+⬇️
 
-### l. Click "Build & deploy" 
+### l. Click "Build & deploy"
+⬇️
 
 ### m. Click "Dependency management"
+⬇️
 
 ### n. Select "Node 16.x"
+⬇️
 
-### 0. Click "Save" 
+### 0. Click "Save"
+⬇️
 
-### p. Navigate to "Deploys" 
+### p. Navigate to "Deploys"
+⬇️
 
-### q. Click "Clear cache and deploy site" 
+### q. Click "Clear cache and deploy site"
+⬇️
 
-### r. Navigate to "Site overview" 
+### r. Navigate to "Site overview"
+⬇️
 
 ### s. After a few minutes, your instance of Public Speaking Dashboard will be available at the link
-The linke will be somethign like yourreallygreatsite.netlify.app
+The linke will be something like: yourreallygreatsite.netlify.app
 
 _It is important to note that deploying the app like this exposes your API keys to anyone who is using the app. Be sure to only share the link with intended audiences, and set "spend limits" on your API keys that you are comfortable with, should someone get ahold of your keys._
 
 
 
-
-
-
 ---
+
+
 
 # Running the App Locally
 
