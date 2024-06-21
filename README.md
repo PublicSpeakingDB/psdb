@@ -137,7 +137,7 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
     The link will be something like: yourreallygreatsite.netlify.app
 <br>
 <br>
-_It is important to note that deploying the app like this exposes your API keys to anyone who is using the app. Be sure to only share the link with intended audiences, and set "spend limits" on your API keys that you are comfortable with, should someone get ahold of your keys._
+_It is important to note that deploying the app like this exposes your API keys to anyone who is using the app. Be sure to only share the link with intended audiences, and set "spend limits" on your API keys that you are comfortable with._
 <br><br><br><br>
 
 
