@@ -1,42 +1,18 @@
 <template>
-  <div id="body" class="dashboard">
-    <p v-if="!loading" id="loadingContainer">
-      Initializing <br /><section id="loader"></section><br /><span
-        id="initialMessage"
-        >(Make sure your webcam is facing you.)</span
-      >
+  <div>
+    <p v-if="!loading" id="loadingContainer" aria-live="polite" aria-busy="true">
+      Initializing <br /><section id="loader" aria-label="Loading animation"></section><br /><span id="initialMessage">(Make sure your webcam is facing you.)</span>
     </p>
-    <span id="container"
- ><div id="video-container" class="video-container">
-   <video id="video" autoplay width="150" height="150"></video></div
-></span>
-    <h1 v-if="showProcess" id="mainTitle">
-      <img
-        id="talking"
-        alt="image of voice waves leaving someone's mouth. Attribution: Speak Icon, by Voysla, 'https://www.flaticon.com/free-icons/speak'"
-        src="talking.png"
-      />
-      {{ msg }}
-    </h1>
-    <p v-if="showProcess" id="messageTwo">
-      {{ msg2 }}
-    </p>
-    
-    <p v-if="showProcess" id="messageThree">
-      {{ msg3 }}
-    </p>
+    <span id="container"><div id="video-container" class="video-container" aria-label="Webcam feed"><video id="video" autoplay width="150" height="150"></video></div></span>
+    <h1 v-if="showProcess" id="mainTitle" aria-live="assertive"><img id="talking" alt="image of voice waves leaving someone's mouth." src="talking.png" />{{ msg }}</h1>
+    <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}</p>
+    <p v-if="showProcess" id="messageThree" aria-live="assertive">{{ msg3 }}</p>
     <span id="timeHolder">Time: </span>
-    <!--<span><button  v-bind:style="{ backgroundColor: WPMColor}" v-if="!show" v-on:click="selectWPM" class="optionsButton" id="optionWPM"> Words Per Minute</button><button v-bind:style="{ backgroundColor: textEmotionColor}" v-if="!show" v-on:click="selectTextEmotion" class="optionsButton" id="optionEmotionsText"> Emotions in Text</button></span>
-		<span><button v-bind:style="{ backgroundColor: voiceEmotionColor}" v-if="!show" v-on:click="selectVoiceEmotion" class="optionsButton" id="optionEmotionVoice"> Emotions in Voice</button><button v-bind:style="{ backgroundColor: faceEmotionColor}" v-if="!show" v-on:click="selectFaceEmotion" class="optionsButton" id="optionEmotionsFace"> Emotions in Face</button></span><br>-->
-    <span
-      ><span v-if="!show3" id="dropdownWrapper">
-        <label for="speakingTime" alt="Choose Desired Speech Length:"></label>
-        <select name="speakingTime" id="speakingTime">
-          <option value="nope" selected>
-            Choose Target Speaking Time - (Gives 30 and 15 Sec Warnings Before
-            Selected Time)
-          </option>
-          <option value="60000">1 Min</option>
+    <span>  
+      <span v-if="!show3" id="dropdownWrapper">
+        <label for="speakingTime" class="sr-only"></label>
+        <select name="speakingTime" id="speakingTime" aria-label="Choose Desired Speech Length" tabindex="0">
+          <option value="60000" selected>1 Min</option>
           <option value="120000">2 Min</option>
           <option value="180000">3 Min</option>
           <option value="300000">5 Min</option>
@@ -45,222 +21,131 @@
           <option value="480000">8 Min</option>
           <option value="540000">9 Min</option>
           <option value="600000">10 Min</option>
-          <!-- <option value="900000">15 Min</option>
-          <option value="1200000">20 Min</option>
-          <option value="1500000">25 Min</option>
-          <option value="1800000">30 Min</option>
-          <option value="2700000">45 Min</option>
-          <option value="3600000">60 Min</option> -->
         </select>
       </span>
-      <button
-        id="begin"
-        v-if="showBegin"
-        v-on:click="
-          begin();
-          selectWPM();
-          selectTextEmotion();
-          selectVoiceEmotion();
-          selectFaceEmotion();
-        "
-      >
-        Begin</button
-      ><button id="start" v-if="!showStart" v-on:click="begin3">Start</button
-      ><button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">
-        Stop</button
-      ><button id="reset" v-if="!show3" v-on:click="reset">Reset</button
-      ><button id="pdf" v-if="!show5" v-on:click="pdfResults">
-        Save
-      </button></span
-    >
+    <button id="begin" v-if="showBegin" v-on:click="begin(); selectWPM(); selectTextEmotion(); selectVoiceEmotion(); selectFaceEmotion();">Begin</button>
+    <button id="start" v-if="!showStart" v-on:click="begin3">Start</button>
+    <button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">Stop</button>
+    <button id="reset" v-if="!show3" v-on:click="reset">Reset</button>
+    <button id="pdf" v-if="!show5" v-on:click="pdfResults">Save</button></span><br>
+    <span id="rawData" aria-live="polite"></span>
+    <div v-if="!showTime" class="title" id="timer" aria-live="off">{{ time }}</div>
+    <span v-if="!show3" id="volume-visualizer-wrapper" aria-label="Volume visualizer"><span id="volume-visualizer"></span></span>
+      <ul v-if="!show3" id="output" aria-live="polite"></ul>
+    <span><button v-if="!show3" id="dataShowButton" v-on:click="unhideData">View Raw Data</button>
+    <button v-if="!show3" id="dataHideButton" v-on:click="hideData">Hide Raw Data</button></span><br>
+    <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
     
-    <!--<br><button id="next" v-if="!show" v-on:click="next">Next</button>--><br />
-    <span id="rawData"></span>
-    <button v-if="!showTime" class="title" id="timer">{{ time }}</button>
-    <span v-if="!show3" id="volume-visualizer-wrapper"
-      ><button id="volume-visualizer"></button
-    ></span>
-    <ul v-if="!show3" id="output"></ul>
-    <span
-      ><button v-if="!show3" id="dataShowButton" v-on:click="unhideData">
-        View Raw Data</button
-      ><button v-if="!show3" id="dataHideButton" v-on:click="hideData">
-        Hide Raw Data
-      </button></span
-    >
-<section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
-<span id="container"
- ><div id="video-container" class="video-container">
-   <video id="video" autoplay width="150" height="150"></video></div
-></span>
-<!-- The Modal -->
-<div id="modalBoxSave" class="modal">
+    <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay width="150" height="150"></video></div></span>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-   
-    <h2>Be Sure to Save!</h2>
-    <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p>
-    <span id="modalBoxCloseSave" class="close2">Got It</span>
-  </div>
-</div>
+    <div id="modalBoxSave" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxSaveLabel">
+      <div class="modal-content">
+          <h2 id="modalBoxSaveLabel">Be Sure to Save!</h2>
+          <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p>
+          <button id="modalBoxCloseSave" tabindex="4" class="close2" aria-label="Close">Got It</button>
+      </div>
+    </div>
 
-<!-- The Modal -->
-<div id="modalBoxOverall" class="modal">
+    <div id="modalBoxOverall" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxOverallLabel">
+      <div class="modal-content">
+          <button id="modalBoxCloseOverall" class="close" aria-label="Close">&times;</button>
+          <h2 id="modalBoxOverallLabel">How Public Speaking Dashboard Works</h2>
+          <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to automated transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
+      </div>
+    </div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span id="modalBoxCloseOverall" class="close">&times;</span>
-    <h2>How Public Speaking Dashboard Works</h2>
-    <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to automated transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
-    
-  </div>
-</div>
-<span id="container"
- ><div id="video-container" class="video-container">
-   <video id="video" autoplay width="150" height="150"></video></div
-></span>
+    <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay width="150" height="150"></video></div></span>
 
-    <!--FEEDBACK SECTION-->
-
-    <!--WPM-->
     <span v-if="!showWPM" id="wpmChart"></span><br>
     <section><button v-if="!showVolume" v-on:click="WPMmodal" class="modalButton" id="modalButtonWPM">More About Rate of Speech</button></section>
 
-<!-- The Modal -->
-<div id="modalBoxWPM" class="modal">
-
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span id="modalBoxCloseWPM" class="close">&times;</span>
-    <h2>Rate of Speech</h2>
-    <p>Rate of speech is calculated by taking the latest registered "chunk" of transcribed speech and dividing it by the time passed since the previous chunk was registered.<br><br>Use this data to think about your own impact and understandability.<br><br>Speaking quickly might add energy but reduce comprehension for the audience. And, speaking slowly might add clarity but lose energy. The ideal is to strike a balance based on your own unique speaking style and character.</p>
-    
-  </div>
-
-</div>
+    <div id="modalBoxWPM" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWPMLabel">
+      <div class="modal-content">
+        <button id="modalBoxCloseWPM" class="close" aria-label="Close">&times;</button>
+        <h2 id="modalBoxWPMLabel">Rate of Speech</h2>
+        <p>Rate of speech is calculated by taking the latest registered "chunk" of transcribed speech and dividing it by the time passed since the previous chunk was registered.<br><br>Use this data to think about your own impact and understandability.<br><br>Speaking quickly might add energy but reduce comprehension for the audience. And, speaking slowly might add clarity but lose energy. The ideal is to strike a balance based on your own unique speaking style and character.</p>
+      </div>
+    </div>
 
     <span v-if="!showVolume" id="volumeChart"></span><br>
-    <section><button v-if="!showVolume" v-on:click="Volumemodal" class="modalButton" id="modalButtonWPM">More About Volume</button></section>
+    <section><button v-if="!showVolume" v-on:click="Volumemodal" class="modalButton" id="modalButtonVolume">More About Volume</button></section>
 
-<!-- The Modal -->
-<div id="modalBoxVolume" class="modal">
+    <div id="modalBoxVolume" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxVolumeLabel">
+      <div class="modal-content">
+        <button id="modalBoxCloseVolume" class="close" aria-label="Close">&times;</button>
+        <h2 id="modalBoxVolumeLabel">Volume</h2>
+        <p>Volume is captured by sampling the microphone volume once a second.<br><br>Use this data to think about your speech "dynamics," the ups and downs throughout your speech. <br><br>While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it.</p>
+      </div>
+    </div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span id="modalBoxCloseVolume" class="close">&times;</span>
-    <h2>Volume</h2>
-    <p>Volume is captured by sampling the microphone volume once a second.<br><br>Use this data to think about your speech "dynamics," the ups and downs throughout your speech. <br><br>While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it.</p>
-    
-  </div>
-
-</div>
     <span v-if="!showFaceEmotion" id="faceEmotionChart"></span>
     <section><button v-if="!showVolume" v-on:click="Facemodal" class="modalButton" id="modalButtonFace">More About Expressions in Face</button></section>
 
-<!-- The Modal -->
-<div id="modalBoxFace" class="modal">
+    <div id="modalBoxFace" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFaceLabel">
+      <div class="modal-content">
+        <button id="modalBoxCloseFace" class="close" aria-label="Close">&times;</button>
+        <h2 id="modalBoxFaceLabel">Expressions in Face</h2>
+        <p>This data is captured by assessing key areas of the face to register a given emotional state once a second.<br><br>Use this data to think about the "congruence" (or not) between your words spoken and your facial expressions.<br><br>Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Keep in mind that a "neutral" facial expression is not negative; it can be a desirable expression in many speaking contexts.<br><br>It is important to keep in mind that, because the system samples your facial expressions once a second, it can sometimes register "micro-expressions," or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences.</p>
+      </div>
+    </div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span id="modalBoxCloseFace" class="close">&times;</span>
-    <h2>Expressions in Face</h2>
-    <p>This data is captured by assessing key areas of the face to register a given emotional state once a second.<br><br>Use this data to think about the "congruence" (or not) between your words spoken and your facial expressions.<br><br>Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Keep in mind that a "neutral" facial expression is not negative; it can be a desirable expression in many speaking contexts.<br><br>It is important to keep in mind that, because the system samples your facial expressions once a second, it can sometimes register "micro-expressions," or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences.</p>
-    
-  </div>
-
-</div>
     <span v-if="!showTextEmotion" id="readabilityChart"></span>
-        <section><button v-if="!showVolume" v-on:click="Wordsmodal" class="modalButton" id="modalButtonWords">More About Complexity of Words Spoken</button></section>
+    <section><button v-if="!showVolume" v-on:click="Wordsmodal" class="modalButton" id="modalButtonWords">More About Complexity of Words Spoken</button></section>
 
-<!-- The Modal -->
-<div id="modalBoxWords" class="modal">
+    <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWordsLabel">
+      <div class="modal-content">
+        <button id="modalBoxCloseWords" class="close" aria-label="Close">&times;</button>
+        <h2 id="modalBoxWordsLabel">Complexity of Words Spoken</h2>
+        <p>Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words.<br><br>Complexity of words spoken can impact the understandability and engagement of your audience. Use this data to reflect on your word choice and consider simplifying your language for better communication.</p>
+      </div>
+    </div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span id="modalBoxCloseWords" class="close">&times;</span>
-    <h2>Complexity of Words Spoken</h2>
-    <p>Word complexity is calcuated by dividing words by number of syllables--the more syllables per word, the higher the complexity score.<br><br>Use this data to think about your understandability and impact.<br><br>Language that is too "chewy" for your audience might impact their ability to understand. But, language that isn't chewy enough might be less impactful.</p>
-    
-  </div>
-
-</div>
-    <h1 v-if="!showFeedback" id="specificAndOverallFeedback">
-      Specific Feedback
-    </h1>
+    <h1 v-if="!showFeedback" id="specificAndOverallFeedback">Specific Feedback</h1>
     <p v-if="!showFeedback" class="feedback">{{ feedback }}</p>
-    <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">
-      Overall Feedback
-    </h1>
+    <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">Overall Feedback</h1>
     <p v-if="!showFeedback2" class="feedback">{{ feedback2 }}</p>
-    
-    
-    <section><button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback">More About Feedback</button></section>
+    <section>
+      <button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button>
+    </section>
 
-<!-- The Modal -->
-<div id="modalBoxFeedback" class="modal">
+    <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFeedbackHeader">
+      <div class="modal-content">
+        <button id="modalBoxCloseFeedback" class="close" aria-label="Close">&times;</button>
+        <h2 id="modalBoxFeedbackHeader">Feedback</h2>
+        <p>Feedback is generated based on the analysis of your speech. It includes specific feedback on various aspects of your speech and overall feedback summarizing your performance.<br><br>Use this feedback to improve your public speaking skills and focus on areas that need improvement.</p>
+      </div>
+    </div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span id="modalBoxCloseFeedback" class="close">&times;</span>
-    <h2>Feedback</h2>
-    <p>Feedback is generated by having a bot summarize the data in 20 or 30 second "chunks." (20 second chunks for speeches under 3 minutes, and 30 second chunks for speeches longer than 3 minutes.)<br><br>From here, another bot summarizes those specific feedback points to give overall feedback.<br><br>It is important to keep in mind that the bots can sometimes give inaccurate feedback (they're bots after all).<br><br>Use the feedback to better understand your own data, but don't take the bots' assessments as absolutely correct.</p>
-    
-  </div>
-
-</div>
-    <!-- 
-		<span v-if="!showTextEmotion" id="textEmotionChart"></span>
- -->
-
- 
     <footer id="footer" v-if="showFooter">
       <section id="version">
         Version 0.1 (Beta)
-        
         <div id="bugs">
           <br />
           <section v-if="showModal" id="modal">
-            Public Speaking Dashboard does not collect user data or use cookies.
-            However, third party services are used for transcription and analysis.
-            Terms of use for those third party services can be found
-            <a href="https://deepgram.com/terms">here</a> and
-            <a href="https://mistral.ai/terms/">here</a>.
+            Public Speaking Dashboard does not collect or store user data. However, third-party services are used for transcription and analysis. Terms of use for those third-party services can be found <a href="https://deepgram.com/terms">here</a> and <a href="https://mistral.ai/terms/">here</a>.
           </section><br>
           <b>Known Bugs and Limitations:</b> <br />
           <section>
-            - Current version of app works best on the latest Google Chrome browser on
-            desktop. Other browsers are unstable.
+            - Current version of app works best on the latest Google Chrome browser on desktop. Other browsers are unstable.
           </section>
           <section>
-            - App will work on Google Chrome browser on iOS and Android. Other
-            browsers are unstable.
+            - App will work on Google Chrome browser on iOS and Android. Other browsers are unstable.
           </section>
           <section>
-            - User needs to speak for at least 30 seconds before meaningful
-            results are produced.
+            - User needs to speak for at least 30 seconds before meaningful results are produced.
           </section>
           <section>
-            - System will only reliably give an overall summary for speeches shorter
-            than 10 minutes.
+            - System will only reliably give an overall summary for speeches shorter than 10 minutes.
           </section>
-          <section>
-            <br />
-            If you find a bug please report it here:
-            <a
-              href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW"
-              >Bug/Error Report Form</a
-            >
-            
-          </section>
-          <br /><br />
+          <br>
+          If you find a bug please report it here:
+          <a href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW">Bug/Error Report Form</a>
+          <br><br>
         </div>
       </section>
     </footer>
-    <!--<p v-if="!showWPM" id="wpm">{{ wpm }} <br><b>Overall Average Words Per Minute</b></p><br>-->
   </div>
 </template>
-
 <script>
 //import paralleldots from 'paralleldots'
 import * as rs from "text-readability";
@@ -718,6 +603,8 @@ window.onclick = function(event) {
     },
 
     begin: function () {
+      document.getElementById("version").style.fontSize = "10px"
+      document.getElementById("bugs").style.fontSize = "10px"
       //initiate speech recognition and ask for microphone permission
       this.analyzeFace();
       window.SpeechRecognition =
@@ -726,7 +613,7 @@ window.onclick = function(event) {
       recognition.start();
       this.show = false;
       this.msg3 =
-        "Choose a desired speech length. Click start. Then, click stop when finished.";
+        "Choose a desired speech length, then click start. Click stop when finished.";
       this.showModal = false;
       console.log("Dashboard page loaded");
       setTimeout(() => {
@@ -1455,8 +1342,14 @@ window.onclick = function(event) {
           },
         };
 
+        var config = {
+          displayModeBar: true,
+          modeBarButtonsToRemove: ["lasso2d", "select2d", "sendDataToCloud"],
+          displaylogo: false,
+        };
+
         var WPMChart = document.getElementById("wpmChart");
-        Plotly.newPlot(WPMChart, [wordsPerMinute], layout);
+        Plotly.newPlot(WPMChart, [wordsPerMinute], layout, config);
       }
 
       //Volume
@@ -1532,7 +1425,7 @@ window.onclick = function(event) {
         };
 
         var volumeChart = document.getElementById("volumeChart");
-        Plotly.newPlot(volumeChart, [volume], layout3);
+        Plotly.newPlot(volumeChart, [volume], layout3, config);
       }
 
       //Readability
@@ -1608,7 +1501,7 @@ window.onclick = function(event) {
         };
 
         var readabilityChart = document.getElementById("readabilityChart");
-        Plotly.newPlot(readabilityChart, [word_complexity], layout5);
+        Plotly.newPlot(readabilityChart, [word_complexity], layout5, config);
       }
 
       //Emotions in Face
@@ -1765,7 +1658,7 @@ window.onclick = function(event) {
         Plotly.newPlot(
           FACEEMOTIONChart,
           [Angry, Fearful, Excited, Bored, Sad, Happy, Disgusted],
-          layout4
+          layout4, config
         );
       }
 
@@ -2133,7 +2026,31 @@ div {
 
 #dataHideButton {
   margin: auto;
-  color: #222831;
+  color: gray;
+  background-color: #222831;
+  width: 40%;
+  text-align: center;
+  height: 30px;
+  font-size: 10px;
+  margin: 0px;
+  border: none;
+}
+
+#dataHideButton:hover {
+  margin: auto;
+  color: #00ffc3;
+  background-color: #222831;
+  width: 40%;
+  text-align: center;
+  height: 30px;
+  font-size: 10px;
+  margin: 0px;
+  border: none;
+}
+
+#dataHideButton:focus {
+  margin: auto;
+  color: #00ffc3;
   background-color: #222831;
   width: 40%;
   text-align: center;
@@ -2145,7 +2062,30 @@ div {
 
 #dataShowButton {
   margin: auto;
-  color: #222831;
+  color: gray;
+  background-color: #222831;
+  width: 40%;
+  text-align: center;
+  height: 30px;
+  font-size: 10px;
+  margin: 0px;
+  border: none;
+}
+#dataShowButton:hover {
+  margin: auto;
+  color: #00ffc3;
+  background-color: #222831;
+  width: 40%;
+  text-align: center;
+  height: 30px;
+  font-size: 10px;
+  margin: 0px;
+  border: none;
+}
+
+#dataShowButton:focus {
+  margin: auto;
+  color: #00ffc3;
   background-color: #222831;
   width: 40%;
   text-align: center;
@@ -2191,6 +2131,8 @@ a {
   font-weight: bold;
   text-align: center;
   margin-bottom: 0px;
+  margin: auto;
+  padding-top: 15px;
 }
 
 #timeHolder {
@@ -2217,6 +2159,11 @@ a {
 
 #speakingTime:hover {
   background-color: #c300ff;
+}
+#speakingTime:focus {
+  border-style: solid; 
+  border-color: white;
+  border-width: thick; 
 }
 
 #volume-visualizer-wrapper {
@@ -2363,23 +2310,24 @@ video {
   color: white; 
   font-size: 28px;
   font-weight: bold;
+  color: darkgray;
 }
 
 .close:hover,
 .close:focus {
-  color: gray; 
+  color: black; 
   text-decoration: none;
   cursor: pointer;
 }
 
 .close2 {
-  color: white; 
+  color: black; 
   font-size: 28px;
   font-weight: bold;
   border-style: solid; 
   padding: 5px; 
   margin: auto;
-  width: 50%;
+  width: 18%;
 }
 
 .close2:hover,
@@ -2470,5 +2418,19 @@ margin-top: .5%;
   75% {
     background-position: 0% 0%, 100% 100%;
   }
+}
+
+button, .optionsButton, #begin, #start, #stop, #reset, #pdf, #next, #speakingTime, #dataHideButton, #dataShowButton {
+  cursor: pointer;
+}
+
+button:hover, .optionsButton:hover, #begin:hover, #start:hover, #stop:hover, #reset:hover, #pdf:hover, #next:hover, #speakingTime:hover, #dataHideButton:hover, #dataShowButton:hover {
+  background-color: #ccc;
+}
+
+button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #reset:focus, #pdf:focus, #next:focus, #speakingTime:focus, #dataHideButton:focus, #dataShowButton:focus {
+  border-style: solid;
+  border-color: white;
+  border-width: thick;
 }
 </style>
