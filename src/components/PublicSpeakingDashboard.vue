@@ -138,10 +138,10 @@
             - System will only reliably give an overall summary for speeches shorter than 10 minutes.
           </section>
           <br>
+          <b>Updates: </b><span id="updates">{{updates}}</span><br>
+          <br>
           If you find a bug or anything that can be improved in the app, please report it here:
           <a href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW">Bug/Improvement Report Form</a>
-          <br><br>
-          <b>Updates: </b><span id="updates">{{updates}}</span><br>
           <br><br>
         </div>
       </section>
