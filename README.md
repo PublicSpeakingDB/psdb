@@ -60,12 +60,12 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
   ### a. [GitHub](https://github.com/)<br>
     ⬇️
     
-## 6. "Fork" the PSDB Repository
+## 6. "Fork" the PSD Repository
 
-  ### a. While signed into your GitHub account, navigate to the publicspeakingDB/psdb repository (linked at the upper left of the page)<br>
+  ### a. While signed into your GitHub account, navigate to the publicspeakingDB/PSD repository (linked at the upper left of the page)<br>
     ⬇️
 
-  ### b. Click "Fork" (you should now see the /psdb repository in the list of repositories on your account)<br>
+  ### b. Click "Fork" (you should now see the /PSD repository in the list of repositories on your account)<br>
     ⬇️
 
 ## 7. Create a Netlify Account (this will be used to serve the app)
@@ -86,7 +86,7 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
   ### d. Select "Github"<br>
     ⬇️
 
-  ### e. Select the "/psdb" repository <br>
+  ### e. Select the "/PSD" repository <br>
     ⬇️
   
   ### f. Name the site whatever you wish<br>
@@ -182,4 +182,4 @@ Customize configuration
 <br><br><br><br> 
 ---
 <br><br><br><br>
-# [Attribution Credits and Dependencies for Public Speaking Dashboard](https://raw.githubusercontent.com/PublicSpeakingDB/psdb/main/package-lock.json)
+# [Attribution Credits and Dependencies for Public Speaking Dashboard](https://raw.githubusercontent.com/PublicSpeakingDB/PSD/main/package-lock.json)
