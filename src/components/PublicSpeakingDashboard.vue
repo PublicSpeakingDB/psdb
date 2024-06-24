@@ -2308,7 +2308,7 @@ video {
   border-style: solid; 
   padding: 5px; 
   margin: auto;
-  width: 18%;
+  width: 100px;
   aria-label: "Close";
 }
 
