@@ -1171,10 +1171,10 @@ window.onclick = function(event) {
         }
         setTimeout(() => {
           this.summarizeData();
-        }, 1000);
+        }, 1010);
           setTimeout(() => {
           this.getFeedback();
-        }, 3000);
+        }, 3500);
         
 
         this.cancelCall = true;
