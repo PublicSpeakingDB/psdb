@@ -141,6 +141,8 @@
           If you find a bug or anything that can be improved in the app, please report it here:
           <a href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW">Bug/Improvement Report Form</a>
           <br><br>
+          <b>Updates: </b><span id="updates">{{updates}}</span><br>
+          <br><br>
         </div>
       </section>
     </footer>
@@ -257,7 +259,9 @@ export default {
       voiceInstance: null,
       dataSummaryTime: 20000, 
       msgTime: "", 
-      speakingTimeLabel: "Choose Desired Speech Length (1 Min)"
+      speakingTimeLabel: "Choose Desired Speech Length (1 Min)", 
+      updates: "", 
+      updateNumber: 0
     };
   },
 
@@ -281,6 +285,14 @@ export default {
         this.showBegin = false;
       }
     }
+
+    axios
+        .get("https://raw.githubusercontent.com/publicspeakingdashboard/updates/main/updates.txt")
+        .then(json => (
+
+        this.updates = json.data
+        
+        ));
   },
 
   mounted() {
