@@ -2180,11 +2180,11 @@ a {
   transition: width 100ms linear;
 }
 #container {
-  margin-top:-95px;
   display: none;
   position: fixed;
   z-index: 1;
-  width: 50vw;
+  margin-top: -90px;
+  margin-left: 10%;
 }
 
 .video-container {
@@ -2192,7 +2192,7 @@ a {
   margin-top: 0px;
   background-color: #222831;
   display: inline-block;
-  
+  height: 175px;
 }
 
 canvas {
