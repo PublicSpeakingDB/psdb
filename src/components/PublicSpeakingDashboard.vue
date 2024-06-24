@@ -2095,8 +2095,9 @@ a {
 }
 
 #talking {
-  height: 100px;
+  height: 85px;
   margin-bottom: -20px;
+  margin-left: -8px;
   -webkit-filter: invert(1);
   filter: invert(1);
 }
@@ -2185,6 +2186,7 @@ a {
   z-index: 1;
   margin-top: -90px;
   margin-left: 10%;
+  pointer-events: none;
 }
 
 .video-container {
