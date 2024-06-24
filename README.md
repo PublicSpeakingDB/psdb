@@ -44,7 +44,7 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 
 ## 2. Generate a Mistral AI API Key 
   ### a. [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup)<br>
-  Save the key somewhere safe. <br>
+  Save the key somewhere safe.<br>
     ⬇️
 
 ## 3. Create a DeepGram Account (this is used for voice transcription on mobile)
