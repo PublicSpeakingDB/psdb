@@ -4,14 +4,14 @@
       Initializing <br /><section id="loader" aria-label="Loading animation"></section><br /><span id="initialMessage">(Make sure your webcam is facing you.)</span>
     </p>
     <span id="container"><div id="video-container" class="video-container" aria-label="Webcam feed"><video id="video" autoplay width="150" height="150"></video></div></span>
-    <h1 v-if="showProcess" id="mainTitle" aria-live="assertive"><img id="talking" alt="image of voice waves leaving someone's mouth." src="talking.png" />{{ msg }}</h1>
+    <h1 v-if="showProcess" id="mainTitle" aria-live="assertive"><img id="talking" alt="Decorative image of voice waves leaving someone's mouth." src="talking.png" />{{ msg }}</h1>
     <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}</p>
     <p v-if="showProcess" id="messageThree" aria-live="assertive">{{ msg3 }}</p>
     <span id="timeHolder">Time: </span>
     <span>  
       <span v-if="!show3" id="dropdownWrapper">
         <label for="speakingTime" class="sr-only"></label>
-        <select name="speakingTime" id="speakingTime" aria-label="Choose Desired Speech Length" tabindex="0">
+        <select name="speakingTime" id="speakingTime" :aria-label="speakingTimeLabel" tabindex="0">
           <option value="60000" selected>1 Min</option>
           <option value="120000">2 Min</option>
           <option value="180000">3 Min</option>
@@ -29,17 +29,17 @@
     <button id="reset" v-if="!show3" v-on:click="reset">Reset</button>
     <button id="pdf" v-if="!show5" v-on:click="pdfResults">Save</button></span><br>
     <span id="rawData" aria-live="polite"></span>
-    <div v-if="!showTime" class="title" id="timer" aria-live="off">{{ time }}</div>
-    <span v-if="!show3" id="volume-visualizer-wrapper" aria-label="Volume visualizer"><span id="volume-visualizer"></span></span>
+    <div v-if="!showTime" class="title" id="timer" aria-live="polite">{{ time }}<span aria-hidden="true">{{msgTime}}</span> </div>
+    <span v-if="!show3" id="volume-visualizer-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Volume Level"><span id="volume-visualizer"></span></span>
       <ul v-if="!show3" id="output" aria-live="polite"></ul>
     <span><button v-if="!show3" id="dataShowButton" v-on:click="unhideData">View Raw Data</button>
     <button v-if="!show3" id="dataHideButton" v-on:click="hideData">Hide Raw Data</button></span><br>
     <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
     
-    <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay width="150" height="150"></video></div></span>
+    <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay muted width="150" height="150" alt="Live video feed for facial expression analysis"></video></div></span>
 
-    <div id="modalBoxSave" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxSaveLabel">
-      <div class="modal-content">
+    <div id="modalBoxSave" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="modalBoxSaveLabel">
+      <div class="modal-content" tabindex="-1">
           <h2 id="modalBoxSaveLabel">Be Sure to Save!</h2>
           <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p>
           <button id="modalBoxCloseSave" tabindex="4" class="close2" aria-label="Close">Got It</button>
@@ -47,7 +47,7 @@
     </div>
 
     <div id="modalBoxOverall" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxOverallLabel">
-      <div class="modal-content">
+      <div class="modal-content" tabindex="-1">
           <button id="modalBoxCloseOverall" class="close" aria-label="Close">&times;</button>
           <h2 id="modalBoxOverallLabel">How Public Speaking Dashboard Works</h2>
           <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to automated transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
@@ -56,44 +56,44 @@
 
     <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay width="150" height="150"></video></div></span>
 
-    <span v-if="!showWPM" id="wpmChart"></span><br>
+    <span v-if="!showWPM" id="wpmChart" role="img" aria-label="Chart showing words per minute over time"></span><br>
     <section><button v-if="!showVolume" v-on:click="WPMmodal" class="modalButton" id="modalButtonWPM">More About Rate of Speech</button></section>
 
     <div id="modalBoxWPM" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWPMLabel">
-      <div class="modal-content">
+      <div class="modal-content" tabindex="-1">
         <button id="modalBoxCloseWPM" class="close" aria-label="Close">&times;</button>
         <h2 id="modalBoxWPMLabel">Rate of Speech</h2>
         <p>Rate of speech is calculated by taking the latest registered "chunk" of transcribed speech and dividing it by the time passed since the previous chunk was registered.<br><br>Use this data to think about your own impact and understandability.<br><br>Speaking quickly might add energy but reduce comprehension for the audience. And, speaking slowly might add clarity but lose energy. The ideal is to strike a balance based on your own unique speaking style and character.</p>
       </div>
     </div>
 
-    <span v-if="!showVolume" id="volumeChart"></span><br>
+    <span v-if="!showVolume" id="volumeChart" role="img" aria-label="Chart showing speaker's microphone volume over time"></span><br>
     <section><button v-if="!showVolume" v-on:click="Volumemodal" class="modalButton" id="modalButtonVolume">More About Volume</button></section>
 
     <div id="modalBoxVolume" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxVolumeLabel">
-      <div class="modal-content">
+      <div class="modal-content" tabindex="-1">
         <button id="modalBoxCloseVolume" class="close" aria-label="Close">&times;</button>
         <h2 id="modalBoxVolumeLabel">Volume</h2>
         <p>Volume is captured by sampling the microphone volume once a second.<br><br>Use this data to think about your speech "dynamics," the ups and downs throughout your speech. <br><br>While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it.</p>
       </div>
     </div>
 
-    <span v-if="!showFaceEmotion" id="faceEmotionChart"></span>
+    <span v-if="!showFaceEmotion" id="faceEmotionChart" role="img" aria-label="Chart showing facial emotions over time"></span>
     <section><button v-if="!showVolume" v-on:click="Facemodal" class="modalButton" id="modalButtonFace">More About Expressions in Face</button></section>
 
     <div id="modalBoxFace" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFaceLabel">
-      <div class="modal-content">
+      <div class="modal-content" tabindex="-1">
         <button id="modalBoxCloseFace" class="close" aria-label="Close">&times;</button>
         <h2 id="modalBoxFaceLabel">Expressions in Face</h2>
         <p>This data is captured by assessing key areas of the face to register a given emotional state once a second.<br><br>Use this data to think about the "congruence" (or not) between your words spoken and your facial expressions.<br><br>Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Keep in mind that a "neutral" facial expression is not negative; it can be a desirable expression in many speaking contexts.<br><br>It is important to keep in mind that, because the system samples your facial expressions once a second, it can sometimes register "micro-expressions," or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences.</p>
       </div>
     </div>
 
-    <span v-if="!showTextEmotion" id="readabilityChart"></span>
+    <span v-if="!showTextEmotion" id="readabilityChart" role="img" aria-label="Chart showing word complexity over time"></span>
     <section><button v-if="!showVolume" v-on:click="Wordsmodal" class="modalButton" id="modalButtonWords">More About Complexity of Words Spoken</button></section>
 
     <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWordsLabel">
-      <div class="modal-content">
+      <div class="modal-content" tabindex="-1">
         <button id="modalBoxCloseWords" class="close" aria-label="Close">&times;</button>
         <h2 id="modalBoxWordsLabel">Complexity of Words Spoken</h2>
         <p>Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words.<br><br>Complexity of words spoken can impact the understandability and engagement of your audience. Use this data to reflect on your word choice and consider simplifying your language for better communication.</p>
@@ -122,7 +122,7 @@
         <div id="bugs">
           <br />
           <section v-if="showModal" id="modal">
-            Public Speaking Dashboard does not collect or store user data. However, third-party services are used for transcription and analysis. Terms of use for those third-party services can be found <a href="https://deepgram.com/terms">here</a> and <a href="https://mistral.ai/terms/">here</a>.
+            Public Speaking Dashboard does not collect or store user data. However, third-party services are used for transcription and analysis. Terms of use for those third-party services can be found at <a href="https://deepgram.com/terms">DeepGram</a> and <a href="https://mistral.ai/terms/">Mistral</a>.
           </section><br>
           <b>Known Bugs and Limitations:</b> <br />
           <section>
@@ -147,7 +147,6 @@
   </div>
 </template>
 <script>
-//import paralleldots from 'paralleldots'
 import * as rs from "text-readability";
 import Plotly from "plotly.js-dist";
 import * as faceapi from "face-api.js";
@@ -256,7 +255,9 @@ export default {
       socket: null,
       transcripts: [],
       voiceInstance: null,
-      dataSummaryTime: 20000
+      dataSummaryTime: 20000, 
+      msgTime: "", 
+      speakingTimeLabel: "Choose Desired Speech Length (1 Min)"
     };
   },
 
@@ -281,6 +282,12 @@ export default {
       }
     }
   },
+
+  mounted() {
+        document.getElementById('speakingTime').addEventListener('change', (event) => {
+            this.speakingTimeLabel = `Choose Desired Speech Length (${event.target.value / 60000} Min)`;
+        });
+    },
 
   methods: {
     begin3: function () {
@@ -311,7 +318,45 @@ export default {
       }
     },
 
+    modalTrap(modalId) {
+      const modal = document.getElementById(modalId);
 
+      setTimeout(() => {
+        const focusableElements = modal.querySelectorAll(
+          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
+        );
+        if (focusableElements.length > 0) {
+          const firstFocusable = focusableElements[0];
+          const lastFocusable = focusableElements[focusableElements.length - 1];
+
+          firstFocusable.focus(); // Set initial focus
+
+          modal.addEventListener('keydown', (event) => {
+            if (event.key === 'Tab') {
+              if (!event.shiftKey && document.activeElement === lastFocusable) {
+                event.preventDefault();
+                firstFocusable.focus();
+              } else if (event.shiftKey && document.activeElement === firstFocusable) {
+                event.preventDefault();
+                lastFocusable.focus();
+              }
+            } else if (event.key === 'Escape') {
+              this.closeModal(modalId); // Close modal on Escape key
+            }
+          });
+        } else {
+          // Handle case where there are no focusable elements
+          modal.setAttribute('tabindex', '-1'); // Make the modal container focusable
+          modal.focus();
+        }
+      }, 10); 
+    },
+
+    closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'none';
+        // Optionally, set focus back to the button that opened the modal
+    }, 
     
 
     Savemodal: function () {
@@ -324,6 +369,16 @@ export default {
 
 
           modal.style.display = "block";
+          this.modalTrap('modalBoxSave');
+
+          setTimeout(() => { document.getElementById("modalBoxCloseSave").focus(); }, 10);
+
+          // Add keydown event listener
+          modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.style.display = "none";
+        }
+    });
 
 
         // When the user clicks on <span> (x), close the modal
@@ -349,6 +404,16 @@ var span = document.getElementById("modalBoxCloseFeedback");
 
 
   modal.style.display = "block";
+  this.modalTrap('modalBoxFeedback');
+
+  setTimeout(() => { document.getElementById("modalBoxCloseFeedback").focus(); }, 10);
+
+  // Add keydown event listener
+  modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.style.display = "none";
+        }
+    });
 
 
 // When the user clicks on <span> (x), close the modal
@@ -375,6 +440,18 @@ var span = document.getElementById("modalBoxCloseOverall");
 
 
   modal.style.display = "block";
+  this.modalTrap('modalBoxOverall');
+
+  
+
+  setTimeout(() => { document.getElementById("modalBoxCloseOverall").focus(); }, 10);
+
+  // Add keydown event listener
+  modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.style.display = "none";
+        }
+    });
 
 
 // When the user clicks on <span> (x), close the modal
@@ -401,6 +478,16 @@ var span = document.getElementById("modalBoxCloseWords");
 
 
   modal.style.display = "block";
+  this.modalTrap('modalBoxWords');
+
+  setTimeout(() => { document.getElementById("modalBoxCloseWords").focus(); }, 10);
+
+  // Add keydown event listener
+  modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.style.display = "none";
+        }
+    });
 
 
 // When the user clicks on <span> (x), close the modal
@@ -427,6 +514,16 @@ var span = document.getElementById("modalBoxCloseFace");
 
 
   modal.style.display = "block";
+  this.modalTrap('modalBoxFace');
+
+  setTimeout(() => { document.getElementById("modalBoxCloseFace").focus(); }, 10);
+
+  // Add keydown event listener
+  modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.style.display = "none";
+        }
+    });
 
 
 // When the user clicks on <span> (x), close the modal
@@ -453,6 +550,16 @@ var span = document.getElementById("modalBoxCloseWPM");
 
 
   modal.style.display = "block";
+  this.modalTrap('modalBoxWPM');
+
+  setTimeout(() => { document.getElementById("modalBoxCloseWPM").focus(); }, 10);
+
+  // Add keydown event listener
+  modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.style.display = "none";
+        }
+    });
 
 
 // When the user clicks on <span> (x), close the modal
@@ -480,6 +587,16 @@ var span = document.getElementById("modalBoxCloseVolume");
 
 
   modal.style.display = "block";
+  this.modalTrap('modalBoxVolume');
+
+  setTimeout(() => { document.getElementById("modalBoxCloseVolume").focus(); }, 10);
+
+  // Add keydown event listener
+  modal.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            modal.style.display = "none";
+        }
+    });
 
 
 // When the user clicks on <span> (x), close the modal
@@ -684,13 +801,11 @@ window.onclick = function(event) {
       if (this.WPMSelected == false) {
         this.msg2 = "";
         this.WPMSelected = true;
-        this.WPMColor = "#f48d79";
         if (this.WPMSelected == true) {
           this.showWPM = false;
         }
       } else {
         this.WPMSelected = false;
-        this.WPMColor = "#CBC3E3";
         if (this.WPMSelected == false) {
           this.showWPM = true;
         }
@@ -701,13 +816,11 @@ window.onclick = function(event) {
       if (this.textEmotionSelected == false) {
         this.msg2 = "";
         this.textEmotionSelected = true;
-        this.textEmotionColor = "#f48d79";
         if (this.textEmotionSelected == true) {
           this.showTextEmotion = false;
         }
       } else {
         this.textEmotionSelected = false;
-        this.textEmotionColor = "#CBC3E3";
         if (this.textEmotionSelected == false) {
           this.showTextEmotion = true;
         }
@@ -718,13 +831,11 @@ window.onclick = function(event) {
       if (this.voiceEmotionSelected == false) {
         this.msg2 = "";
         this.voiceEmotionSelected = true;
-        this.voiceEmotionColor = "#f48d79";
         if (this.voiceEmotionSelected == true) {
           this.showVoiceEmotion = false;
         }
       } else {
         this.voiceEmotionSelected = false;
-        this.voiceEmotionColor = "#CBC3E3";
         if (this.voiceEmotionSelected == false) {
           this.showVoiceEmotion = true;
         }
@@ -735,13 +846,11 @@ window.onclick = function(event) {
       if (this.faceEmotionSelected == false) {
         this.msg2 = "";
         this.faceEmotionSelected = true;
-        this.faceEmotionColor = "#f48d79";
         if (this.faceEmotionSelected == true) {
           this.showFaceEmotion = false;
         }
       } else {
         this.faceEmotionSelected = false;
-        this.faceEmotionColor = "#CBC3E3";
         if (this.faceEmotionSelected == false) {
           this.showFaceEmotion = true;
         }
@@ -965,12 +1074,15 @@ window.onclick = function(event) {
       var element = document.getElementById("timer");
       if (this.placeHolderForTimeCheck >= selectedTimeThirty) {
         element.style.backgroundColor = "green";
+        this.msgTime = "30 Seconds Remaining"
       }
       if (this.placeHolderForTimeCheck >= selectedTimeFifteen) {
         element.style.backgroundColor = "yellow";
+        this.msgTime = "15 Seconds Remaining"
       }
       if (this.placeHolderForTimeCheck >= selectedTime) {
         element.style.backgroundColor = "red";
+        this.msgTime = "Selected Time Reached"
       }
 
       function convertTime(miliseconds) {
@@ -1346,6 +1458,7 @@ window.onclick = function(event) {
           displayModeBar: true,
           modeBarButtonsToRemove: ["lasso2d", "select2d", "sendDataToCloud"],
           displaylogo: false,
+          responsive: true
         };
 
         var WPMChart = document.getElementById("wpmChart");
@@ -1661,148 +1774,6 @@ window.onclick = function(event) {
           layout4, config
         );
       }
-
-      // Emotions in Text
-      // 			if (this.textEmotionSelected == true) {
-      //
-      // 				let Anger = {
-      // 					x: [],
-      // 					y: [],
-      // 					mode: "lines",
-      // 					name: 'Anger',
-      // 					line: {
-      // 						color: '#ff6961',
-      // 						width: 2
-      // 					}
-      // 				};
-      //
-      // 				let Fear = {
-      // 					x: [],
-      // 					y: [],
-      // 					mode: "lines",
-      // 					name: 'Fear',
-      // 					line: {
-      // 						color: '#fdfd96',
-      // 						width: 2
-      // 					}
-      // 				};
-      //
-      // 				let Excitement = {
-      // 					x: [],
-      // 					y: [],
-      // 					mode: "lines",
-      // 					name: 'Excitement',
-      // 					line: {
-      // 						color: '#ffb347',
-      // 						width: 2
-      // 					}
-      // 				};
-      //
-      // 				let Boredom = {
-      // 					x: [],
-      // 					y: [],
-      // 					mode: "lines",
-      // 					name: 'Boredom',
-      // 					line: {
-      // 						color: '#cfcfc4',
-      // 						width: 2
-      // 					}
-      // 				};
-      //
-      // 				let Sadness = {
-      // 					x: [],
-      // 					y: [],
-      // 					mode: "lines",
-      // 					name: 'Sadness',
-      // 					line: {
-      // 						color: '#85A1F2',
-      // 						width: 2
-      // 					}
-      // 				};
-      //
-      // 				let Happiness = {
-      // 					x: [],
-      // 					y: [],
-      // 					mode: "lines",
-      // 					name: 'Happiness',
-      // 					line: {
-      // 						color: '#77dd77',
-      // 						width: 2
-      // 					}
-      // 				};
-      //
-      // 				data.forEach(function(val) {
-      // 				Anger.x.push(val["time"]);
-      // 				Anger.y.push(val["Angry"]);
-      // 				Fear.x.push(val["time"]);
-      // 				Fear.y.push(val["Fear"]);
-      // 				Excitement.x.push(val["time"]);
-      // 				Excitement.y.push(val["Excited"]);
-      // 				Boredom.x.push(val["time"]);
-      // 				Boredom.y.push(val["Bored"]);
-      // 				Sadness.x.push(val["time"]);
-      // 				Sadness.y.push(val["Sad"]);
-      // 				Happiness.x.push(val["time"]);
-      // 				Happiness.y.push(val["Happy"]);
-      // 				});
-      //
-      // 				var layout2 = {
-      // 				paper_bgcolor: "#222831",
-      // 				plot_bgcolor: "#222831",
-      // 				title: {
-      // 					text:'  Emotions in Words Spoken',
-      // 					font: {
-      // 					family: 'Arial, sans-serif',
-      // 					size: 20,
-      // 					color: '#fdfd96',
-      // 				},
-      // 					xref: 'paper',
-      // 					automargin: true,
-      // 					x: 0.6,
-      // 					xanchor: 'center',
-      // 					y: 0.88,
-      // 					yanchor: 'top'
-      // 				},
-      // 				autosize: true,
-      // 					xaxis: {
-      // 						tickfont : {
-      // 							size : 16,
-      // 							color : '#fdfd96'
-      // 						},
-      // 						tickcolor: '#36454f',
-      // 						title: {
-      // 							text: 'Time',
-      // 							font: {
-      // 							family: 'Arial, sans-serif',
-      // 							size: 18,
-      // 							color: '#fdfd96',
-      // 							}
-      // 						},
-      // 					},
-      // 					yaxis: {
-      // 						margin: {
-      // 							autoexpand: true,
-      // 						},
-      // 						automargin: true,
-      // 						tickfont : {
-      // 							size : 16,
-      // 							color : '#fdfd96'
-      // 						},
-      // 						tickcolor: '#fdfd96',
-      // 						title: {
-      // 						text: 'Emotions',
-      // 							font: {
-      // 							family: 'Arial, sans-serif',
-      // 							size: 18,
-      // 							color: '#fdfd96'
-      // 							}
-      // 						}
-      // 					}
-      // 				};
-      //
-      // 				var TEXTEMOTIONChart = document.getElementById('textEmotionChart');
-      // 				Plotly.newPlot(TEXTEMOTIONChart, [Anger, Fear, Excitement, Boredom, Sadness, Happiness], layout2);
-      //			}
     },
   }, //
 }; //
@@ -1895,6 +1866,11 @@ div {
 #start:hover {
   background-color: #cbc3e3;
 }
+#start:focus {
+  border-style: solid; 
+  border-color: white;
+  border-width: thick; 
+}
 
 #stop {
   background-color: #ff726f;
@@ -1926,6 +1902,11 @@ div {
 
 #reset:hover {
   background-color: #cbc3e3;
+}
+#reset:focus {
+  border-style: solid; 
+  border-color: white;
+  border-width: thick; 
 }
 
 #pdf {
@@ -2026,7 +2007,7 @@ div {
 
 #dataHideButton {
   margin: auto;
-  color: gray;
+  color: #00ffc3;
   background-color: #222831;
   width: 40%;
   text-align: center;
@@ -2038,8 +2019,8 @@ div {
 
 #dataHideButton:hover {
   margin: auto;
-  color: #00ffc3;
-  background-color: #222831;
+  color: black;
+  background-color: #19a47f;
   width: 40%;
   text-align: center;
   height: 30px;
@@ -2057,12 +2038,11 @@ div {
   height: 30px;
   font-size: 10px;
   margin: 0px;
-  border: none;
 }
 
 #dataShowButton {
   margin: auto;
-  color: gray;
+  color: #00ffc3;;
   background-color: #222831;
   width: 40%;
   text-align: center;
@@ -2073,8 +2053,8 @@ div {
 }
 #dataShowButton:hover {
   margin: auto;
-  color: #00ffc3;
-  background-color: #222831;
+  color: black;
+  background-color: #19a47f;
   width: 40%;
   text-align: center;
   height: 30px;
@@ -2199,19 +2179,19 @@ a {
   transition: width 100ms linear;
 }
 #container {
-  height: 200px;
-  margin-top:-60px;
+  margin-top:-30px;
   display: none;
   position: fixed;
-  right: -30px; 
+  right: -80px; 
   z-index: 1;
+  width: 35vw;
 }
 
 .video-container {
   position: relative;
   margin-top: 0px;
   background-color: #222831;
-  width: 60%;
+  width: 15vw;
   display: inline-block;
  
 }
@@ -2307,10 +2287,10 @@ video {
 /* The Close Button */
 .close {
   float: right;
-  color: white; 
+  color: black; 
   font-size: 28px;
   font-weight: bold;
-  color: darkgray;
+  aria-label: "Close";
 }
 
 .close:hover,
@@ -2318,6 +2298,7 @@ video {
   color: black; 
   text-decoration: none;
   cursor: pointer;
+  background-color: lightgray;
 }
 
 .close2 {
@@ -2328,6 +2309,7 @@ video {
   padding: 5px; 
   margin: auto;
   width: 18%;
+  aria-label: "Close";
 }
 
 .close2:hover,
@@ -2424,13 +2406,7 @@ button, .optionsButton, #begin, #start, #stop, #reset, #pdf, #next, #speakingTim
   cursor: pointer;
 }
 
-button:hover, .optionsButton:hover, #begin:hover, #start:hover, #stop:hover, #reset:hover, #pdf:hover, #next:hover, #speakingTime:hover, #dataHideButton:hover, #dataShowButton:hover {
-  background-color: #ccc;
-}
-
 button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #reset:focus, #pdf:focus, #next:focus, #speakingTime:focus, #dataHideButton:focus, #dataShowButton:focus {
-  border-style: solid;
-  border-color: white;
-  border-width: thick;
+   outline: 3px solid #09eb1c;  /* Add a noticeable outline */
 }
 </style>
