@@ -62,10 +62,10 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
     
 ## 6. "Fork" the PSD Repository
 
-  ### a. While signed into your GitHub account, navigate to the publicspeakingDB/PSD repository (linked at the upper left of the page)<br>
+  ### a. While signed into your GitHub account, navigate to the publicspeakingDB/psd repository (linked at the upper left of the page)<br>
     ⬇️
 
-  ### b. Click "Fork" (you should now see the /PSD repository in the list of repositories on your account)<br>
+  ### b. Click "Fork" (you should now see the /psd repository in the list of repositories on your account)<br>
     ⬇️
 
 ## 7. Create a Netlify Account (this will be used to serve the app)
@@ -86,7 +86,7 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
   ### d. Select "Github"<br>
     ⬇️
 
-  ### e. Select the "/PSD" repository <br>
+  ### e. Select the "/psd" repository <br>
     ⬇️
   
   ### f. Name the site whatever you wish<br>
