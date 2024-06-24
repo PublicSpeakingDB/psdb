@@ -729,6 +729,7 @@ window.onclick = function(event) {
       let recognition = new window.SpeechRecognition();
       recognition.start();
       this.show = false;
+      this.msg = ""
       this.msg3 =
         "Choose a desired speech length, then click start. Click stop when finished.";
       this.showModal = false;
@@ -2179,21 +2180,19 @@ a {
   transition: width 100ms linear;
 }
 #container {
-  margin-top:-30px;
+  margin-top:-95px;
   display: none;
   position: fixed;
-  right: -80px; 
   z-index: 1;
-  width: 35vw;
+  width: 50vw;
 }
 
 .video-container {
   position: relative;
   margin-top: 0px;
   background-color: #222831;
-  width: 15vw;
   display: inline-block;
- 
+  
 }
 
 canvas {
