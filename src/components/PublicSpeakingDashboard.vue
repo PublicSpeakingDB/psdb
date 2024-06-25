@@ -5,7 +5,7 @@
     </p>
     <span id="container"><div id="video-container" class="video-container" aria-label="Webcam feed"><video id="video" autoplay width="150" height="150"></video></div></span>
     <h1 v-if="showProcess" id="mainTitle" aria-live="assertive"><img id="talking" alt="Decorative image of voice waves leaving someone's mouth." src="talking.png" />{{ msg }}</h1>
-    <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}</p>
+    <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}<a v-if="browserUrl" href="https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538&sjid=17703533698318943859-NA">here</a></p>
     <p v-if="showProcess" id="messageThree" aria-live="assertive">{{ msg3 }}</p>
     <span id="timeHolder">Time: </span>
     <span>  
@@ -30,8 +30,8 @@
     <button id="pdf" v-if="!show5" v-on:click="pdfResults">Save</button></span><br>
     <span id="rawData" aria-live="polite"></span>
     <div v-if="!showTime" class="title" id="timer" aria-live="polite">{{ time }}<span aria-hidden="true">{{msgTime}}</span> </div>
-    <span v-if="!show3" id="volume-visualizer-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Volume Level"><span id="volume-visualizer"></span></span>
-      <ul v-if="!show3" id="output" aria-live="polite"></ul>
+    <span v-if="!show3" id="volume-visualizer-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Volume Level" aria-live="polite"><span id="volume-visualizer"></span> <span id="volume-number"></span><span class="sr-only">Visual representation of volume level</span></span>      
+    <ul v-if="!show3" id="output" aria-live="polite"></ul>
     <span><button v-if="!show3" id="dataShowButton" v-on:click="unhideData">View Raw Data</button>
     <button v-if="!show3" id="dataHideButton" v-on:click="hideData">Hide Raw Data</button></span><br>
     <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
@@ -230,7 +230,6 @@ export default {
       faceEmotionState: "",
       analyzeFaceInterval: "",
       renderDataInterval: "",
-      //analyzingFace: true,
       faceAngry: 0,
       faceDisgusted: 0,
       faceFearful: 0,
@@ -261,7 +260,8 @@ export default {
       msgTime: "", 
       speakingTimeLabel: "Choose Desired Speech Length (1 Min)", 
       updates: "", 
-      updateNumber: 0
+      updateNumber: 0, 
+      browserUrl: false
     };
   },
 
@@ -271,18 +271,16 @@ export default {
       this.android = true;
       console.log("using alternate speech recognition");
     } else {
-      if (
-        "SpeechRecognition" in window ||
-        "webkitSpeechRecognition" in window
-      ) {
+      if (/Chrome/.test(navigator.userAgent)) {
         console.log("Landing page loaded");
-        console.log("Speech recognition supported");
-      } else {
+        console.log("Speech recognition supported in Chrome");
+      } 
+      if (!/Chrome/.test(navigator.userAgent)) {
         console.log("Landing page loaded");
-        console.log("Speech recognition not supported.");
-        this.msg2 =
-          "Public Speaking Dashboard is not supported by this browser and/or device. Currently, Public Speaking Dashboard only works on desktop and in the Chrome browser.";
+        console.log("Not Chrome browser.");
         this.showBegin = false;
+        this.msg2 = "Public Speaking Dashboard is not supported by this browser. Currently, Public Speaking Dashboard only works in the Chrome browser. You can download and install Chrome  ";
+        this.browserUrl = true;
       }
     }
 
@@ -296,9 +294,12 @@ export default {
   },
 
   mounted() {
-        document.getElementById('speakingTime').addEventListener('change', (event) => {
-            this.speakingTimeLabel = `Choose Desired Speech Length (${event.target.value / 60000} Min)`;
-        });
+
+    const speakingTimeDropdown = document.getElementById('speakingTime');
+    speakingTimeDropdown.addEventListener('change', (event) => {
+    this.speakingTimeLabel = `Choose Desired Speech Length (${event.target.value / 60000} Min)`;
+    this.$announce(`Selected speaking time: ${event.target.value / 60000} minutes`);
+    });
     },
 
   methods: {
@@ -341,7 +342,7 @@ export default {
           const firstFocusable = focusableElements[0];
           const lastFocusable = focusableElements[focusableElements.length - 1];
 
-          firstFocusable.focus(); // Set initial focus
+          firstFocusable.focus(); 
 
           modal.addEventListener('keydown', (event) => {
             if (event.key === 'Tab') {
@@ -353,12 +354,11 @@ export default {
                 lastFocusable.focus();
               }
             } else if (event.key === 'Escape') {
-              this.closeModal(modalId); // Close modal on Escape key
+              this.closeModal(modalId); 
             }
           });
         } else {
-          // Handle case where there are no focusable elements
-          modal.setAttribute('tabindex', '-1'); // Make the modal container focusable
+          modal.setAttribute('tabindex', '-1'); 
           modal.focus();
         }
       }, 10); 
@@ -367,16 +367,12 @@ export default {
     closeModal(modalId) {
         const modal = document.getElementById(modalId);
         modal.style.display = 'none';
-        // Optionally, set focus back to the button that opened the modal
     }, 
     
 
     Savemodal: function () {
-        // Get the modal
         var modal = document.getElementById("modalBoxSave");
 
-        // Get the button that opens the modal
-        // Get the <span> element that closes the modal
         var span = document.getElementById("modalBoxCloseSave");
 
 
@@ -385,7 +381,6 @@ export default {
 
           setTimeout(() => { document.getElementById("modalBoxCloseSave").focus(); }, 10);
 
-          // Add keydown event listener
           modal.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             modal.style.display = "none";
@@ -393,12 +388,10 @@ export default {
     });
 
 
-        // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
           modal.style.display = "none";
         }
 
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
           if (event.target == modal) {
             modal.style.display = "none";
@@ -407,11 +400,8 @@ export default {
       },
     
     Feedbackmodal: function () {
-        // Get the modal
 var modal = document.getElementById("modalBoxFeedback");
 
-// Get the button that opens the modal
-// Get the <span> element that closes the modal
 var span = document.getElementById("modalBoxCloseFeedback");
 
 
@@ -420,7 +410,6 @@ var span = document.getElementById("modalBoxCloseFeedback");
 
   setTimeout(() => { document.getElementById("modalBoxCloseFeedback").focus(); }, 10);
 
-  // Add keydown event listener
   modal.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             modal.style.display = "none";
@@ -428,12 +417,10 @@ var span = document.getElementById("modalBoxCloseFeedback");
     });
 
 
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -443,11 +430,8 @@ window.onclick = function(event) {
       
     }, 
     Overallmodal: function () {
-        // Get the modal
 var modal = document.getElementById("modalBoxOverall");
 
-// Get the button that opens the modal
-// Get the <span> element that closes the modal
 var span = document.getElementById("modalBoxCloseOverall");
 
 
@@ -458,7 +442,6 @@ var span = document.getElementById("modalBoxCloseOverall");
 
   setTimeout(() => { document.getElementById("modalBoxCloseOverall").focus(); }, 10);
 
-  // Add keydown event listener
   modal.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             modal.style.display = "none";
@@ -466,12 +449,10 @@ var span = document.getElementById("modalBoxCloseOverall");
     });
 
 
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -481,11 +462,8 @@ window.onclick = function(event) {
       
     }, 
     Wordsmodal: function () {
-        // Get the modal
 var modal = document.getElementById("modalBoxWords");
 
-// Get the button that opens the modal
-// Get the <span> element that closes the modal
 var span = document.getElementById("modalBoxCloseWords");
 
 
@@ -494,7 +472,6 @@ var span = document.getElementById("modalBoxCloseWords");
 
   setTimeout(() => { document.getElementById("modalBoxCloseWords").focus(); }, 10);
 
-  // Add keydown event listener
   modal.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             modal.style.display = "none";
@@ -502,12 +479,10 @@ var span = document.getElementById("modalBoxCloseWords");
     });
 
 
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -517,11 +492,8 @@ window.onclick = function(event) {
       
     }, 
 Facemodal: function () {
-        // Get the modal
 var modal = document.getElementById("modalBoxFace");
 
-// Get the button that opens the modal
-// Get the <span> element that closes the modal
 var span = document.getElementById("modalBoxCloseFace");
 
 
@@ -530,7 +502,6 @@ var span = document.getElementById("modalBoxCloseFace");
 
   setTimeout(() => { document.getElementById("modalBoxCloseFace").focus(); }, 10);
 
-  // Add keydown event listener
   modal.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             modal.style.display = "none";
@@ -538,12 +509,10 @@ var span = document.getElementById("modalBoxCloseFace");
     });
 
 
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -553,11 +522,8 @@ window.onclick = function(event) {
       
     }, 
     WPMmodal: function () {
-        // Get the modal
 var modal = document.getElementById("modalBoxWPM");
 
-// Get the button that opens the modal
-// Get the <span> element that closes the modal
 var span = document.getElementById("modalBoxCloseWPM");
 
 
@@ -566,7 +532,6 @@ var span = document.getElementById("modalBoxCloseWPM");
 
   setTimeout(() => { document.getElementById("modalBoxCloseWPM").focus(); }, 10);
 
-  // Add keydown event listener
   modal.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             modal.style.display = "none";
@@ -574,12 +539,10 @@ var span = document.getElementById("modalBoxCloseWPM");
     });
 
 
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -590,11 +553,8 @@ window.onclick = function(event) {
     }, 
 
     Volumemodal: function () {
-        // Get the modal
 var modal = document.getElementById("modalBoxVolume");
 
-// Get the button that opens the modal
-// Get the <span> element that closes the modal
 var span = document.getElementById("modalBoxCloseVolume");
 
 
@@ -603,7 +563,6 @@ var span = document.getElementById("modalBoxCloseVolume");
 
   setTimeout(() => { document.getElementById("modalBoxCloseVolume").focus(); }, 10);
 
-  // Add keydown event listener
   modal.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             modal.style.display = "none";
@@ -611,12 +570,10 @@ var span = document.getElementById("modalBoxCloseVolume");
     });
 
 
-// When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -674,7 +631,6 @@ window.onclick = function(event) {
               console.log("app started");
               this.show5 = true;
               this.stop = true;
-              // if (this.analyzingFace == false){this.analyzeFace()}
             }
           } else {
             this.msg2 =
@@ -693,7 +649,7 @@ window.onclick = function(event) {
         }
       });
 
-      this.mediaRecorder.start(50); // Start recording in chunks of 250ms
+      this.mediaRecorder.start(50); 
     },
 
     handleResponse: function (message) {
@@ -734,7 +690,6 @@ window.onclick = function(event) {
     begin: function () {
       document.getElementById("version").style.fontSize = "10px"
       document.getElementById("bugs").style.fontSize = "10px"
-      //initiate speech recognition and ask for microphone permission
       this.analyzeFace();
       window.SpeechRecognition =
         window.webkitSpeechRecognition || window.SpeechRecognition;
@@ -751,60 +706,53 @@ window.onclick = function(event) {
     }, "4000");
     },
 
-    startVolumeMeter: function () {
-      (async () => {
-        const volumeVisualizer = document.getElementById("volume-visualizer");
-        // Initialize
-        try {
-          const audioStream = await navigator.mediaDevices.getUserMedia({
-            audio: {
-              echoCancellation: true,
-            },
-          });
+    startVolumeMeter: function() {
+  (async () => {
+    const volumeVisualizer = document.getElementById("volume-visualizer");
+    const volumeNumberDisplay = document.getElementById("volume-number");
 
-          const audioContext = new AudioContext();
-          const audioSource = audioContext.createMediaStreamSource(audioStream);
-          const analyser = audioContext.createAnalyser();
-          analyser.fftSize = 512;
-          analyser.minDecibels = -127;
-          analyser.maxDecibels = 0;
-          analyser.smoothingTimeConstant = 0.4;
-          audioSource.connect(analyser);
-          const volumes = new Uint8Array(analyser.frequencyBinCount);
-          this.volumeCallback = () => {
-            analyser.getByteFrequencyData(volumes);
-            let volumeSum = 0;
-            for (const volume of volumes) volumeSum += volume;
-            const averageVolume = volumeSum / volumes.length;
-            // Value range: 127 = analyser.maxDecibels - analyser.minDecibels;
-            volumeVisualizer.style.setProperty(
-              "--volume",
-              (averageVolume * 100) / 127 + "%"
-            );
-            this.volumeNumber = averageVolume;
-            this.showVolume = false;
-          };
-        } catch (e) {
-          console.error(
-            "Failed to initialize volume visualizer, simulating instead...",
-            e
-          );
-          let lastVolume = 50;
-          this.volumeCallback = () => {
-            const volume = Math.min(
-              Math.max(Math.random() * 100, 0.8 * lastVolume),
-              1.2 * lastVolume
-            );
-            lastVolume = volume;
-            volumeVisualizer.style.setProperty("--volume", volume + "%");
-          };
+    try {
+      const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const audioContext = new AudioContext();
+      const audioSource = audioContext.createMediaStreamSource(audioStream);
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 2048; 
+
+      audioSource.connect(analyser);
+      const volumes = new Uint8Array(analyser.frequencyBinCount);
+
+      this.volumeCallback = () => {
+        analyser.getByteFrequencyData(volumes);
+
+        let volumeSum = 0;
+        for (const amplitude of volumes) {
+          volumeSum += amplitude * amplitude;
         }
-        // Use
+        const rms = Math.sqrt(volumeSum / volumes.length);
 
-        if (this.volumeCallback !== null && this.volumeInterval === null)
-          this.volumeInterval = setInterval(this.volumeCallback, 100);
-      })();
-    },
+        const dBFS = 20 * Math.log10(rms / 255);
+
+        const dBSPL = dBFS + 94; 
+        const decibelValue = Math.max(0, dBSPL); 
+
+        volumeNumberDisplay.textContent = Math.round(decibelValue) + " dB";
+        this.volumeNumber = Math.round(decibelValue)
+
+        const visualizerPercentage = Math.min(100, decibelValue / 94 * 100); 
+        volumeVisualizer.style.setProperty("--volume", visualizerPercentage + "%");
+        this.showVolume = false;
+      }; 
+    } catch (e) {
+      console.log(e)
+    }
+
+    if (this.volumeCallback !== null && this.volumeInterval === null) {
+      this.volumeInterval = setInterval(this.volumeCallback, 50); 
+    }
+  })();
+},
+
+
 
     setVolume: function () {
       this.volumeValue = Math.round(this.volumeNumber);
@@ -871,7 +819,6 @@ window.onclick = function(event) {
     },
 
     initiateVoiceControl: function () {
-      //start listening for words and making a transcript of detected words
       console.log("Voice this.voiceInstance initiated");
       window.SpeechRecognition = window.webkitSpeechRecognition; //|| window.Speechthis.voiceInstance;
       window.SpeechGrammarList = window.webkitSpeechGrammarList; //|| window.SpeechGrammarList;
@@ -939,7 +886,6 @@ window.onclick = function(event) {
           this.summarizeData,
           this.dataSummaryTime
         );
-        //this.voiceInterval = window.setInterval(this.voiceInstance.start(), 25000);
 
         this.startVolumeMeter();
         document.getElementById("container").style.display = "inline";
@@ -948,7 +894,6 @@ window.onclick = function(event) {
         console.log("app started");
         this.show5 = true;
 
-        // if (this.analyzingFace == false){this.analyzeFace()}
       }
     },
 
@@ -1057,7 +1002,6 @@ window.onclick = function(event) {
     },
 
     grabTime: function () {
-      //keep  of time in both milliseconds as well as minutes and seconds
 
       if (this.time1 == true) {
         this.timeDifference = Date.now() - this.initialTime;
@@ -1120,31 +1064,12 @@ window.onclick = function(event) {
 
     registerWPM: function () {
       //calculate number of words per minute--at one second intervals
-      this.wpm = Math.round((this.wordCount / (this.timeElapsed / 1000)) * 60);
+      const elapsedSeconds = this.timeElapsed / 1000;
+      this.wpm = elapsedSeconds > 0 ? Math.round((this.wordCount / elapsedSeconds) * 60) : 0; 
     },
 
-    //getEmotionStats: function () {
-    //send transcript data to be evaluated as per emotional content
-    // const pd = require('paralleldots' || paralleldots)
-    // 			pd.apiKey = "hL7rOIhghKLZtrI6w04cFjxVvAOHQ7BiNhjMLAVnMPw";
-    // 			pd.emotion(this.workingOutput,"en")
-    // 			.then((response) => {
-    // 				let obj = JSON.parse(response)
-    // 				this.textEmotionData = response.slice(1)
-    // 				this.anger = Math.round(obj.emotion.Angry * 100)
-    // 				this.fear = Math.round(obj.emotion.Fear * 100)
-    // 				this.excitement = Math.round(obj.emotion.Excited * 100)
-    // 				this.boredom = Math.round(obj.emotion.Bored * 100)
-    // 				this.sadness = Math.round(obj.emotion.Sad * 100)
-    // 				this.happiness = Math.round(obj.emotion.Happy * 100)
-    // 			})
-    // 				.catch((error) => {
-    // 				console.log(error);
-    // 			})
-
-    //},
-
     getReadabilityStats: function () {
+      //calculate "chewiness" of language choices to output to chart
       this.readability = rs.gunningFog(this.workingOutput);
     },
 
@@ -1193,8 +1118,6 @@ window.onclick = function(event) {
         this.cancelCall = true;
       }
 
-      //clearInterval(this.analyzeFaceInterval)
-      //this.analyzingFace = false
     },
 
     reset: function () {
@@ -1212,7 +1135,6 @@ window.onclick = function(event) {
     renderData: function () {
       const promise1 = new Promise((resolve, reject) => {
         this.setVolume();
-        //this.getEmotionStats()
         this.getReadabilityStats();
         this.registerWPM();
         resolve("Data rendered!");
@@ -1291,7 +1213,6 @@ window.onclick = function(event) {
           dataSource.indexOf(instance.referenceTime)
         );
         instance.referenceTime = overallSlicedDataArray[workingValue].time;
-        //dataSource[numberOfObjects2 - 1].time;
       }
 
       if (instance.firstSummary == true) {
@@ -1322,10 +1243,7 @@ window.onclick = function(event) {
           instance.dataSummary = instance.dataSummary +=
             "#" + "00:" + actualTime + " " + rawResultA + "\n\n";
           instance.feedback = instance.dataSummary;
-          // let div = document.getElementById("feedback");
-          // let p = document.createElement("p");
-          // p.innerText = instance.workingTime + ": " + rawResultA;
-          // div.appendChild(p);
+
         })
         .catch((error) => {
           console.log(error);
@@ -1800,6 +1718,17 @@ window.onclick = function(event) {
 #voiceEmotion,
 #wpm {
   display: inline-block;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; /* added line */
+  border: 0;
 }
 div {
   background-color: none;
