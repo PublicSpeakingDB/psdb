@@ -4,7 +4,7 @@
       Initializing <br /><section id="loader" aria-label="Loading animation"></section><br /><span id="initialMessage">(Make sure your webcam is facing you.)</span>
     </p>
     <span id="container"><div id="video-container" class="video-container" aria-label="Webcam feed"><video id="video" autoplay width="150" height="150"></video></div></span>
-    <h1 v-if="showProcess" id="mainTitle" aria-live="assertive"><img id="talking" alt="Decorative image of voice waves leaving someone's mouth." src="talking.png" />{{ msg }}</h1>
+    <h1 v-if="showProcess" id="mainTitle" aria-live="polite"><img id="talking" alt="" aria-hidden="true" src="talking.png" />{{ msg }}</h1>
     <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}<a v-if="browserUrl" href="https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538&sjid=17703533698318943859-NA">here</a></p>
     <p v-if="showProcess" id="messageThree" aria-live="assertive">{{ msg3 }}</p>
     <span id="timeHolder">Time: </span>
