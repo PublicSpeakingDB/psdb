@@ -38,7 +38,7 @@
     
     <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay muted width="150" height="150" alt="Live video feed for facial expression analysis"></video></div></span>
 
-    <div id="modalBoxSave" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="Instructions to save modal">
+    <div id="modalBoxSave" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="modalBoxSaveDescription">
       <div class="modal-content" tabindex="-1">
           <h2 id="modalBoxSaveLabel">Be Sure to Save!</h2>
           <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p>
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div id="modalBoxOverall" class="modal" role="dialog" aria-modal="true" aria-labelledby="How public speaking dashboard works modal">
+    <div id="modalBoxOverall" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxOverallDescription">
       <div class="modal-content" tabindex="-1">
           <button id="modalBoxCloseOverall" class="close" aria-label="Close how public speaking dashboard works modal">&times;</button>
           <h2 id="modalBoxOverallLabel">How Public Speaking Dashboard Works</h2>
@@ -59,7 +59,7 @@
     <span v-if="!showWPM" id="wpmChart" role="img" aria-label="Chart showing words per minute over time"></span><br>
     <section><button v-if="!showVolume" v-on:click="WPMmodal" class="modalButton" id="modalButtonWPM">More About Rate of Speech</button></section>
 
-    <div id="modalBoxWPM" class="modal" role="dialog" aria-modal="true" aria-labelledby="Words per minute explanation modal">
+    <div id="modalBoxWPM" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWPMDescription">
       <div class="modal-content" tabindex="-1">
         <button id="modalBoxCloseWPM" class="close" aria-label="Close words per minute explanation modal">&times;</button>
         <h2 id="modalBoxWPMLabel">Rate of Speech</h2>
@@ -70,7 +70,7 @@
     <span v-if="!showVolume" id="volumeChart" role="img" aria-label="Chart showing speaker's microphone volume over time"></span><br>
     <section><button v-if="!showVolume" v-on:click="Volumemodal" class="modalButton" id="modalButtonVolume">More About Volume</button></section>
 
-    <div id="modalBoxVolume" class="modal" role="dialog" aria-modal="true" aria-labelledby="Speaking volume explanation modal">
+    <div id="modalBoxVolume" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxVolumeDescription">
       <div class="modal-content" tabindex="-1">
         <button id="modalBoxCloseVolume" class="close" aria-label="Close speaking volume explanation modal">&times;</button>
         <h2 id="modalBoxVolumeLabel">Volume</h2>
@@ -81,7 +81,7 @@
     <span v-if="!showFaceEmotion" id="faceEmotionChart" role="img" aria-label="Chart showing facial emotions over time"></span>
     <section><button v-if="!showVolume" v-on:click="Facemodal" class="modalButton" id="modalButtonFace">More About Expressions in Face</button></section>
 
-    <div id="modalBoxFace" class="modal" role="dialog" aria-modal="true" aria-labelledby="Facial emotions explanation modal">
+    <div id="modalBoxFace" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFaceDescription">
       <div class="modal-content" tabindex="-1">
         <button id="modalBoxCloseFace" class="close" aria-label="Close facial emotions explanation modal">&times;</button>
         <h2 id="modalBoxFaceLabel">Expressions in Face</h2>
@@ -92,7 +92,7 @@
     <span v-if="!showTextEmotion" id="readabilityChart" role="img" aria-label="Chart showing word complexity over time"></span>
     <section><button v-if="!showVolume" v-on:click="Wordsmodal" class="modalButton" id="modalButtonWords">More About Complexity of Words Spoken</button></section>
 
-    <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="Word complexity explanation modal">
+    <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWordsDescription">
       <div class="modal-content" tabindex="-1">
         <button id="modalBoxCloseWords" class="close" aria-label="Close word complexity explanation modal">&times;</button>
         <h2 id="modalBoxWordsLabel">Complexity of Words Spoken</h2>
@@ -108,7 +108,7 @@
       <button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button>
     </section>
 
-    <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="Feedback explanation modal">
+    <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFeedbackDescription">
       <div class="modal-content">
         <button id="modalBoxCloseFeedback" class="close" aria-label="Close feedback explanation modal">&times;</button>
         <h2 id="modalBoxFeedbackHeader">Feedback</h2>
