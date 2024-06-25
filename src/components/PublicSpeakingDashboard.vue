@@ -11,7 +11,7 @@
     <span>  
       <span v-if="!show3" id="dropdownWrapper">
         <label for="speakingTime" class="sr-only"></label>
-        <select name="speakingTime" id="speakingTime" :aria-label="speakingTimeLabel" tabindex="0">
+        <select name="speakingTime" id="speakingTime" aria-label="Desired Speaking Time Dropdown Menu" tabindex="0">
           <option value="60000" selected>1 Min</option>
           <option value="120000">2 Min</option>
           <option value="180000">3 Min</option>
@@ -38,17 +38,17 @@
     
     <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay muted width="150" height="150" alt="Live video feed for facial expression analysis"></video></div></span>
 
-    <div id="modalBoxSave" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="modalBoxSaveLabel">
+    <div id="modalBoxSave" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="Instructions to save modal">
       <div class="modal-content" tabindex="-1">
           <h2 id="modalBoxSaveLabel">Be Sure to Save!</h2>
           <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p>
-          <button id="modalBoxCloseSave" tabindex="4" class="close2" aria-label="Close">Got It</button>
+          <button id="modalBoxCloseSave" tabindex="4" class="close2" aria-label="Close instructions to save modal">Got It</button>
       </div>
     </div>
 
-    <div id="modalBoxOverall" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxOverallLabel">
+    <div id="modalBoxOverall" class="modal" role="dialog" aria-modal="true" aria-labelledby="How public speaking dashboard works modal">
       <div class="modal-content" tabindex="-1">
-          <button id="modalBoxCloseOverall" class="close" aria-label="Close">&times;</button>
+          <button id="modalBoxCloseOverall" class="close" aria-label="Close how public speaking dashboard works modal">&times;</button>
           <h2 id="modalBoxOverallLabel">How Public Speaking Dashboard Works</h2>
           <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to automated transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
       </div>
@@ -59,9 +59,9 @@
     <span v-if="!showWPM" id="wpmChart" role="img" aria-label="Chart showing words per minute over time"></span><br>
     <section><button v-if="!showVolume" v-on:click="WPMmodal" class="modalButton" id="modalButtonWPM">More About Rate of Speech</button></section>
 
-    <div id="modalBoxWPM" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWPMLabel">
+    <div id="modalBoxWPM" class="modal" role="dialog" aria-modal="true" aria-labelledby="Words per minute explanation modal">
       <div class="modal-content" tabindex="-1">
-        <button id="modalBoxCloseWPM" class="close" aria-label="Close">&times;</button>
+        <button id="modalBoxCloseWPM" class="close" aria-label="Close words per minute explanation modal">&times;</button>
         <h2 id="modalBoxWPMLabel">Rate of Speech</h2>
         <p>Rate of speech is calculated by taking the latest registered "chunk" of transcribed speech and dividing it by the time passed since the previous chunk was registered.<br><br>Use this data to think about your own impact and understandability.<br><br>Speaking quickly might add energy but reduce comprehension for the audience. And, speaking slowly might add clarity but lose energy. The ideal is to strike a balance based on your own unique speaking style and character.</p>
       </div>
@@ -70,9 +70,9 @@
     <span v-if="!showVolume" id="volumeChart" role="img" aria-label="Chart showing speaker's microphone volume over time"></span><br>
     <section><button v-if="!showVolume" v-on:click="Volumemodal" class="modalButton" id="modalButtonVolume">More About Volume</button></section>
 
-    <div id="modalBoxVolume" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxVolumeLabel">
+    <div id="modalBoxVolume" class="modal" role="dialog" aria-modal="true" aria-labelledby="Speaking volume explanation modal">
       <div class="modal-content" tabindex="-1">
-        <button id="modalBoxCloseVolume" class="close" aria-label="Close">&times;</button>
+        <button id="modalBoxCloseVolume" class="close" aria-label="Close speaking volume explanation modal">&times;</button>
         <h2 id="modalBoxVolumeLabel">Volume</h2>
         <p>Volume is captured by sampling the microphone volume once a second.<br><br>Use this data to think about your speech "dynamics," the ups and downs throughout your speech. <br><br>While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it.</p>
       </div>
@@ -81,9 +81,9 @@
     <span v-if="!showFaceEmotion" id="faceEmotionChart" role="img" aria-label="Chart showing facial emotions over time"></span>
     <section><button v-if="!showVolume" v-on:click="Facemodal" class="modalButton" id="modalButtonFace">More About Expressions in Face</button></section>
 
-    <div id="modalBoxFace" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFaceLabel">
+    <div id="modalBoxFace" class="modal" role="dialog" aria-modal="true" aria-labelledby="Facial emotions explanation modal">
       <div class="modal-content" tabindex="-1">
-        <button id="modalBoxCloseFace" class="close" aria-label="Close">&times;</button>
+        <button id="modalBoxCloseFace" class="close" aria-label="Close facial emotions explanation modal">&times;</button>
         <h2 id="modalBoxFaceLabel">Expressions in Face</h2>
         <p>This data is captured by assessing key areas of the face to register a given emotional state once a second.<br><br>Use this data to think about the "congruence" (or not) between your words spoken and your facial expressions.<br><br>Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Keep in mind that a "neutral" facial expression is not negative; it can be a desirable expression in many speaking contexts.<br><br>It is important to keep in mind that, because the system samples your facial expressions once a second, it can sometimes register "micro-expressions," or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences.</p>
       </div>
@@ -92,9 +92,9 @@
     <span v-if="!showTextEmotion" id="readabilityChart" role="img" aria-label="Chart showing word complexity over time"></span>
     <section><button v-if="!showVolume" v-on:click="Wordsmodal" class="modalButton" id="modalButtonWords">More About Complexity of Words Spoken</button></section>
 
-    <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWordsLabel">
+    <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="Word complexity explanation modal">
       <div class="modal-content" tabindex="-1">
-        <button id="modalBoxCloseWords" class="close" aria-label="Close">&times;</button>
+        <button id="modalBoxCloseWords" class="close" aria-label="Close word complexity explanation modal">&times;</button>
         <h2 id="modalBoxWordsLabel">Complexity of Words Spoken</h2>
         <p>Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words.<br><br>Complexity of words spoken can impact the understandability and engagement of your audience. Use this data to reflect on your word choice and consider simplifying your language for better communication.</p>
       </div>
@@ -108,9 +108,9 @@
       <button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button>
     </section>
 
-    <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFeedbackHeader">
+    <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="Feedback explanation modal">
       <div class="modal-content">
-        <button id="modalBoxCloseFeedback" class="close" aria-label="Close">&times;</button>
+        <button id="modalBoxCloseFeedback" class="close" aria-label="Close feedback explanation modal">&times;</button>
         <h2 id="modalBoxFeedbackHeader">Feedback</h2>
         <p>Feedback is generated based on the analysis of your speech. It includes specific feedback on various aspects of your speech and overall feedback summarizing your performance.<br><br>Use this feedback to improve your public speaking skills and focus on areas that need improvement.</p>
       </div>
@@ -2232,7 +2232,6 @@ video {
   color: black; 
   font-size: 28px;
   font-weight: bold;
-  aria-label: "Close";
 }
 
 .close:hover,
@@ -2251,7 +2250,6 @@ video {
   padding: 5px; 
   margin: auto;
   width: 100px;
-  aria-label: "Close";
 }
 
 .close2:hover,
