@@ -101,8 +101,11 @@
     </div>
 
     <h1 v-if="!showFeedback" id="specificAndOverallFeedback">Specific Feedback</h1>
+    <span id="spinner1" v-if="spinner1" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
     <p v-if="!showFeedback" class="feedback">{{ feedback }}</p>
+
     <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">Overall Feedback</h1>
+    <span id="spinner2" v-if="spinner2" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
     <p v-if="!showFeedback2" class="feedback">{{ feedback2 }}</p>
     <section>
       <button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button>
@@ -261,7 +264,9 @@ export default {
       speakingTimeLabel: "Choose Desired Speech Length (1 Min)", 
       updates: "", 
       updateNumber: 0, 
-      browserUrl: false
+      browserUrl: false, 
+      spinner1: false, 
+      spinner2: false
     };
   },
 
@@ -732,13 +737,13 @@ window.onclick = function(event) {
 
         const dBFS = 20 * Math.log10(rms / 255);
 
-        const dBSPL = dBFS + 94; 
+        const dBSPL = dBFS + 66; 
         const decibelValue = Math.max(0, dBSPL); 
 
         volumeNumberDisplay.textContent = Math.round(decibelValue) + " dB";
         this.volumeNumber = Math.round(decibelValue)
 
-        const visualizerPercentage = Math.min(100, decibelValue / 94 * 100); 
+        const visualizerPercentage = Math.min(100, decibelValue / 66 * 100); 
         volumeVisualizer.style.setProperty("--volume", visualizerPercentage + "%");
         this.showVolume = false;
       }; 
@@ -1198,6 +1203,7 @@ window.onclick = function(event) {
     },
 
     summarizeData: function () {
+      this.spinner1 = true;
       var overallRawData = document.getElementById("rawData").innerHTML;
       const overallSlicedDataArray = JSON.parse(
         "[" + overallRawData.slice(0, -1) + "]"
@@ -1229,7 +1235,7 @@ window.onclick = function(event) {
 
           const params = {
             model: 'open-mistral-7b',
-            messages: [{role: 'user', content: "Read the following data and give a summary that describes some key take-aways from it. Keep the summary under seventy five words. The data contains information about an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. When refering to facial emotions, refer to them as their corresponding emotions. Report only the numbers in the data. Do not assign units of measure to them. Do not offer advice for improvement. Do not offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not conjecture about what the speaker's intentions are. Do not give an overall statement about the speaker's dynamics. Do not make commentary on data that is not present. Omit from the summary any sentences that include the words, 'the data does not provide' or 'is not provided'. Note only the included data. Do not mention anything beyond what is included in the data. Keep the response under seventy five words. Data: " +
+            messages: [{role: 'user', content: "Read the following data and give a summary that describes some key take-aways from it. The data contains information about an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. When refering to facial emotions, refer to them as their corresponding emotions. Report only the numbers in the data. Do not assign units of measure to them. Do not offer advice for improvement. Do not offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not conjecture about what the speaker's intentions are. Do not give an overall statement about the speaker's dynamics. Do not make commentary on data that is not present. Omit from the summary any sentences that include the words, 'the data does not provide' or 'is not provided'. Note only the included data. Do not mention anything beyond what is included in the data. Keep the response under seventy five words. Data: " +
             instance.dataSample}],
             temperature: 0,
       };
@@ -1242,6 +1248,7 @@ window.onclick = function(event) {
           const rawResultA = result.data.choices[0].message.content + " ";
           instance.dataSummary = instance.dataSummary +=
             "#" + "00:" + actualTime + " " + rawResultA + "\n\n";
+          this.spinner1 = false;
           instance.feedback = instance.dataSummary;
 
         })
@@ -1252,6 +1259,7 @@ window.onclick = function(event) {
     },
 
     getFeedback: function () {
+      this.spinner2 = true; 
       const instance = this;
       console.log("final input" + instance.feedback);
       const client = axios.create({
@@ -1262,7 +1270,8 @@ window.onclick = function(event) {
 
           const params = {
             model: 'open-mistral-7b',
-            messages: [{role: 'user', content: "Give a brief overall summary of the following statements about a specific speech. The statements represent descriptions of data chunks about the speech. Keep the summary under two hundred words. Include overall averages for numbers and ranges reported in the statements. Refer to the speech as 'the speech'. Do not offer advice or suggestions for improvement. If there are no statements following 'Statements: ', respond with 'not enough data to return overall feedback'. Note only the included data. Do not mention anything beyond what is included in the data. Do not refere to volume in decibels. Statements: " +
+            messages: [{role: 'user', content: "Give a brief overall summary of the following statements about a specific speech. The statements represent descriptions of data chunks about the speech marked by minutes and seconds. Rate of speech is calculated by taking the latest registered chunk of transcribed speech and dividing it by the time passed since the previous chunk was registered. This data is meant to be used to think about one’s own impact and understandability. For example, speaking quickly might add energy but reduce comprehension for the audience. And, speaking slowly might add clarity but lose energy. The ideal is to strike a balance based on one’s own unique speaking style and character. Volume is captured by sampling the microphone volume once a second to output a volume score in decibels. This data is meant to be used to think about one’s speech dynamics, the ups and downs throughout their speech. While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it. Facial emotion data is captured by assessing key areas of the face to register a given emotional state once a second. This data is meant to be used to think about the congruence (or not) between the words spoken and one’s facial expressions. Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Neutral facial expressions are not negative; they can be a desirable expressions in many speaking contexts. It is important to keep in mind that, because the system samples facial expressions once a second, it can sometimes register micro-expressions, or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences. Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words. Complexity of words spoken can impact the understandability and engagement of one’s audience. This data is meant to be used to reflect on one’s word choices and to consider simplifying your language for better communication. Include overall averages for numbers and ranges reported in the statements. Refer to the speech as 'the speech'. Offer some take aways for the speaker to consider based on the statements while pointing to specific examples from the statements. Do not use evaluative language in the take aways. If there are no statements following 'Statements: ', respond with 'not enough data to return overall feedback'. Note only the included data. Do not mention anything beyond what is included in the data. Keep the response under 400 words. Statements: "
+            +
           instance.dataSummary}],
             temperature: 0,
             
@@ -1274,6 +1283,7 @@ window.onclick = function(event) {
           console.log(result)
           instance.showFeedback2 = false;
           const rawResultA = result.data.choices[0].message.content;
+          this.spinner2 = false
           instance.feedback2 = rawResultA;
           console.log("final output" + rawResultA);
         })
@@ -2349,4 +2359,75 @@ button, .optionsButton, #begin, #start, #stop, #reset, #pdf, #next, #speakingTim
 button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #reset:focus, #pdf:focus, #next:focus, #speakingTime:focus, #dataHideButton:focus, #dataShowButton:focus {
    outline: 3px solid #09eb1c;  /* Add a noticeable outline */
 }
+
+
+.lds-ellipsis,
+.lds-ellipsis span {
+  box-sizing: border-box;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis span {
+  position: absolute;
+  top: 33.33333px;
+  width: 13.33333px;
+  height: 13.33333px;
+  border-radius: 50%;
+  background: currentColor;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis span:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis span:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis span:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis span:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+#spinner1 {
+  color: white;
+}
+
+#spinner2 {
+  color: white;
+}
+
+
 </style>
