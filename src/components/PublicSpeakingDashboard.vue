@@ -272,7 +272,7 @@ export default {
 
   created() {
     var isAndroid = /(android)/i.test(navigator.userAgent);
-    if (isAndroid) {
+    if (isAndroid && /Chrome/.test(navigator.userAgent)) {
       this.android = true;
       console.log("using alternate speech recognition");
     } else {
@@ -280,7 +280,7 @@ export default {
         console.log("Landing page loaded");
         console.log("Speech recognition supported in Chrome");
       } 
-      if (!/Chrome/.test(navigator.userAgent) || /Firefox/.test(navigator.userAgent)) {
+      else {
         console.log("Landing page loaded");
         console.log("Not Chrome browser.");
         this.showBegin = false;
