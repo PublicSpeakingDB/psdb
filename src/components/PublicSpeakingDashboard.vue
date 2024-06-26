@@ -280,7 +280,7 @@ export default {
         console.log("Landing page loaded");
         console.log("Speech recognition supported in Chrome");
       } 
-      if (!/Chrome/.test(navigator.userAgent)) {
+      if (!/Chrome/.test(navigator.userAgent) || /Firefox/.test(navigator.userAgent)) {
         console.log("Landing page loaded");
         console.log("Not Chrome browser.");
         this.showBegin = false;
