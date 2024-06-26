@@ -102,7 +102,7 @@
 
     <h1 v-if="!showFeedback" id="specificAndOverallFeedback">Specific Feedback</h1>
     <span id="spinner1" v-if="spinner1" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
-    <p v-if="!showFeedback" class="feedback">{{ feedback }}</p>
+    <p v-if="!showFeedback" class="feedback">{{ feedback }}</p><br>
 
     <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">Overall Feedback</h1>
     <span id="spinner2" v-if="spinner2" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
