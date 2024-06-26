@@ -98,7 +98,7 @@
         <h2 id="modalBoxWordsLabel">Complexity of Words Spoken</h2>
         <p>Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words.<br><br>Complexity of words spoken can impact the understandability and engagement of your audience. Use this data to reflect on your word choice and consider simplifying your language for better communication.</p>
       </div>
-    </div>
+    </div><br>
 
     <h1 v-if="!showFeedback" id="specificAndOverallFeedback">Specific Feedback</h1>
     <span id="spinner1" v-if="spinner1" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
@@ -1248,13 +1248,15 @@ window.onclick = function(event) {
           const rawResultA = result.data.choices[0].message.content + " ";
           instance.dataSummary = instance.dataSummary +=
             "#" + "00:" + actualTime + " " + rawResultA + "\n\n";
-          this.spinner1 = false;
+          instance.spinner1 = false;
           instance.feedback = instance.dataSummary;
 
         })
         .catch((error) => {
           console.log(error);
-          this.msg = error;
+          instance.spinner1 = false;
+          instance.showFeedback = false;
+          instance.feedback = "No specfic feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url. https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, scroll to the error below."+ "\n\n" + "\n\n" + "\n\n" + error;
         });
     },
 
@@ -1289,7 +1291,9 @@ window.onclick = function(event) {
         })
         .catch((error) => {
           console.log(error);
-          this.msg = error;
+          instance.spinner2 = false;
+          instance.showFeedback2 = false;
+          instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url. https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, scroll to the error below."+ "\n\n" + "\n\n" + "\n\n" + error;
         });
     },
 
