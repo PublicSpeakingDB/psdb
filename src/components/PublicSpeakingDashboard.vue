@@ -242,7 +242,6 @@ export default {
       faceSurprised: 0,
       continuous: true,
       speechAgain: false,
-      API: process.env.VUE_APP_ROOT_API2,
       API2: process.env.VUE_APP_ROOT_API3,
       feedback: "",
       feedback2: "",
@@ -1202,100 +1201,81 @@ window.onclick = function(event) {
       this.overallDataObject = document.getElementById("rawData").innerHTML;
     },
 
-    summarizeData: function () {
-      this.spinner1 = true;
-      var overallRawData = document.getElementById("rawData").innerHTML;
-      const overallSlicedDataArray = JSON.parse(
-        "[" + overallRawData.slice(0, -1) + "]"
+    async summarizeData() {
+    this.spinner1 = true;
+    var overallRawData = document.getElementById("rawData").innerHTML;
+    const overallSlicedDataArray = JSON.parse(
+      "[" + overallRawData.slice(0, -1) + "]"
+    );
+    const numberOfObjects = overallSlicedDataArray.length;
+    const dataSource = JSON.stringify(overallSlicedDataArray);
+    const workingValue = numberOfObjects - 1;
+    const instance = this;
+    const actualTime = instance.workingTime;
+
+    if (instance.firstSummary == false) {
+      instance.dataSample = dataSource.substring(
+        dataSource.indexOf(instance.referenceTime)
       );
-      const numberOfObjects = overallSlicedDataArray.length;
-      const dataSource = JSON.stringify(overallSlicedDataArray);
-      const workingValue = numberOfObjects - 1;
-      const instance = this;
-      const actualTime = instance.workingTime;
+      instance.referenceTime = overallSlicedDataArray[workingValue].time;
+    }
 
-      if (instance.firstSummary == false) {
-        instance.dataSample = dataSource.substring(
-          dataSource.indexOf(instance.referenceTime)
-        );
-        instance.referenceTime = overallSlicedDataArray[workingValue].time;
-      }
+    if (instance.firstSummary == true) {
+      instance.dataSample = dataSource;
+      instance.referenceTime = overallSlicedDataArray[workingValue].time;
+      instance.firstSummary = false;
+    }
 
-      if (instance.firstSummary == true) {
-        instance.dataSample = dataSource;
-        instance.referenceTime = overallSlicedDataArray[workingValue].time;
-        instance.firstSummary = false;
-      }
-
-      const client = axios.create({
+    try {
+      // /.netlify/functions/summarizeData
+      // http://localhost:8888/.netlify/functions/summarizeData
+      const response = await fetch('/.netlify/functions/summarizeData', {
+        method: 'POST',
         headers: {
-          Authorization: "Bearer " + instance.API,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ dataSample: instance.dataSample, referenceTime: instance.referenceTime }), // Send both dataSample and referenceTime
       });
 
-          const params = {
-            model: 'open-mistral-7b',
-            messages: [{role: 'user', content: "Read the following data and give a summary that describes some key take-aways from it. The data contains information about an isolated section of a speech. Describe to the speaker their speech dynamics while quoting, if available, the content of the section. When refering to facial emotions, refer to them as their corresponding emotions. Report only the numbers in the data. Do not assign units of measure to them. Do not offer advice for improvement. Do not offer evaluations of whether the speaker delivered well or poorly. Do not analyze the data for the speaker. Do not conjecture about what the speaker's intentions are. Do not give an overall statement about the speaker's dynamics. Do not make commentary on data that is not present. Omit from the summary any sentences that include the words, 'the data does not provide' or 'is not provided'. Note only the included data. Do not mention anything beyond what is included in the data. Keep the response under seventy five words. Data: " +
-            instance.dataSample}],
-            temperature: 0,
-      };
+      const data = await response.json();
+      instance.showFeedback = false;
+      instance.dataSummary = instance.dataSummary +=
+        "#" + "00:" + actualTime + " " + data.result + "\n\n";
+      instance.spinner1 = false;
+      instance.feedback = instance.dataSummary;
+    } catch (error) {
+      console.error('Error summarizing data:', error);
+      instance.spinner1 = false;
+      instance.showFeedback = false;
+      instance.feedback =
+        "Error summarizing data. Check the console for details.";
+    }
+  },
 
-      client
-        .post("https://api.mistral.ai/v1/chat/completions", params)
-        .then((result) => {
-          console.log(result.data)
-          instance.showFeedback = false;
-          const rawResultA = result.data.choices[0].message.content + " ";
-          instance.dataSummary = instance.dataSummary +=
-            "#" + "00:" + actualTime + " " + rawResultA + "\n\n";
-          instance.spinner1 = false;
-          instance.feedback = instance.dataSummary;
+  async getFeedback() {
+    this.spinner2 = true;
+    const instance = this;
 
-        })
-        .catch((error) => {
-          console.log(error);
-          instance.spinner1 = false;
-          instance.showFeedback = false;
-          instance.feedback = "No specfic feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url. https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, scroll to the error below."+ "\n\n" + "\n\n" + "\n\n" + error;
-        });
-    },
-
-    getFeedback: function () {
-      this.spinner2 = true; 
-      const instance = this;
-      console.log("final input" + instance.feedback);
-      const client = axios.create({
+    try {
+      const response = await fetch(`/.netlify/functions/getFeedback`, {
+        method: 'POST',
         headers: {
-          Authorization: "Bearer " + instance.API,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ dataSummary: instance.dataSummary }),
       });
 
-          const params = {
-            model: 'open-mistral-7b',
-            messages: [{role: 'user', content: "Give a brief overall summary of the following statements about a specific speech. The statements represent descriptions of data chunks about the speech marked by minutes and seconds. Rate of speech is calculated by taking the latest registered chunk of transcribed speech and dividing it by the time passed since the previous chunk was registered. This data is meant to be used to think about one’s own impact and understandability. For example, speaking quickly might add energy but reduce comprehension for the audience. And, speaking slowly might add clarity but lose energy. The ideal is to strike a balance based on one’s own unique speaking style and character. Volume is captured by sampling the microphone volume once a second to output a volume score in decibels. This data is meant to be used to think about one’s speech dynamics, the ups and downs throughout their speech. While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it. Facial emotion data is captured by assessing key areas of the face to register a given emotional state once a second. This data is meant to be used to think about the congruence (or not) between the words spoken and one’s facial expressions. Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Neutral facial expressions are not negative; they can be a desirable expressions in many speaking contexts. It is important to keep in mind that, because the system samples facial expressions once a second, it can sometimes register micro-expressions, or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences. Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words. Complexity of words spoken can impact the understandability and engagement of one’s audience. This data is meant to be used to reflect on one’s word choices and to consider simplifying your language for better communication. Include overall averages for numbers and ranges reported in the statements. Refer to the speech as 'the speech'. Offer some take aways for the speaker to consider based on the statements while pointing to specific examples from the statements. Do not use evaluative language in the take aways. If there are no statements following 'Statements: ', respond with 'not enough data to return overall feedback'. Note only the included data. Do not mention anything beyond what is included in the data. Keep the response under 400 words. Statements: "
-            +
-          instance.dataSummary}],
-            temperature: 0,
-            
-      };
-
-      client
-        .post("https://api.mistral.ai/v1/chat/completions", params)
-        .then((result) => {
-          console.log(result)
-          instance.showFeedback2 = false;
-          const rawResultA = result.data.choices[0].message.content;
-          this.spinner2 = false
-          instance.feedback2 = rawResultA;
-          console.log("final output" + rawResultA);
-        })
-        .catch((error) => {
-          console.log(error);
-          instance.spinner2 = false;
-          instance.showFeedback2 = false;
-          instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url. https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, scroll to the error below."+ "\n\n" + "\n\n" + "\n\n" + error;
-        });
-    },
+      const data = await response.json();
+      instance.showFeedback2 = false;
+      instance.feedback2 = data.result;
+      this.spinner2 = false;
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+      instance.spinner2 = false;
+      instance.showFeedback2 = false;
+      instance.feedback2 = "Error fetching feedback. Check the console for details.";
+    }
+  },
 
     resetWorkingOutput: function () {
       this.workingOutput = "";

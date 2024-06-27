@@ -1,6 +1,20 @@
 module.exports = {
-  publicPath: '/',
+  publicPath: "/",
   devServer: {
-    allowedHosts: [".csb.app"], // Copy and paste the domain from the URL Codebox provides for your runtime here
+    proxy: {
+      "/\\.netlify\\/functions/": {
+        target: "http://localhost:8888", // Replace with your Netlify Dev server port
+        pathRewrite: { "^/\\.netlify\\/functions/": "" },
+        changeOrigin: true, 
+      },
+    },
+  },
+  chainWebpack: (config) => {
+    config.plugin("define").tap((args) => {
+      args[0]["process.env"].VUE_APP_ROOT_API2 = JSON.stringify(
+        "" // Set a placeholder or an empty string
+      );
+      return args;
+    });
   },
 };
