@@ -1,3 +1,4 @@
+# Public Speaking Dashboard
 Public Speaking Dashboard is an open-source public speaking tool. 
 
 It is shared under a Creative Commons license. Please feel free to copy and use the source code. Also, please feel free to remix and experiment. 
@@ -16,7 +17,7 @@ This work is licensed under a
 ---
 
 Find instructions below for cloning your own instance of Public Speaking Dashboard or for running the app locally. 
-# Public Speaking Dashboard
+
 
 <details>
 <summary><h2>✨ Getting Started: Create Your Own Instance on Netlify</h2></summary>
