@@ -62,30 +62,26 @@ This guide will walk you through the steps for setting up your own instance of P
 This app is built with Vue.js and requires Node.js 16.
 <br>
 <h3 style="display: inline-block;">1. **Create a `.env` File**</h3>
-In the app's root directory, create a `.env` file with:
-VUE_APP_ROOT_API2=yourMistralAPIKey
-VUE_APP_ROOT_API3=yourDeepGramAPIKey
+<br>In the app's root directory, create a `.env` file with:<br>
+VUE_APP_ROOT_API2=yourMistralAPIKey<br>
+VUE_APP_ROOT_API3=yourDeepGramAPIKey<br>
 
-<h3 style="display: inline-block;">2. **Project Setup**</h3>
-`npm install`
+<h3 style="display: inline-block;">2. **Project Setup**</h3><br>
+`npm install`<br>
 
-<h3 style="display: inline-block;">3. **Development**</h3>
-`npm run serve`
+<h3 style="display: inline-block;">3. **Development**</h3><br>
+`npm run serve`<br>
 
-<h3 style="display: inline-block;">4. **Production**</h3>
-`npm run build`
+<h3 style="display: inline-block;">4. **Production**</h3><br>
+`npm run build`<br>
 
-<h3 style="display: inline-block;">5. **Linting**</h3>
-`npm run lint`
-
-
-For configuration details: Vue CLI Configuration
+<h3 style="display: inline-block;">5. **Linting**</h3><br>
+`npm run lint`<br>
 
 </div>
 </details>
 
 <div style="padding-left: 20px;">
-
-### [Attribution Credits and Dependencies for Public Speaking Dashboard](https://raw.githubusercontent.com/PublicSpeakingdashboard/PSD/main/package-lock.json)
+<a href="https://raw.githubusercontent.com/PublicSpeakingdashboard/PSD/main/package-lock.json">Attribution Credits and Dependencies for Public Speaking Dashboard</a>
 </div>
 
