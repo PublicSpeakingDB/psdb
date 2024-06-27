@@ -83,5 +83,5 @@ This app is built with Vue.js and requires Node.js 16.
 </div>
 
 <h2 style="display: inline-block;">🚀 Live Demo (Without AI Feedback)</h2>
-<iframe width="100%" height="50%" src="https://psd-demo.netlify.app/"></iframe>
+<iframe width="100%" height="100%" src="https://psd-demo.netlify.app/"></iframe>
 
