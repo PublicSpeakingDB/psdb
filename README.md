@@ -62,20 +62,19 @@ This guide will walk you through the steps for setting up your own instance of P
 This app is built with Vue.js and requires Node.js 16.
 <br>
 <h3 style="display: inline-block;">1. **Create a `.env` File**</h3>
-<br>In the app's root directory, create a `.env` file with:<br>
-VUE_APP_ROOT_API2=yourMistralAPIKey<br>
-VUE_APP_ROOT_API3=yourDeepGramAPIKey<br>
-
-<h3 style="display: inline-block;">2. **Project Setup**</h3><br>
+-In the app's root directory, create a `.env` file with:<br>
+`VUE_APP_ROOT_API2=yourMistralAPIKey`<br>
+`VUE_APP_ROOT_API3=yourDeepGramAPIKey`<br>
+<h3 style="display: inline-block;">2. **Project Setup**</h3>
 `npm install`<br>
 
-<h3 style="display: inline-block;">3. **Development**</h3><br>
+<h3 style="display: inline-block;">3. **Development**</h3>
 `npm run serve`<br>
 
-<h3 style="display: inline-block;">4. **Production**</h3><br>
+<h3 style="display: inline-block;">4. **Production**</h3>
 `npm run build`<br>
 
-<h3 style="display: inline-block;">5. **Linting**</h3><br>
+<h3 style="display: inline-block;">5. **Linting**</h3>
 `npm run lint`<br>
 
 </div>
