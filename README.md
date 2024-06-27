@@ -1,7 +1,7 @@
 # Public Speaking Dashboard
 Public Speaking Dashboard is an open-source public speaking tool. 
 
-Please feel free to copy and use the source code. Also, please feel free to remix and experiment. 
+Please feel free to copy and use the source code as well as to remix and experiment with it. 
 
 ---
 [![CC BY-NC 4.0][cc-by-nc-shield]][cc-by-nc]
