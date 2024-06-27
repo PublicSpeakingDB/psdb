@@ -47,7 +47,7 @@ This guide will walk you through the steps for setting up your own instance of P
 
 ### 4. **Fork the Repository**
 
-- While logged into GitHub, navigate to the publicspeakingDB/psd repository.
+- While logged into GitHub, navigate to the publicspeakingdashboard/psd repository.
 - Click "Fork" to create your copy.
 
 ### 5. **Netlify Account**
