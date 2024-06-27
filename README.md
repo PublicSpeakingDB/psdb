@@ -30,7 +30,6 @@ This guide will walk you through the steps for setting up your own instance of P
 - This will be the AI "back end" of your application.
 - **Generate a Mistral AI API Key:** [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup) 
 - Store this key in a safe place.
-
 - **Important Note:** Mistral is a "pay as you go" service, meaning that everytime a user runs the app, it will result in a charge to your Mistral account. Share the link only with intended audiences. 
 
 ### 2. **(Optional) Create a DeepGram Account**
@@ -39,7 +38,6 @@ This guide will walk you through the steps for setting up your own instance of P
 - This is for voice transcription on Android mobile devices (transcription will not work on Android without this service)
 - **Generate a DeepGram API Key:** [Instructions](https://developers.deepgram.com/docs/create-additional-api-keys)
 - Store this key in a safe place.
-
 - **Important Note:** The way that Public Speaking Dashboard is configured, this API key is exposed to whoever has access to the the App when it is deployed on Netlify. The DeepGram service is free, but, even so, share the link only with intended audiences. 
 
 ### 3. **GitHub Account**
