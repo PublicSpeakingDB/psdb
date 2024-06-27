@@ -78,10 +78,10 @@ This app is built with Vue.js and requires Node.js 16.
 </div>
 </details>
 
+<h2 style="display: inline-block;">🔥 Live Demo (Without AI Feedback)</h2>
+<iframe width="100%" height="100%" src="https://psd-demo.netlify.app/"></iframe>
+<br>
 <div style="padding-left: 20px;">
 <a href="https://raw.githubusercontent.com/PublicSpeakingdashboard/PSD/main/package-lock.json">Attribution Credits and Dependencies for Public Speaking Dashboard</a>
 </div>
-
-<h2 style="display: inline-block;">🚀 Live Demo (Without AI Feedback)</h2>
-<iframe width="100%" height="100%" src="https://psd-demo.netlify.app/"></iframe>
 
