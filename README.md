@@ -24,19 +24,23 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 
 This guide will walk you through the steps to set up your personalized Public Speaking Dashboard on Netlify.
 
-### 1. **Mistral AI Account**
+### 1. **Create a Mistral AI Account**
 
 - **Create an account:** [Mistral AI](https://mistral.ai/)
 - This will be the AI "back end" of your application.
 - **Generate a Mistral AI API Key:** [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup) 
-- Save this key securely.
+- Store this key in a safe place.
 
-### 2. **DeepGram Account**
+- **Important Note:** Mistral is a "pay as you go" service, meaning that everytime a user runs the app, it will result in a charge to your Mistral account. Share the link only with intended audiences. 
+
+### 2. **(Optional) Create a DeepGram Account**
 
 - **Create an account:** [DeepGram](https://deepgram.com/)
-- This is for voice transcription on mobile devices.
+- This is for voice transcription on Android mobile devices (transcription will not work on Android without this service)
 - **Generate a DeepGram API Key:** [Instructions](https://developers.deepgram.com/docs/create-additional-api-keys)
-- Save this key securely.
+- Store this key in a safe place.
+
+- **Important Note:** The way that Public Speaking Dashboard is configured, this API key is exposed to whoever has access to the the App when it is deployed on Netlify. The DeepGram service is free, but, even so, share the link only with intended audiences. 
 
 ### 3. **GitHub Account**
 
@@ -67,9 +71,7 @@ VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
 8. Save and go to "Deploys", then click "Clear cache and deploy site".
 9. After a few minutes, your dashboard will be live at a URL like: yourreallygreatsite.netlify.app.
 
-**🎉 Congratulations!**
-
-**Important Note:** This deployment exposes your API keys. Share the link cautiously and set spending limits on your API keys. 
+**🎉 Congratulations!** 
 
 </details>
 
