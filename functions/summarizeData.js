@@ -31,7 +31,7 @@ exports.handler = withCors(async (event, context) => {
       statusCode: 200,
       body: JSON.stringify({ 
         result: rawResultA, 
-        referenceTime: referenceTime // Send referenceTime back to the client
+        referenceTime: referenceTime 
       }),
     };
   } catch (error) {
@@ -39,7 +39,7 @@ exports.handler = withCors(async (event, context) => {
 
     if (error.response && error.response.data) {
       const apiErrorMessage =
-        error.response.data.error || "Unknown API error"; // Use .error to display specific Mistral API errors
+        error.response.data.error || "Unknown API error"; 
       return {
         statusCode: error.response.status,
         body: JSON.stringify({ error: apiErrorMessage }),

@@ -1,13 +1,9 @@
-// cors.js
-
 module.exports = (handler) => async (event, context) => {
-    // Handle preflight requests
     if (event.httpMethod === "OPTIONS") {
-      // Get the origin from Netlify's context if available
       const origin =
         context.clientContext && context.clientContext.url
           ? context.clientContext.url
-          : "http://localhost:8888"; // Fallback for local dev
+          : "http://localhost:8888"; 
 
       return {
         statusCode: 200,
@@ -19,10 +15,8 @@ module.exports = (handler) => async (event, context) => {
       };
     }
 
-    // Process the actual request and add CORS headers to the response
     const response = await handler(event, context);
     
-    // Get the origin from Netlify's context if available
     const origin =
         context.clientContext && context.clientContext.url
           ? context.clientContext.url

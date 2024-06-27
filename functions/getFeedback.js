@@ -1,6 +1,6 @@
 const axios = require("axios");
 require("dotenv").config();
-const withCors = require("./cors.js"); // Import the custom CORS middleware
+const withCors = require("./cors.js"); 
 
 exports.handler = withCors(async (event, context) => {
   try {
@@ -35,7 +35,7 @@ exports.handler = withCors(async (event, context) => {
 
     if (error.response && error.response.data) {
       const apiErrorMessage =
-        error.response.data.error || "Unknown API error"; // Use .error to display specific Mistral API errors
+        error.response.data.error || "Unknown API error"; 
       return {
         statusCode: error.response.status,
         body: JSON.stringify({ error: apiErrorMessage }),
