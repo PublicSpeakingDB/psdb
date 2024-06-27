@@ -86,6 +86,6 @@ For configuration details: Vue CLI Configuration
 
 <div style="padding-left: 20px;">
 
-# [Attribution Credits and Dependencies for Public Speaking Dashboard](https://raw.githubusercontent.com/PublicSpeakingDB/PSD/main/package-lock.json)
+### [Attribution Credits and Dependencies for Public Speaking Dashboard](https://raw.githubusercontent.com/PublicSpeakingdashboard/PSD/main/package-lock.json)
 </div>
 
