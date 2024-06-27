@@ -16,170 +16,86 @@ This work is licensed under a
 ---
 
 Find instructions below for cloning your own instance of Public Speaking Dashboard or for running the app locally. 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-# Creating your own instance of Public Speaking Dashboard on Netlify
+# Public Speaking Dashboard
 
-## 1. Create a Mistral AI Account (this will be the AI "back end" of the app)
-  ### a. [Mistral AI](https://mistral.ai/)<br>
-      ⬇️
+<details>
+<summary><h2>✨ Getting Started: Create Your Own Instance on Netlify</h2></summary>
 
-## 2. Generate a Mistral AI API Key 
-  ### a. [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup)<br>
-  Save the key somewhere safe.<br>
-    ⬇️
+This guide will walk you through the steps to set up your personalized Public Speaking Dashboard on Netlify.
 
-## 3. Create a DeepGram Account (this is used for voice transcription on mobile)
-  ### a. [DeepGram](https://deepgram.com/)<br>
-    ⬇️
+### 1. **Mistral AI Account**
 
-## 4. Generate a DeepGram API Key
-  ### a. [Instructions](https://developers.deepgram.com/docs/create-additional-api-keys) <br>
-  Save the key somewhere safe. <br>
-    ⬇️
-    
-## 5. Create a GitHub Account (this is how you will access the source code of Public Speaking Dashboard)
-  ### a. [GitHub](https://github.com/)<br>
-    ⬇️
-    
-## 6. "Fork" the PSD Repository
+- **Create an account:** [Mistral AI](https://mistral.ai/)
+- This will be the AI "back end" of your application.
+- **Generate a Mistral AI API Key:** [Instructions](https://docs.mistral.ai/getting-started/quickstart/#account-setup) 
+- Save this key securely.
 
-  ### a. While signed into your GitHub account, navigate to the publicspeakingDB/psd repository (linked at the upper left of the page)<br>
-    ⬇️
+### 2. **DeepGram Account**
 
-  ### b. Click "Fork" (you should now see the /psd repository in the list of repositories on your account)<br>
-    ⬇️
+- **Create an account:** [DeepGram](https://deepgram.com/)
+- This is for voice transcription on mobile devices.
+- **Generate a DeepGram API Key:** [Instructions](https://developers.deepgram.com/docs/create-additional-api-keys)
+- Save this key securely.
 
-## 7. Create a Netlify Account (this will be used to serve the app)
-  ### a. [Netlify](https://www.netlify.com/)<br>
-    ⬇️
-    
-## 8. Deploy Public Speaking Dashboard to Netlify<br>
+### 3. **GitHub Account**
 
-  ### a. While signed into GitHub, navigate to dashboard<br>
-    ⬇️
+- **Create an account:** [GitHub](https://github.com/)
+- This gives you access to the Public Speaking Dashboard source code.
 
-  ### b. Click "Add new site"<br>
-    ⬇️
+### 4. **Fork the Repository**
 
-  ### c. Select "Import an existing project" <br>
-    ⬇️
+- While logged into GitHub, navigate to the publicspeakingDB/psd repository.
+- Click "Fork" to create your copy.
 
-  ### d. Select "Github"<br>
-    ⬇️
+### 5. **Netlify Account**
 
-  ### e. Select the "/psd" repository <br>
-    ⬇️
-  
-  ### f. Name the site whatever you wish<br>
-    ⬇️
-  
-  ### g. Leave all other settings at their default values<br>
-    ⬇️
-  
-  ### h. Click "Add environment variables" and "Add" two variables<br>
-    Do not edit the key name--copy it verbatim. For the value, copy and paste your Mistral and DeepGram API keys accordingly<br>
-    ```
-    VUE_APP_ROOT_API2=yourMistralAPIKeyCode
-    VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
-    ```
-    <br>
-      ⬇️  
-      
-  ### i. Click "Deploy"<br>
-    ⬇️
-  
-  ### j. Navigate back to the main dashboard<br>
-    ⬇️
-  
-  ### k. Click "Site configuration"<br>
-    ⬇️
-  
-  ### l. Click "Build & deploy"<br>
-    ⬇️
-  
-  ### m. Click "Dependency management"<br>
-    ⬇️
-  
-  ### n. Select "Node 16.x"<br>
-    ⬇️
-  
-  ### 0. Click "Save"<br>
-    ⬇️
-  
-  ### p. Navigate to "Deploys"<br>
-    ⬇️
-  
-  ### q. Click "Clear cache and deploy site"<br>
-    ⬇️
-  
-  ### r. Navigate to "Site overview"<br>
-    ⬇️
-  
-  ### s. After a few minutes, your instance of Public Speaking Dashboard will be available at the link <br><br>
-    The link will be something like: yourreallygreatsite.netlify.app
-      🎉
-<br>
-<br>
-_It is important to note that deploying the app like this exposes your API keys to anyone who is using the app. Be sure to only share the link with intended audiences, and set "spend limits" on your API keys that you are comfortable with._
-<br><br><br><br>
+- **Create an account:** [Netlify](https://www.netlify.com/)
+- This will host your application.
+
+### 6. **Deploy on Netlify**
+
+1. Go to your GitHub dashboard.
+2. Click "Add new site" and select "Import an existing project."
+3. Choose "GitHub" and select your forked "/psd" repository.
+4. Name your site and leave other settings as default.
+5. Under "Add environment variables", add the following (use your actual keys):
+VUE_APP_ROOT_API2=yourMistralAPIKeyCode
+VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
+6. Click "Deploy" and then go to "Site configuration".
+7. In "Build & deploy", go to "Dependency management" and select "Node 16.x".
+8. Save and go to "Deploys", then click "Clear cache and deploy site".
+9. After a few minutes, your dashboard will be live at a URL like: yourreallygreatsite.netlify.app.
+
+**🎉 Congratulations!**
+
+**Important Note:** This deployment exposes your API keys. Share the link cautiously and set spending limits on your API keys. 
+
+</details>
 
 ---
 
-<br><br><br><br>
 
-# Running the App Locally
+<details>
+<summary><h2>🚀 Running Locally</h2></summary>
 
-The app is built with vue.js (and requires node.js 16)
+This app is built with Vue.js and requires Node.js 16.
 
-## Create a .env file with Mistral API Key and a DeepGram API Key and save in root directory of app
-```
+1. **Create a `.env` File**
+
+In the app's root directory, create a `.env` file with:
 VUE_APP_ROOT_API2=yourMistralAPIKey
 VUE_APP_ROOT_API3=yourDeepGramAPIKey
-```
-
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
+2. **Project Setup**
+```npm install
+3. **Development**
 npm run serve
-```
-
-### Compiles and minifies for production
-```
+4. **Production**
 npm run build
-```
-
-### Lints and fixes files
-```
+5. **Linting**
 npm run lint
-```
 
-Customize configuration
-[Configuration documentation](https://cli.vuejs.org/config/) 
+For configuration details: Vue CLI Configuration
 
-<br><br><br><br> 
----
-<br><br><br><br>
+</details>
+
 # [Attribution Credits and Dependencies for Public Speaking Dashboard](https://raw.githubusercontent.com/PublicSpeakingDB/PSD/main/package-lock.json)
