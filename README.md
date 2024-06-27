@@ -98,3 +98,16 @@ For configuration details: Vue CLI Configuration
 </details>
 
 # [Attribution Credits and Dependencies for Public Speaking Dashboard](https://raw.githubusercontent.com/PublicSpeakingDB/PSD/main/package-lock.json)
+<style>
+details {
+  margin-bottom: 10px; /* Add space between sections */
+}
+
+summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+details[open] summary {
+}
+</style>
