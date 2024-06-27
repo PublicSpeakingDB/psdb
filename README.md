@@ -19,12 +19,12 @@ This work is licensed under a
 Find instructions below for cloning your own instance of Public Speaking Dashboard. 
 
 <details>
-<summary><h2 style="display: inline-block;">✨Clone Your Own Instance of Public Speaking Dashboard</h2></summary>
+<summary><h2 style="display: inline-block;">✨ Clone Your Own Instance of Public Speaking Dashboard</h2></summary>
 
 <div style="padding-left: 20px;">
 
 This guide will walk you through the steps for setting up your own instance of Public Speaking Dashboard on Netlify.
-
+<br>
 <h3 style="display: inline-block;">1. **Create a Mistral AI Account**</h3>
 
 <ul style="list-style-type: disc;">
@@ -60,7 +60,7 @@ This guide will walk you through the steps for setting up your own instance of P
 <div style="padding-left: 20px;">
 
 This app is built with Vue.js and requires Node.js 16.
-
+<br>
 <h3 style="display: inline-block;">1. **Create a `.env` File**</h3>
 In the app's root directory, create a `.env` file with:
 VUE_APP_ROOT_API2=yourMistralAPIKey
