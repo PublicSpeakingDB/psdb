@@ -73,8 +73,6 @@ VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
 
 </details>
 
----
-
 
 <details>
 <summary><h2>🚀 Running Locally</h2></summary>
