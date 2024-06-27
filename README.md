@@ -22,7 +22,7 @@ Find instructions below for cloning your own instance of Public Speaking Dashboa
 <details>
 <summary><h2>✨ Getting Started: Create Your Own Instance on Netlify</h2></summary>
 
-This guide will walk you through the steps to set up your personalized Public Speaking Dashboard on Netlify.
+This guide will walk you through the steps for setting up your own instance of Public Speaking Dashboard on Netlify.
 
 ### 1. **Create a Mistral AI Account**
 
