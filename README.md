@@ -18,7 +18,7 @@ This work is licensed under a
 
 Find instructions below for cloning your own instance of Public Speaking Dashboard. 
 
-
+---
 <details>
 <summary><h2>✨ Getting Started: Create Your Own Instance on Netlify</h2></summary>
 
