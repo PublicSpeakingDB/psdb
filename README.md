@@ -16,7 +16,7 @@ This work is licensed under a
 [cc-by-nc-shield]: https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg
 ---
 
-Find instructions below for cloning your own instance of Public Speaking Dashboard or for running the app locally. 
+Find instructions below for cloning your own instance of Public Speaking Dashboard. 
 
 
 <details>
