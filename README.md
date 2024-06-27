@@ -64,7 +64,7 @@ This guide will walk you through the steps for setting up your own instance of P
 5. Under "Add environment variables", add the following (use your actual keys):
 VUE_APP_ROOT_API2=yourMistralAPIKeyCode
 VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode
-6. Click "Deploy" and then go to "Site configuration".
+6. Click "Deploy" and then go to "Site configuration". (The deployment will indicate "failed"; the next step will remedy that.) 
 7. In "Build & deploy", go to "Dependency management" and select "Node 16.x".
 8. Save and go to "Deploys", then click "Clear cache and deploy site".
 9. After a few minutes, your dashboard will be live at a URL like: yourreallygreatsite.netlify.app.
