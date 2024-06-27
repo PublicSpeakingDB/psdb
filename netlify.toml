@@ -1,0 +1,21 @@
+# netlify.toml File
+
+[build]
+  # Command to build your site (e.g., for Vue CLI: npm run build)
+  command = "npm run build" 
+  # Directory where the built site files will be located
+  publish = "dist" 
+  # Optional: Directory for Netlify functions (default is "functions")
+  functions = "functions"
+
+[dev]
+  # Optional: Port for the Netlify Dev server (default is 8888)
+  port = 8888
+
+[context.production]
+  command = "npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
