@@ -1241,14 +1241,18 @@ window.onclick = function(event) {
       instance.showFeedback = false;
       instance.dataSummary = instance.dataSummary +=
         "#" + "00:" + actualTime + " " + data.result + "\n\n";
+      if (data.result){
+        instance.feedback = instance.dataSummary;
+      }
+      else{
+        instance.feedback = "No specific feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
+      }
       instance.spinner1 = false;
-      instance.feedback = instance.dataSummary;
     } catch (error) {
       console.error('Error summarizing data:', error);
       instance.spinner1 = false;
       instance.showFeedback = false;
-      instance.feedback =
-        "Error summarizing data. Check the console for details.";
+      instance.feedback = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log.";
     }
   },
 
@@ -1267,13 +1271,20 @@ window.onclick = function(event) {
 
       const data = await response.json();
       instance.showFeedback2 = false;
-      instance.feedback2 = data.result;
+
+      if (data.result){
+        instance.feedback2 = data.result;
+      }
+      else{
+        instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
+      }
+      
       this.spinner2 = false;
     } catch (error) {
       console.error('Error fetching feedback:', error);
       instance.spinner2 = false;
       instance.showFeedback2 = false;
-      instance.feedback2 = "Error fetching feedback. Check the console for details.";
+      instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
     }
   },
 
@@ -2254,7 +2265,7 @@ video {
 .modalButton {
 background: #f48d79;
 border: none;
-font-size: 1em;
+font-size: .9em;
 margin-bottom: 28px;; 
 color: black;
 }
