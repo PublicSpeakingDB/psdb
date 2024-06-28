@@ -143,6 +143,6 @@ This app is built with Vue.js and requires Node.js 16.
 
 <h2 style="display: inline-block;">🔥 <a href="https://psd-demo.netlify.app/">Live Demo</a> (Without AI Feedback)</h2>
 <br>
-<div style="padding-left: 20px;">
+<div>
 <a href="https://raw.githubusercontent.com/PublicSpeakingdashboard/PSD/main/package-lock.json">Attribution Credits and Dependencies for Public Speaking Dashboard</a>
 </div>
