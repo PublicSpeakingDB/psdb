@@ -11,16 +11,11 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
-    "@middy/core": "^5.4.2",
-    "@middy/http-cors": "^5.4.2",
     "axios": "^1.5.1",
-    "core-js": "^3.6.5",
     "dotenv": "^16.3.1",
     "face-api.js": "^0.22.2",
     "netlify": "^13.1.20",
-    "node-fetch": "^3.3.2",
     "nvm": "^0.0.4",
-    "plotly": "^1.0.6",
     "plotly.js-dist": "^2.24.3",
     "text-readability": "^1.0.5",
     "vue": "^2.6.11"
