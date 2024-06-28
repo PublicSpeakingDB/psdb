@@ -1,7 +1,7 @@
 <template>
   <div>
     <p v-if="!loading" id="loadingContainer" aria-live="polite" aria-busy="true">
-      Initializing <br /><section id="loader" aria-label="Loading animation"></section><br /><span id="initialMessage">(Make sure your webcam is facing you.)</span>
+      Initializing <br /><section id="loader" aria-label="Loading animation"><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></section><br /><span id="initialMessage">(Make sure your webcam is facing you.)</span>
     </p>
     <span id="container"><div id="video-container" class="video-container" aria-label="Webcam feed"><video id="video" autoplay width="150" height="150"></video></div></span>
     <h1 v-if="showProcess" id="mainTitle" aria-live="polite"><img id="talking" alt="" aria-hidden="true" src="talking.png" />{{ msg }}</h1>
@@ -102,11 +102,11 @@
 
     <h1 v-if="!showFeedback" id="specificAndOverallFeedback">Specific Feedback</h1>
     <span id="spinner1" v-if="spinner1" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
-    <p v-if="!showFeedback" class="feedback">{{ feedback }}</p><br>
+    <section v-if="!showFeedback" class="feedback">{{ feedback }}</section><br>
 
     <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">Overall Feedback</h1>
     <span id="spinner2" v-if="spinner2" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
-    <p v-if="!showFeedback2" class="feedback">{{ feedback2 }}</p>
+    <section v-if="!showFeedback2" class="feedback">{{ feedback2 }}</section>
     <section>
       <button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button>
     </section>
@@ -127,7 +127,7 @@
           <section v-if="showModal" id="modal">
             Public Speaking Dashboard does not collect or store user data. However, third-party services are used for transcription and analysis. Terms of use for those third-party services can be found at <a href="https://deepgram.com/terms">DeepGram</a> and <a href="https://mistral.ai/terms/">Mistral</a>.
           </section><br>
-          <b>Known Bugs and Limitations:</b> <br />
+          <b>Limitations:</b> <br />
           <section>
             - Current version of app works best on the latest Google Chrome browser on desktop. Other browsers are unstable.
           </section>
@@ -2172,7 +2172,7 @@ video {
 
 #initialMessage {
   font-size: 20px;
-  color: #c300ff;
+  color: #fdfd96;
 }
 #modal {
   color: white;
@@ -2192,21 +2192,20 @@ video {
 }
 
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  padding-top: 100px;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  width: 100%; 
+  height: 100%; 
+  overflow: auto;
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
   z-index: 2; 
 }
 
-/* Modal Content */
 .modal-content {
   margin: auto;
   padding: 20px;
@@ -2220,7 +2219,6 @@ video {
   overflow-y: scroll;
 }
 
-/* The Close Button */
 .close {
   float: right;
   color: black; 
@@ -2254,15 +2252,18 @@ video {
 }
 
 .modalButton {
-background: rgba(0,0,0,.5);
+background: #f48d79;
 border: none;
-font-size: 12px;
-font-weight: bold;
-margin-bottom: 2%; 
-color: white;
-margin-top: .5%;
+font-size: 1em;
+margin-bottom: 28px;; 
+color: black;
 }
-
+#modalButtonOverall{
+margin-top: 6px; 
+}
+#modalButtonFeedback{
+  margin-top: 6px;
+}
 
 @page {
   size: A3 landscape;
@@ -2276,65 +2277,102 @@ margin-top: .5%;
 }
 
 #loader {
-
   margin: auto;
   width: 50%;
-  /* the colors */
-  --c1: #71c68b;
-  --c2: #f48d79;
-  --c3: #c300ff;
-  --c4: #fdfd96;
-  /**/
-
-  width: 200px; /* control the size */
-  aspect-ratio: 8/5;
-  --_g: no-repeat radial-gradient(#000 68%, #0000 71%);
-  -webkit-mask: var(--_g), var(--_g), var(--_g);
-  -webkit-mask-size: 25% 40%;
-  background: conic-gradient(var(--c1) 50%, var(--c2) 0) no-repeat,
-    conic-gradient(var(--c3) 100%, var(--c4) 0) no-repeat;
-  background-size: 200% 50%;
-  animation: back 3s infinite steps(1), load 2s infinite;
 }
 
-@keyframes load {
+@keyframes loading {
+  from {color: #f48d79;}
+  to {color: #c300ff;}
+}
+.lds-spinner,
+.lds-spinner div,
+.lds-spinner div:after {
+  box-sizing: border-box;
+  animation-name: loading; 
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+.lds-spinner {
+  color: currentColor;
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-spinner div {
+  transform-origin: 40px 40px;
+  animation: lds-spinner 1.2s linear infinite;
+}
+.lds-spinner div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 3.2px;
+  left: 36.8px;
+  width: 6.4px;
+  height: 17.6px;
+  border-radius: 20%;
+  background: currentColor;
+}
+.lds-spinner div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -1.1s;
+}
+.lds-spinner div:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -1s;
+}
+.lds-spinner div:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.9s;
+}
+.lds-spinner div:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.8s;
+}
+.lds-spinner div:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.7s;
+}
+.lds-spinner div:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.6s;
+}
+.lds-spinner div:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.5s;
+}
+.lds-spinner div:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.4s;
+}
+.lds-spinner div:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.3s;
+}
+.lds-spinner div:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.2s;
+}
+.lds-spinner div:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.1s;
+}
+.lds-spinner div:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
+}
+@keyframes lds-spinner {
   0% {
-    -webkit-mask-position: 0% 0%, 50% 0%, 100% 0%;
-  }
-  16.67% {
-    -webkit-mask-position: 0% 100%, 50% 0%, 100% 0%;
-  }
-  33.33% {
-    -webkit-mask-position: 0% 100%, 50% 100%, 100% 0%;
-  }
-  50% {
-    -webkit-mask-position: 0% 100%, 50% 100%, 100% 100%;
-  }
-  66.67% {
-    -webkit-mask-position: 0% 0%, 50% 100%, 100% 100%;
-  }
-  83.33% {
-    -webkit-mask-position: 0% 0%, 50% 0%, 100% 100%;
+    opacity: 1;
   }
   100% {
-    -webkit-mask-position: 0% 0%, 50% 0%, 100% 0%;
+    opacity: 0;
   }
 }
-@keyframes back {
-  0%,
-  100% {
-    background-position: 0% 0%, 0% 100%;
-  }
-  25% {
-    background-position: 100% 0%, 0% 100%;
-  }
-  50% {
-    background-position: 100% 0%, 100% 100%;
-  }
-  75% {
-    background-position: 0% 0%, 100% 100%;
-  }
-}
+
+
 
 button, .optionsButton, #begin, #start, #stop, #reset, #pdf, #next, #speakingTime, #dataHideButton, #dataShowButton {
   cursor: pointer;
