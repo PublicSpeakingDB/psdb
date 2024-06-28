@@ -1,7 +1,7 @@
 
 const axios = require("axios");
 require("dotenv").config();
-const withCors = require("./cors.js"); // Import the custom CORS middleware
+const withCors = require("./cors.js");
 
 exports.handler = withCors(async (event, context) => {
   try {

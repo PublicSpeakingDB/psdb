@@ -1,156 +1,51 @@
 <template>
   <div>
-    <p v-if="!loading" id="loadingContainer" aria-live="polite" aria-busy="true">
-      Initializing <br /><section id="loader" aria-label="Loading animation"><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></section><br /><span id="initialMessage">(Make sure your webcam is facing you.)</span>
-    </p>
-    <span id="container"><div id="video-container" class="video-container" aria-label="Webcam feed"><video id="video" autoplay width="150" height="150"></video></div></span>
-    <h1 v-if="showProcess" id="mainTitle" aria-live="polite"><img id="talking" alt="" aria-hidden="true" src="talking.png" />{{ msg }}</h1>
-    <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}<a v-if="browserUrl" href="https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538&sjid=17703533698318943859-NA">here</a></p>
-    <p v-if="showProcess" id="messageThree" aria-live="assertive">{{ msg3 }}</p>
-    <span id="timeHolder">Time: </span>
-    <span>  
-      <span v-if="!show3" id="dropdownWrapper">
-        <label for="speakingTime" class="sr-only"></label>
-        <select name="speakingTime" id="speakingTime" aria-label="Desired Speaking Time Dropdown Menu" tabindex="0">
-          <option value="60000" selected>1 Min</option>
-          <option value="120000">2 Min</option>
-          <option value="180000">3 Min</option>
-          <option value="300000">5 Min</option>
-          <option value="360000">6 Min</option>
-          <option value="420000">7 Min</option>
-          <option value="480000">8 Min</option>
-          <option value="540000">9 Min</option>
-          <option value="600000">10 Min</option>
-        </select>
-      </span>
-    <button id="begin" v-if="showBegin" v-on:click="begin(); selectWPM(); selectTextEmotion(); selectVoiceEmotion(); selectFaceEmotion();">Begin</button>
-    <button id="start" v-if="!showStart" v-on:click="begin3">Start</button>
-    <button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">Stop</button>
-    <button id="reset" v-if="!show3" v-on:click="reset">Reset</button>
-    <button id="pdf" v-if="!show5" v-on:click="pdfResults">Save</button></span><br>
-    <span id="rawData" aria-live="polite"></span>
-    <div v-if="!showTime" class="title" id="timer" aria-live="polite">{{ time }}<span aria-hidden="true">{{msgTime}}</span> </div>
-    <span v-if="!show3" id="volume-visualizer-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Volume Level" aria-live="polite"><span id="volume-visualizer"></span> <span id="volume-number"></span><span class="sr-only">Visual representation of volume level</span></span>      
-    <ul v-if="!show3" id="output" aria-live="polite"></ul>
-    <span><button v-if="!show3" id="dataShowButton" v-on:click="unhideData">View Raw Data</button>
-    <button v-if="!show3" id="dataHideButton" v-on:click="hideData">Hide Raw Data</button></span><br>
-    <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
+    <!-- Initalizing Loader & Modal-->
+    <p v-if="!loading" id="loadingContainer" aria-live="polite" aria-busy="true"> Initializing <br /><section id="loader" aria-label="Loading animation"><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></section><br /><span id="initialMessage">(Make sure your webcam is facing you.)</span> </p> <div id="modalBoxSave" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="modalBoxSaveDescription"> <div class="modal-content" tabindex="-1"> <h2 id="modalBoxSaveLabel">Be Sure to Save!</h2> <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p> <button id="modalBoxCloseSave" tabindex="4" class="close2" aria-label="Close instructions to save modal">Got It</button> </div> </div>
     
+    <!-- Video Feed -->
     <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay muted width="150" height="150" alt="Live video feed for facial expression analysis"></video></div></span>
 
-    <div id="modalBoxSave" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="modalBoxSaveDescription">
-      <div class="modal-content" tabindex="-1">
-          <h2 id="modalBoxSaveLabel">Be Sure to Save!</h2>
-          <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p>
-          <button id="modalBoxCloseSave" tabindex="4" class="close2" aria-label="Close instructions to save modal">Got It</button>
-      </div>
-    </div>
+    <!-- Title & Instructions -->
+    <h1 v-if="showProcess" id="mainTitle" aria-live="polite"><img id="talking" alt="" aria-hidden="true" src="talking.png" />{{ msg }}</h1> <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}<a v-if="browserUrl" href="https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538&sjid=17703533698318943859-NA">here</a></p> <p v-if="showProcess" id="messageThree" aria-live="assertive">{{ msg3 }}</p>
+    
+    <!-- Controls -->
+    <span id="timeHolder">Time: </span> <span> <span v-if="!show3" id="dropdownWrapper"> <label for="speakingTime" class="sr-only"></label> <select name="speakingTime" id="speakingTime" aria-label="Desired Speaking Time Dropdown Menu" tabindex="0"> <option value="60000" selected>1 Min</option> <option value="120000">2 Min</option> <option value="180000">3 Min</option> <option value="300000">5 Min</option> <option value="360000">6 Min</option> <option value="420000">7 Min</option> <option value="480000">8 Min</option> <option value="540000">9 Min</option> <option value="600000">10 Min</option> </select> </span> <button id="begin" v-if="showBegin" v-on:click="begin(); selectWPM(); selectTextEmotion(); selectVoiceEmotion(); selectFaceEmotion();">Begin</button> <button id="start" v-if="!showStart" v-on:click="begin3">Start</button> <button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">Stop</button> <button id="reset" v-if="!show3" v-on:click="reset">Reset</button> <button id="pdf" v-if="!show5" v-on:click="pdfResults">Save</button></span><br>
+    
+    <!-- Time, Transcript, Volume, and Raw Data -->
+    <span id="rawData" aria-live="polite"></span> <div v-if="!showTime" class="title" id="timer" aria-live="polite">{{ time }}<span aria-hidden="true">{{msgTime}}</span> </div> <span v-if="!show3" id="volume-visualizer-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Volume Level" aria-live="polite"><span id="volume-visualizer"></span> <span id="volume-number"></span><span class="sr-only">Visual representation of volume level</span></span> <ul v-if="!show3" id="output" aria-live="polite"></ul> <span><button v-if="!show3" id="dataShowButton" v-on:click="unhideData">View Raw Data</button> <button v-if="!show3" id="dataHideButton" v-on:click="hideData">Hide Raw Data</button></span><br> <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
+    
+    <!-- Charts & Explanation Modals -->
+    
+        <!-- Modal: How Public Speaking Dashboard Works -->
+        <div id="modalBoxOverall" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxOverallDescription"> <div class="modal-content" tabindex="-1"> <button id="modalBoxCloseOverall" class="close" aria-label="Close how public speaking dashboard works modal">&times;</button> <h2 id="modalBoxOverallLabel">How Public Speaking Dashboard Works</h2> <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to automated transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p> </div> </div>
 
-    <div id="modalBoxOverall" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxOverallDescription">
-      <div class="modal-content" tabindex="-1">
-          <button id="modalBoxCloseOverall" class="close" aria-label="Close how public speaking dashboard works modal">&times;</button>
-          <h2 id="modalBoxOverallLabel">How Public Speaking Dashboard Works</h2>
-          <p>Public Speaking Dashboard analyzes the user's rate of speech, volume, expressions in face, and word complexity. Then, that data is summarized by bots (short for "software-based robots") to help you think about your speech performance.<br><br>Use the data output and feedback to identify successes and opportunities for growth in your speaking performance. <br><br><b>Important note about transcription</b>: Public Speaking Dashboard is <i>mostly</i> correct in its transcriptions, but will unavoidably return erroneous results (this is a limitation inherent to automated transcription in general). As such, it is important to reflect on the results of Public Speaking Dashboard not with an eye for specific "blunders" but rather larger patterns in your public speaking.</p>
-      </div>
-    </div>
+        <!-- Chart and Modal: Words Per Minute -->
+        <span v-if="!showWPM" id="wpmChart" role="img" aria-label="Chart showing words per minute over time"></span><br> <section><button v-if="!showVolume" v-on:click="WPMmodal" class="modalButton" id="modalButtonWPM">More About Rate of Speech</button></section> <div id="modalBoxWPM" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWPMDescription"> <div class="modal-content" tabindex="-1"> <button id="modalBoxCloseWPM" class="close" aria-label="Close words per minute explanation modal">&times;</button> <h2 id="modalBoxWPMLabel">Rate of Speech</h2> <p>Rate of speech is calculated by taking the latest registered "chunk" of transcribed speech and dividing it by the time passed since the previous chunk was registered.<br><br>Use this data to think about your own impact and understandability.<br><br>Speaking quickly might add energy but reduce comprehension for the audience. And, speaking slowly might add clarity but lose energy. The ideal is to strike a balance based on your own unique speaking style and character.</p> </div> </div>
 
-    <span id="container"><div id="video-container" class="video-container"><video id="video" autoplay width="150" height="150"></video></div></span>
+        <!-- Chart and Modal: Volume -->
+        <span v-if="!showVolume" id="volumeChart" role="img" aria-label="Chart showing speaker's microphone volume over time"></span><br> <section><button v-if="!showVolume" v-on:click="Volumemodal" class="modalButton" id="modalButtonVolume">More About Volume</button></section> <div id="modalBoxVolume" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxVolumeDescription"> <div class="modal-content" tabindex="-1"> <button id="modalBoxCloseVolume" class="close" aria-label="Close speaking volume explanation modal">&times;</button> <h2 id="modalBoxVolumeLabel">Volume</h2> <p>Volume is captured by sampling the microphone volume once a second.<br><br>Use this data to think about your speech "dynamics," the ups and downs throughout your speech. <br><br>While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it.</p> </div> </div>
 
-    <span v-if="!showWPM" id="wpmChart" role="img" aria-label="Chart showing words per minute over time"></span><br>
-    <section><button v-if="!showVolume" v-on:click="WPMmodal" class="modalButton" id="modalButtonWPM">More About Rate of Speech</button></section>
+        <!-- Chart and Modal: Facial Emotions -->
+        <span v-if="!showFaceEmotion" id="faceEmotionChart" role="img" aria-label="Chart showing facial emotions over time"></span> <section><button v-if="!showVolume" v-on:click="Facemodal" class="modalButton" id="modalButtonFace">More About Expressions in Face</button></section> <div id="modalBoxFace" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFaceDescription"> <div class="modal-content" tabindex="-1"> <button id="modalBoxCloseFace" class="close" aria-label="Close facial emotions explanation modal">&times;</button> <h2 id="modalBoxFaceLabel">Expressions in Face</h2> <p>This data is captured by assessing key areas of the face to register a given emotional state once a second.<br><br>Use this data to think about the "congruence" (or not) between your words spoken and your facial expressions.<br><br>Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Keep in mind that a "neutral" facial expression is not negative; it can be a desirable expression in many speaking contexts.<br><br>It is important to keep in mind that, because the system samples your facial expressions once a second, it can sometimes register "micro-expressions," or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences.</p> </div> </div>
 
-    <div id="modalBoxWPM" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWPMDescription">
-      <div class="modal-content" tabindex="-1">
-        <button id="modalBoxCloseWPM" class="close" aria-label="Close words per minute explanation modal">&times;</button>
-        <h2 id="modalBoxWPMLabel">Rate of Speech</h2>
-        <p>Rate of speech is calculated by taking the latest registered "chunk" of transcribed speech and dividing it by the time passed since the previous chunk was registered.<br><br>Use this data to think about your own impact and understandability.<br><br>Speaking quickly might add energy but reduce comprehension for the audience. And, speaking slowly might add clarity but lose energy. The ideal is to strike a balance based on your own unique speaking style and character.</p>
-      </div>
-    </div>
+        <!-- Chart and Modal: Complexity of Words Spoken -->
+        <span v-if="!showTextEmotion" id="readabilityChart" role="img" aria-label="Chart showing word complexity over time"></span> <section><button v-if="!showVolume" v-on:click="Wordsmodal" class="modalButton" id="modalButtonWords">More About Complexity of Words Spoken</button></section> <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWordsDescription"> <div class="modal-content" tabindex="-1"> <button id="modalBoxCloseWords" class="close" aria-label="Close word complexity explanation modal">&times;</button> <h2 id="modalBoxWordsLabel">Complexity of Words Spoken</h2> <p>Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words.<br><br>Complexity of words spoken can impact the understandability and engagement of your audience. Use this data to reflect on your word choice and consider simplifying your language for better communication.</p> </div> </div><br>
 
-    <span v-if="!showVolume" id="volumeChart" role="img" aria-label="Chart showing speaker's microphone volume over time"></span><br>
-    <section><button v-if="!showVolume" v-on:click="Volumemodal" class="modalButton" id="modalButtonVolume">More About Volume</button></section>
+    <!-- AI Feedback -->
 
-    <div id="modalBoxVolume" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxVolumeDescription">
-      <div class="modal-content" tabindex="-1">
-        <button id="modalBoxCloseVolume" class="close" aria-label="Close speaking volume explanation modal">&times;</button>
-        <h2 id="modalBoxVolumeLabel">Volume</h2>
-        <p>Volume is captured by sampling the microphone volume once a second.<br><br>Use this data to think about your speech "dynamics," the ups and downs throughout your speech. <br><br>While it is true that a speech can be too quiet or too loud, variance in volume can also enhance a speech by adding texture to it.</p>
-      </div>
-    </div>
+        <!-- Specific Feedback -->
+        <h1 v-if="!showFeedback" id="specificAndOverallFeedback">Specific Feedback</h1> <span id="spinner1" v-if="spinner1" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br> <section v-if="!showFeedback" class="feedback">{{ feedback }}</section><br>
 
-    <span v-if="!showFaceEmotion" id="faceEmotionChart" role="img" aria-label="Chart showing facial emotions over time"></span>
-    <section><button v-if="!showVolume" v-on:click="Facemodal" class="modalButton" id="modalButtonFace">More About Expressions in Face</button></section>
-
-    <div id="modalBoxFace" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFaceDescription">
-      <div class="modal-content" tabindex="-1">
-        <button id="modalBoxCloseFace" class="close" aria-label="Close facial emotions explanation modal">&times;</button>
-        <h2 id="modalBoxFaceLabel">Expressions in Face</h2>
-        <p>This data is captured by assessing key areas of the face to register a given emotional state once a second.<br><br>Use this data to think about the "congruence" (or not) between your words spoken and your facial expressions.<br><br>Much of the time we want our facial expressions to be congruent with our content. But there are also occasions where incongruence is desirable--in humorous speech, for instance. Keep in mind that a "neutral" facial expression is not negative; it can be a desirable expression in many speaking contexts.<br><br>It is important to keep in mind that, because the system samples your facial expressions once a second, it can sometimes register "micro-expressions," or flashes of expression that do not necessarily represent the emotional state perceptible by our audiences.</p>
-      </div>
-    </div>
-
-    <span v-if="!showTextEmotion" id="readabilityChart" role="img" aria-label="Chart showing word complexity over time"></span>
-    <section><button v-if="!showVolume" v-on:click="Wordsmodal" class="modalButton" id="modalButtonWords">More About Complexity of Words Spoken</button></section>
-
-    <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWordsDescription">
-      <div class="modal-content" tabindex="-1">
-        <button id="modalBoxCloseWords" class="close" aria-label="Close word complexity explanation modal">&times;</button>
-        <h2 id="modalBoxWordsLabel">Complexity of Words Spoken</h2>
-        <p>Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words.<br><br>Complexity of words spoken can impact the understandability and engagement of your audience. Use this data to reflect on your word choice and consider simplifying your language for better communication.</p>
-      </div>
-    </div><br>
-
-    <h1 v-if="!showFeedback" id="specificAndOverallFeedback">Specific Feedback</h1>
-    <span id="spinner1" v-if="spinner1" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
-    <section v-if="!showFeedback" class="feedback">{{ feedback }}</section><br>
-
-    <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">Overall Feedback</h1>
-    <span id="spinner2" v-if="spinner2" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br>
-    <section v-if="!showFeedback2" class="feedback">{{ feedback2 }}</section>
-    <section>
-      <button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button>
-    </section>
-
-    <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFeedbackDescription">
-      <div class="modal-content">
-        <button id="modalBoxCloseFeedback" class="close" aria-label="Close feedback explanation modal">&times;</button>
-        <h2 id="modalBoxFeedbackHeader">Feedback</h2>
-        <p>Feedback is generated based on the analysis of your speech. It includes specific feedback on various aspects of your speech and overall feedback summarizing your performance.<br><br>Use this feedback to improve your public speaking skills and focus on areas that need improvement.</p>
-      </div>
-    </div>
-
-    <footer id="footer" v-if="showFooter">
-      <section id="version">
-        Version 0.1 (Beta)
-        <div id="bugs">
-          <br />
-          <section v-if="showModal" id="modal">
-            Public Speaking Dashboard does not collect or store user data. However, third-party services are used for transcription and analysis. Terms of use for those third-party services can be found at <a href="https://deepgram.com/terms">DeepGram</a> and <a href="https://mistral.ai/terms/">Mistral</a>.
-          </section><br>
-          <b>Limitations:</b> <br />
-          <section>
-            - Current version of app works best on the latest Google Chrome browser on desktop. Other browsers are unstable.
-          </section>
-          <section>
-            - App will work on Google Chrome browser on iOS and Android. Other browsers are unstable.
-          </section>
-          <section>
-            - User needs to speak for at least 30 seconds before meaningful results are produced.
-          </section>
-          <section>
-            - System will only reliably give an overall summary for speeches shorter than 10 minutes.
-          </section>
-          <br>
-          <b>Updates: </b><span id="updates">{{updates}}</span><br>
-          <br>
-          If you find a bug or anything that can be improved in the app, please report it here:
-          <a href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW">Bug/Improvement Report Form</a>
-          <br><br>
-        </div>
-      </section>
-    </footer>
+        <!-- Feedback and Modal: Overall Feedback-->
+        <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">Overall Feedback</h1> <span id="spinner2" v-if="spinner2" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br> <section v-if="!showFeedback2" class="feedback">{{ feedback2 }}</section> <section> <button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button> </section> <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFeedbackDescription"> <div class="modal-content"> <button id="modalBoxCloseFeedback" class="close" aria-label="Close feedback explanation modal">&times;</button> <h2 id="modalBoxFeedbackHeader">Feedback</h2> <p>Feedback is generated based on the analysis of your speech. It includes specific feedback on various aspects of your speech and overall feedback summarizing your performance.<br><br>Use this feedback to improve your public speaking skills and focus on areas that need improvement.</p> </div> </div>
+    
+        <!-- Footer: Version, Limitations, Updates and Feedback Form -->
+    <footer id="footer" v-if="showFooter"> <section id="version"> Version 0.1 (Beta) <div id="bugs"> <br /> <section v-if="showModal" id="modal"> Public Speaking Dashboard does not collect or store user data. However, third-party services are used for transcription and analysis. Terms of use for those third-party services can be found at <a href="https://deepgram.com/terms">DeepGram</a> and <a href="https://mistral.ai/terms/">Mistral</a>. </section><br> <b>Limitations:</b> <br /> <section> - Current version of app works best on the latest Google Chrome browser on desktop. Other browsers are unstable. </section> <section> - App will work on Google Chrome browser on iOS and Android. Other browsers are unstable. </section> <section> - User needs to speak for at least 30 seconds before meaningful results are produced. </section> <section> - System will only reliably give an overall summary for speeches shorter than 10 minutes. </section> <br> <b>Updates: </b><span id="updates">{{updates}}</span><br> <br> If you find a bug or anything that can be improved in the app, please report it here: <a href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW">Bug/Improvement Report Form</a> <br><br> </div> </section> </footer>
   </div>
 </template>
+
+
 <script>
 import * as rs from "text-readability";
 import Plotly from "plotly.js-dist";
@@ -269,7 +164,9 @@ export default {
     };
   },
 
+  
   created() {
+    //check for Chrome browser (and for Android; for fallback transcription with DeepGram)
     var isAndroid = /(android)/i.test(navigator.userAgent);
     if (isAndroid && /Chrome/.test(navigator.userAgent)) {
       this.android = true;
@@ -287,7 +184,7 @@ export default {
         this.browserUrl = true;
       }
     }
-
+    //check for updates
     axios
         .get("https://raw.githubusercontent.com/publicspeakingdashboard/updates/main/updates.txt")
         .then(json => (
@@ -298,7 +195,7 @@ export default {
   },
 
   mounted() {
-
+    //set current speaking time for screenreader
     const speakingTimeDropdown = document.getElementById('speakingTime');
     speakingTimeDropdown.addEventListener('change', (event) => {
     this.speakingTimeLabel = `Choose Desired Speech Length (${event.target.value / 60000} Min)`;
@@ -308,6 +205,7 @@ export default {
 
   methods: {
     begin3: function () {
+      //set up app, while setting desires speaking time
       this.msg=""
       this.showStart = true;
       this.showStop = false;
@@ -336,6 +234,7 @@ export default {
     },
 
     modalTrap(modalId) {
+      //trap focus when tabbing into modals
       const modal = document.getElementById(modalId);
 
       setTimeout(() => {
@@ -373,7 +272,7 @@ export default {
         modal.style.display = 'none';
     }, 
     
-
+//modals
     Savemodal: function () {
         var modal = document.getElementById("modalBoxSave");
 
@@ -386,10 +285,10 @@ export default {
           setTimeout(() => { document.getElementById("modalBoxCloseSave").focus(); }, 10);
 
           modal.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            modal.style.display = "none";
-        }
-    });
+            if (event.key === 'Escape') {
+                modal.style.display = "none";
+            }
+          });
 
 
         span.onclick = function() {
@@ -404,189 +303,182 @@ export default {
       },
     
     Feedbackmodal: function () {
-var modal = document.getElementById("modalBoxFeedback");
+      var modal = document.getElementById("modalBoxFeedback");
 
-var span = document.getElementById("modalBoxCloseFeedback");
+      var span = document.getElementById("modalBoxCloseFeedback");
 
 
-  modal.style.display = "block";
-  this.modalTrap('modalBoxFeedback');
+        modal.style.display = "block";
+        this.modalTrap('modalBoxFeedback');
 
-  setTimeout(() => { document.getElementById("modalBoxCloseFeedback").focus(); }, 10);
+        setTimeout(() => { document.getElementById("modalBoxCloseFeedback").focus(); }, 10);
 
-  modal.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            modal.style.display = "none";
+        modal.addEventListener('keydown', (event) => {
+              if (event.key === 'Escape') {
+                  modal.style.display = "none";
+              }
+          });
+
+
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
-    });
-
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-      
+      }
     }, 
+
     Overallmodal: function () {
-var modal = document.getElementById("modalBoxOverall");
+      var modal = document.getElementById("modalBoxOverall");
 
-var span = document.getElementById("modalBoxCloseOverall");
+      var span = document.getElementById("modalBoxCloseOverall");
 
 
-  modal.style.display = "block";
-  this.modalTrap('modalBoxOverall');
+        modal.style.display = "block";
+        this.modalTrap('modalBoxOverall');
 
-  
+        
 
-  setTimeout(() => { document.getElementById("modalBoxCloseOverall").focus(); }, 10);
+        setTimeout(() => { document.getElementById("modalBoxCloseOverall").focus(); }, 10);
 
-  modal.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            modal.style.display = "none";
+        modal.addEventListener('keydown', (event) => {
+              if (event.key === 'Escape') {
+                  modal.style.display = "none";
+              }
+          });
+
+
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
-    });
-
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-      
+      }
     }, 
+
     Wordsmodal: function () {
-var modal = document.getElementById("modalBoxWords");
+      var modal = document.getElementById("modalBoxWords");
 
-var span = document.getElementById("modalBoxCloseWords");
+      var span = document.getElementById("modalBoxCloseWords");
 
 
-  modal.style.display = "block";
-  this.modalTrap('modalBoxWords');
+        modal.style.display = "block";
+        this.modalTrap('modalBoxWords');
 
-  setTimeout(() => { document.getElementById("modalBoxCloseWords").focus(); }, 10);
+        setTimeout(() => { document.getElementById("modalBoxCloseWords").focus(); }, 10);
 
-  modal.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            modal.style.display = "none";
+        modal.addEventListener('keydown', (event) => {
+              if (event.key === 'Escape') {
+                  modal.style.display = "none";
+              }
+          });
+
+
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
-    });
-
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-      
+      }
     }, 
-Facemodal: function () {
-var modal = document.getElementById("modalBoxFace");
 
-var span = document.getElementById("modalBoxCloseFace");
+    Facemodal: function () {
+      var modal = document.getElementById("modalBoxFace");
+
+      var span = document.getElementById("modalBoxCloseFace");
 
 
-  modal.style.display = "block";
-  this.modalTrap('modalBoxFace');
+        modal.style.display = "block";
+        this.modalTrap('modalBoxFace');
 
-  setTimeout(() => { document.getElementById("modalBoxCloseFace").focus(); }, 10);
+        setTimeout(() => { document.getElementById("modalBoxCloseFace").focus(); }, 10);
 
-  modal.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            modal.style.display = "none";
+        modal.addEventListener('keydown', (event) => {
+              if (event.key === 'Escape') {
+                  modal.style.display = "none";
+              }
+          });
+
+
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
-    });
-
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-      
+      }  
     }, 
+
     WPMmodal: function () {
-var modal = document.getElementById("modalBoxWPM");
+      var modal = document.getElementById("modalBoxWPM");
 
-var span = document.getElementById("modalBoxCloseWPM");
+      var span = document.getElementById("modalBoxCloseWPM");
 
 
-  modal.style.display = "block";
-  this.modalTrap('modalBoxWPM');
+        modal.style.display = "block";
+        this.modalTrap('modalBoxWPM');
 
-  setTimeout(() => { document.getElementById("modalBoxCloseWPM").focus(); }, 10);
+        setTimeout(() => { document.getElementById("modalBoxCloseWPM").focus(); }, 10);
 
-  modal.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            modal.style.display = "none";
+        modal.addEventListener('keydown', (event) => {
+              if (event.key === 'Escape') {
+                  modal.style.display = "none";
+              }
+          });
+
+
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
-    });
-
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-      
+      }
     }, 
 
     Volumemodal: function () {
-var modal = document.getElementById("modalBoxVolume");
+      var modal = document.getElementById("modalBoxVolume");
 
-var span = document.getElementById("modalBoxCloseVolume");
+      var span = document.getElementById("modalBoxCloseVolume");
 
 
-  modal.style.display = "block";
-  this.modalTrap('modalBoxVolume');
+        modal.style.display = "block";
+        this.modalTrap('modalBoxVolume');
 
-  setTimeout(() => { document.getElementById("modalBoxCloseVolume").focus(); }, 10);
+        setTimeout(() => { document.getElementById("modalBoxCloseVolume").focus(); }, 10);
 
-  modal.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-            modal.style.display = "none";
+        modal.addEventListener('keydown', (event) => {
+              if (event.key === 'Escape') {
+                  modal.style.display = "none";
+              }
+          });
+
+
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
         }
-    });
-
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-      
+      }
     }, 
 
+    //alternate initialization specifically for Android Chrome (to use DeepGram fallback transcription)
     begin2: async function () {
       if (this.stop == false) {
         try {
@@ -692,6 +584,7 @@ window.onclick = function(event) {
     },
 
     begin: function () {
+      //main initialization 
       document.getElementById("version").style.fontSize = "10px"
       document.getElementById("bugs").style.fontSize = "10px"
       this.analyzeFace();
@@ -711,53 +604,54 @@ window.onclick = function(event) {
     },
 
     startVolumeMeter: function() {
-  (async () => {
-    const volumeVisualizer = document.getElementById("volume-visualizer");
-    const volumeNumberDisplay = document.getElementById("volume-number");
+    //volume calculation and visualization
+    (async () => {
+      const volumeVisualizer = document.getElementById("volume-visualizer");
+      const volumeNumberDisplay = document.getElementById("volume-number");
 
-    try {
-      const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const audioContext = new AudioContext();
-      const audioSource = audioContext.createMediaStreamSource(audioStream);
-      const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 2048; 
+      try {
+        const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const audioContext = new AudioContext();
+        const audioSource = audioContext.createMediaStreamSource(audioStream);
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 2048; 
 
-      audioSource.connect(analyser);
-      const volumes = new Uint8Array(analyser.frequencyBinCount);
+        audioSource.connect(analyser);
+        const volumes = new Uint8Array(analyser.frequencyBinCount);
 
-      this.volumeCallback = () => {
-        analyser.getByteFrequencyData(volumes);
+        this.volumeCallback = () => {
+          analyser.getByteFrequencyData(volumes);
 
-        let volumeSum = 0;
-        for (const amplitude of volumes) {
-          volumeSum += amplitude * amplitude;
-        }
-        const rms = Math.sqrt(volumeSum / volumes.length);
+          let volumeSum = 0;
+          for (const amplitude of volumes) {
+            volumeSum += amplitude * amplitude;
+          }
+          const rms = Math.sqrt(volumeSum / volumes.length);
 
-        const dBFS = 20 * Math.log10(rms / 255);
+          const dBFS = 20 * Math.log10(rms / 255);
 
-        const dBSPL = dBFS + 66; 
-        const decibelValue = Math.max(0, dBSPL); 
+          const dBSPL = dBFS + 66; 
+          const decibelValue = Math.max(0, dBSPL); 
 
-        volumeNumberDisplay.textContent = Math.round(decibelValue) + " dB";
-        this.volumeNumber = Math.round(decibelValue)
+          volumeNumberDisplay.textContent = Math.round(decibelValue) + " dB";
+          this.volumeNumber = Math.round(decibelValue)
 
-        const visualizerPercentage = Math.min(100, decibelValue / 66 * 100); 
-        volumeVisualizer.style.setProperty("--volume", visualizerPercentage + "%");
-        this.showVolume = false;
-      }; 
-    } catch (e) {
-      console.log(e)
-    }
+          const visualizerPercentage = Math.min(100, decibelValue / 66 * 100); 
+          volumeVisualizer.style.setProperty("--volume", visualizerPercentage + "%");
+          this.showVolume = false;
+        }; 
+      } catch (e) {
+        console.log(e)
+      }
 
-    if (this.volumeCallback !== null && this.volumeInterval === null) {
-      this.volumeInterval = setInterval(this.volumeCallback, 50); 
-    }
-  })();
-},
+      if (this.volumeCallback !== null && this.volumeInterval === null) {
+        this.volumeInterval = setInterval(this.volumeCallback, 50); 
+      }
+    })();
+  },
 
 
-
+//todo: recode to remove original selection menu functions
     setVolume: function () {
       this.volumeValue = Math.round(this.volumeNumber);
     },
@@ -823,6 +717,7 @@ window.onclick = function(event) {
     },
 
     initiateVoiceControl: function () {
+      //transcription of voice using the speech recognition api built into Chrome
       console.log("Voice this.voiceInstance initiated");
       window.SpeechRecognition = window.webkitSpeechRecognition; //|| window.Speechthis.voiceInstance;
       window.SpeechGrammarList = window.webkitSpeechGrammarList; //|| window.SpeechGrammarList;
@@ -902,6 +797,7 @@ window.onclick = function(event) {
     },
 
     analyzeFace: function () {
+      //analysis of face, using faceapi.js
       this.showProcess = false;
       this.showBegin = false;
       const video = document.querySelector("video");
@@ -1006,7 +902,7 @@ window.onclick = function(event) {
     },
 
     grabTime: function () {
-
+      //clock and preferred speaking time warnings
       if (this.time1 == true) {
         this.timeDifference = Date.now() - this.initialTime;
         this.dataNamer = this.timeDifference;
@@ -1061,13 +957,13 @@ window.onclick = function(event) {
     },
 
     countWords: function (str) {
-      //count how many words are in the transcript of detected words
+      //calculation of number of words in the overall transcript
       const arr = str.split(" ");
       return arr.filter((word) => word !== "").length;
     },
 
     registerWPM: function () {
-      //calculate number of words per minute--at one second intervals
+      //calcualtion of number of words per minute
       const elapsedSeconds = this.timeElapsed / 1000;
       this.wpm = elapsedSeconds > 0 ? Math.round((this.wordCount / elapsedSeconds) * 60) : 0; 
     },
@@ -1097,7 +993,6 @@ window.onclick = function(event) {
         clearInterval(this.grabTimeInterval);
         clearInterval(this.renderDataInterval);
         clearInterval(this.summarizeDataInterval);
-        //clearInterval(this.voiceInterval);
         this.showTime = false;
         this.stop = true;
         this.show5 = false;
@@ -1125,18 +1020,22 @@ window.onclick = function(event) {
     },
 
     reset: function () {
+      //reloads app, and clears data
       location.reload();
     },
 
     unhideData: function () {
+      //shows raw data
       document.getElementById("rawData").style.display = "inline-block";
     },
 
     hideData: function () {
+      //hides raw data
       document.getElementById("rawData").style.display = "none";
     },
 
     renderData: function () {
+      //collects data from words per minute, volume, facial emotion, and word complexity functions and writes it to the raw data element in the html
       const promise1 = new Promise((resolve, reject) => {
         this.setVolume();
         this.getReadabilityStats();
@@ -1202,61 +1101,61 @@ window.onclick = function(event) {
     },
 
     async summarizeData() {
-    this.spinner1 = true;
-    var overallRawData = document.getElementById("rawData").innerHTML;
-    const overallSlicedDataArray = JSON.parse(
-      "[" + overallRawData.slice(0, -1) + "]"
-    );
-    const numberOfObjects = overallSlicedDataArray.length;
-    const dataSource = JSON.stringify(overallSlicedDataArray);
-    const workingValue = numberOfObjects - 1;
-    const instance = this;
-    const actualTime = instance.workingTime;
-
-    if (instance.firstSummary == false) {
-      instance.dataSample = dataSource.substring(
-        dataSource.indexOf(instance.referenceTime)
+      //collects the most recent batch of raw data and sends to large lanugage model for summary
+      this.spinner1 = true;
+      var overallRawData = document.getElementById("rawData").innerHTML;
+      const overallSlicedDataArray = JSON.parse(
+        "[" + overallRawData.slice(0, -1) + "]"
       );
-      instance.referenceTime = overallSlicedDataArray[workingValue].time;
-    }
+      const numberOfObjects = overallSlicedDataArray.length;
+      const dataSource = JSON.stringify(overallSlicedDataArray);
+      const workingValue = numberOfObjects - 1;
+      const instance = this;
+      const actualTime = instance.workingTime;
 
-    if (instance.firstSummary == true) {
-      instance.dataSample = dataSource;
-      instance.referenceTime = overallSlicedDataArray[workingValue].time;
-      instance.firstSummary = false;
-    }
-
-    try {
-      // /.netlify/functions/summarizeData
-      // http://localhost:8888/.netlify/functions/summarizeData
-      const response = await fetch('/.netlify/functions/summarizeData', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ dataSample: instance.dataSample, referenceTime: instance.referenceTime }), // Send both dataSample and referenceTime
-      });
-
-      const data = await response.json();
-      instance.showFeedback = false;
-      instance.dataSummary = instance.dataSummary +=
-        "#" + "00:" + actualTime + " " + data.result + "\n\n";
-      if (data.result){
-        instance.feedback = instance.dataSummary;
+      if (instance.firstSummary == false) {
+        instance.dataSample = dataSource.substring(
+          dataSource.indexOf(instance.referenceTime)
+        );
+        instance.referenceTime = overallSlicedDataArray[workingValue].time;
       }
-      else{
-        instance.feedback = "No specific feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
+
+      if (instance.firstSummary == true) {
+        instance.dataSample = dataSource;
+        instance.referenceTime = overallSlicedDataArray[workingValue].time;
+        instance.firstSummary = false;
       }
-      instance.spinner1 = false;
-    } catch (error) {
-      console.error('Error summarizing data:', error);
-      instance.spinner1 = false;
-      instance.showFeedback = false;
-      instance.feedback = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log.";
-    }
+
+      try {
+        const response = await fetch('/.netlify/functions/summarizeData', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ dataSample: instance.dataSample, referenceTime: instance.referenceTime }),
+        });
+
+        const data = await response.json();
+        instance.showFeedback = false;
+        instance.dataSummary = instance.dataSummary +=
+          "#" + "00:" + actualTime + " " + data.result + "\n\n";
+        if (data.result){
+          instance.feedback = instance.dataSummary;
+        }
+        else{
+          instance.feedback = "No specific feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
+        }
+        instance.spinner1 = false;
+      } catch (error) {
+        console.error('Error summarizing data:', error);
+        instance.spinner1 = false;
+        instance.showFeedback = false;
+        instance.feedback = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log.";
+      }
   },
 
   async getFeedback() {
+    //collects all of the previous summaries of data and sends them to large language model for summary and feedback
     this.spinner2 = true;
     const instance = this;
 
@@ -1289,11 +1188,12 @@ window.onclick = function(event) {
   },
 
     resetWorkingOutput: function () {
+      //clears transcript between function calls
       this.workingOutput = "";
     },
 
     pdfResults: function () {
-
+      //set up page for saving data report in .pdf
       var feedBackEls = document.getElementsByClassName("feedback");
       document.getElementById("container").style.position = "static"
 
@@ -1314,11 +1214,12 @@ window.onclick = function(event) {
     },
 
     visualizeData: function () {
+      //writes data values for the words per minute, volume, facial emotion, and word complexity functions
       var overallRawData = document.getElementById("rawData").innerHTML;
       var overallSlicedDataArray = "[" + overallRawData.slice(0, -1) + "]";
       var data = JSON.parse(overallSlicedDataArray);
 
-      //Words Per Minute
+      //Words per minute
       if (this.showWPM == false) {
         let wordsPerMinute = {
           x: [],
@@ -1711,11 +1612,11 @@ window.onclick = function(event) {
         );
       }
     },
-  }, //
-}; //
+  }, //methods
+}; //export
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 @import url("https://fonts.cdnfonts.com/css/lcd");
 #textEmotion,
@@ -1724,6 +1625,7 @@ window.onclick = function(event) {
 #wpm {
   display: inline-block;
 }
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1732,18 +1634,21 @@ window.onclick = function(event) {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
-  white-space: nowrap; /* added line */
+  white-space: nowrap;
   border: 0;
 }
+
 div {
   background-color: none;
   color: #71c68b;
 }
+
 .chartWindow {
   position: relative;
   display: inline-block;
   width: 80%;
 }
+
 .optionsButton {
   height: 50px;
   width: 75px;
@@ -1813,6 +1718,7 @@ div {
 #start:hover {
   background-color: #cbc3e3;
 }
+
 #start:focus {
   border-style: solid; 
   border-color: white;
@@ -1850,6 +1756,7 @@ div {
 #reset:hover {
   background-color: #cbc3e3;
 }
+
 #reset:focus {
   border-style: solid; 
   border-color: white;
@@ -1998,6 +1905,7 @@ div {
   margin: 0px;
   border: none;
 }
+
 #dataShowButton:hover {
   margin: auto;
   color: black;
@@ -2025,17 +1933,21 @@ div {
 h1 {
   font-size: 50px;
 }
+
 h3 {
   margin: 40px 0 0;
 }
+
 ul {
   list-style-type: none;
   padding: 0px;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 a {
   color: #42b983;
 }
@@ -2088,6 +2000,7 @@ a {
 #speakingTime:hover {
   background-color: #c300ff;
 }
+
 #speakingTime:focus {
   border-style: solid; 
   border-color: white;
@@ -2126,6 +2039,7 @@ a {
   background-color: #c300ff;
   transition: width 100ms linear;
 }
+
 #container {
   display: none;
   position: fixed;
@@ -2148,12 +2062,14 @@ canvas {
   left: 0;
   top: 0px;
 }
+
 .result-container {
   width: 100%;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
+
 .result-container > div {
   font-size: 1.3rem;
   padding: 0.5rem;
@@ -2185,9 +2101,11 @@ video {
   font-size: 20px;
   color: #fdfd96;
 }
+
 #modal {
   color: white;
 }
+
 #footer {
   display: flex;
   position: float;
@@ -2225,7 +2143,6 @@ video {
   background-color: #f48d79; 
   color: black;
   font-size: 25px;
-
   height: 75%; 
   overflow-y: scroll;
 }
@@ -2265,13 +2182,15 @@ video {
 .modalButton {
 background: #f48d79;
 border: none;
-font-size: .9em;
+font-size: .8em;
 margin-bottom: 28px;; 
 color: black;
 }
+
 #modalButtonOverall{
 margin-top: 6px; 
 }
+
 #modalButtonFeedback{
   margin-top: 6px;
 }
@@ -2282,9 +2201,9 @@ margin-top: 6px;
   margin: none;
 }
 * {
-  -webkit-print-color-adjust: exact !important; /* Chrome, Safari 6 – 15.3, Edge */
-  color-adjust: exact !important; /* Firefox 48 – 96 */
-  print-color-adjust: exact !important; /* Firefox 97+, Safari 15.4+ */
+  -webkit-print-color-adjust: exact !important; 
+  color-adjust: exact !important; 
+  print-color-adjust: exact !important; 
 }
 
 #loader {
@@ -2296,6 +2215,7 @@ margin-top: 6px;
   from {color: #f48d79;}
   to {color: #c300ff;}
 }
+
 .lds-spinner,
 .lds-spinner div,
 .lds-spinner div:after {
@@ -2304,6 +2224,7 @@ margin-top: 6px;
   animation-duration: 2s;
   animation-iteration-count: infinite;
 }
+
 .lds-spinner {
   color: currentColor;
   display: inline-block;
@@ -2311,10 +2232,12 @@ margin-top: 6px;
   width: 80px;
   height: 80px;
 }
+
 .lds-spinner div {
   transform-origin: 40px 40px;
   animation: lds-spinner 1.2s linear infinite;
 }
+
 .lds-spinner div:after {
   content: " ";
   display: block;
@@ -2326,54 +2249,67 @@ margin-top: 6px;
   border-radius: 20%;
   background: currentColor;
 }
+
 .lds-spinner div:nth-child(1) {
   transform: rotate(0deg);
   animation-delay: -1.1s;
 }
+
 .lds-spinner div:nth-child(2) {
   transform: rotate(30deg);
   animation-delay: -1s;
 }
+
 .lds-spinner div:nth-child(3) {
   transform: rotate(60deg);
   animation-delay: -0.9s;
 }
+
 .lds-spinner div:nth-child(4) {
   transform: rotate(90deg);
   animation-delay: -0.8s;
 }
+
 .lds-spinner div:nth-child(5) {
   transform: rotate(120deg);
   animation-delay: -0.7s;
 }
+
 .lds-spinner div:nth-child(6) {
   transform: rotate(150deg);
   animation-delay: -0.6s;
 }
+
 .lds-spinner div:nth-child(7) {
   transform: rotate(180deg);
   animation-delay: -0.5s;
 }
+
 .lds-spinner div:nth-child(8) {
   transform: rotate(210deg);
   animation-delay: -0.4s;
 }
+
 .lds-spinner div:nth-child(9) {
   transform: rotate(240deg);
   animation-delay: -0.3s;
 }
+
 .lds-spinner div:nth-child(10) {
   transform: rotate(270deg);
   animation-delay: -0.2s;
 }
+
 .lds-spinner div:nth-child(11) {
   transform: rotate(300deg);
   animation-delay: -0.1s;
 }
+
 .lds-spinner div:nth-child(12) {
   transform: rotate(330deg);
   animation-delay: 0s;
 }
+
 @keyframes lds-spinner {
   0% {
     opacity: 1;
@@ -2383,8 +2319,6 @@ margin-top: 6px;
   }
 }
 
-
-
 button, .optionsButton, #begin, #start, #stop, #reset, #pdf, #next, #speakingTime, #dataHideButton, #dataShowButton {
   cursor: pointer;
 }
@@ -2393,17 +2327,18 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
    outline: 3px solid #09eb1c;  /* Add a noticeable outline */
 }
 
-
 .lds-ellipsis,
 .lds-ellipsis span {
   box-sizing: border-box;
 }
+
 .lds-ellipsis {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
 }
+
 .lds-ellipsis span {
   position: absolute;
   top: 33.33333px;
@@ -2413,22 +2348,27 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
   background: currentColor;
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
+
 .lds-ellipsis span:nth-child(1) {
   left: 8px;
   animation: lds-ellipsis1 0.6s infinite;
 }
+
 .lds-ellipsis span:nth-child(2) {
   left: 8px;
   animation: lds-ellipsis2 0.6s infinite;
 }
+
 .lds-ellipsis span:nth-child(3) {
   left: 32px;
   animation: lds-ellipsis2 0.6s infinite;
 }
+
 .lds-ellipsis span:nth-child(4) {
   left: 56px;
   animation: lds-ellipsis3 0.6s infinite;
 }
+
 @keyframes lds-ellipsis1 {
   0% {
     transform: scale(0);
@@ -2437,6 +2377,7 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
     transform: scale(1);
   }
 }
+
 @keyframes lds-ellipsis3 {
   0% {
     transform: scale(1);
@@ -2445,6 +2386,7 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
     transform: scale(0);
   }
 }
+
 @keyframes lds-ellipsis2 {
   0% {
     transform: translate(0, 0);
@@ -2461,6 +2403,4 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
 #spinner2 {
   color: white;
 }
-
-
 </style>
