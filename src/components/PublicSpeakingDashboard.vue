@@ -630,13 +630,13 @@ export default {
 
           const dBFS = 20 * Math.log10(rms / 255);
 
-          const dBSPL = dBFS + 83; 
+          const dBSPL = dBFS + 88; 
           const decibelValue = Math.max(0, dBSPL); 
 
           volumeNumberDisplay.textContent = Math.round(decibelValue) + " dB";
           this.volumeNumber = Math.round(decibelValue)
 
-          const visualizerPercentage = Math.min(100, decibelValue / 83 * 100); 
+          const visualizerPercentage = Math.min(100, decibelValue / 88 * 100); 
           volumeVisualizer.style.setProperty("--volume", visualizerPercentage + "%");
           this.showVolume = false;
         }; 
