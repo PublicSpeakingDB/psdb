@@ -32,15 +32,12 @@
         <!-- Chart and Modal: Complexity of Words Spoken -->
         <span v-if="!showTextEmotion" id="readabilityChart" role="img" aria-label="Chart showing word complexity over time"></span> <section><button v-if="!showVolume" v-on:click="Wordsmodal" class="modalButton" id="modalButtonWords">More About Complexity of Words Spoken</button></section> <div id="modalBoxWords" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxWordsDescription"> <div class="modal-content" tabindex="-1"> <button id="modalBoxCloseWords" class="close" aria-label="Close word complexity explanation modal">&times;</button> <h2 id="modalBoxWordsLabel">Complexity of Words Spoken</h2> <p>Word complexity is calculated by dividing the number of words by the number of syllables. A higher ratio indicates more complex words.<br><br>Complexity of words spoken can impact the understandability and engagement of your audience. Use this data to reflect on your word choice and consider simplifying your language for better communication.</p> </div> </div><br>
 
-    <!-- AI Feedback -->
+    <!-- AI Feedback -->        
 
-        <!-- Specific Feedback -->
-        <h1 v-if="!showFeedback" id="specificAndOverallFeedback">Specific Feedback</h1> <span id="spinner1" v-if="spinner1" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br> <section v-if="!showFeedback" class="feedback">{{ feedback }}</section><br>
-
-        <!-- Feedback and Modal: Overall Feedback-->
-        <h1 v-if="!showFeedback2" id="specificAndOverallFeedback">Overall Feedback</h1> <span id="spinner2" v-if="spinner2" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><br> <section v-if="!showFeedback2" class="feedback">{{ feedback2 }}</section> <section> <button v-if="!showVolume" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button> </section> <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFeedbackDescription"> <div class="modal-content"> <button id="modalBoxCloseFeedback" class="close" aria-label="Close feedback explanation modal">&times;</button> <h2 id="modalBoxFeedbackHeader">Feedback</h2> <p>Feedback is generated based on the analysis of your speech. It includes specific feedback on various aspects of your speech and overall feedback summarizing your performance.<br><br>Use this feedback to improve your public speaking skills and focus on areas that need improvement.</p> </div> </div>
+        <!-- Feedback and Modal: Summary & Feedback-->
+        <span id="spinner2" v-if="spinner2" class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span> </span><section v-if="!showFeedback2" class="feedback"><center><h1>Summary & Feedback</h1></center>{{ feedback2 }}<br><br><center><button id="showSpecificFeedbackButton" v-on:click="showFeedback = !showFeedback">Show/Hide Specific Data Summaries</button></center></section> <section v-if="!showFeedback" class="feedback"><center><h1 v-if="!showFeedback" id="specificAndOverallFeedback"><hr>Specific Data Summaries</h1><hr></center>{{ feedback }}</section><br><section> <button v-if="!showFeedback2" v-on:click="Feedbackmodal" class="modalButton" id="modalButtonFeedback" aria-haspopup="true" aria-expanded="false" aria-controls="modalBoxFeedback">More About Feedback</button> </section> <div id="modalBoxFeedback" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalBoxFeedbackDescription"> <div class="modal-content"> <button id="modalBoxCloseFeedback" class="close" aria-label="Close feedback explanation modal">&times;</button> <h2 id="modalBoxFeedbackHeader">Feedback</h2> <p>Feedback is generated based on the analysis of your speech. It includes specific feedback on various aspects of your speech and overall feedback summarizing your performance.<br><br>Use this feedback to improve your public speaking skills and focus on areas that need improvement.</p> </div> </div>
     
-        <!-- Footer: Version, Limitations, Updates and Feedback Form -->
+    <!-- Footer: Version, Limitations, Updates and Feedback Form -->
     <footer id="footer" v-if="showFooter"> <section id="version"> Version 0.1 (Beta) <div id="bugs"> <br /> <section v-if="showModal" id="modal"> Public Speaking Dashboard does not collect or store user data. However, third-party services are used for transcription and analysis. Terms of use for those third-party services can be found at <a href="https://deepgram.com/terms">DeepGram</a> and <a href="https://mistral.ai/terms/">Mistral</a>. </section><br> <b>Limitations:</b> <br /> <section> - Current version of app works best on the latest Google Chrome browser on desktop. Other browsers are unstable. </section> <section> - App will work on Google Chrome browser on iOS and Android. Other browsers are unstable. </section> <section> - User needs to speak for at least 30 seconds before meaningful results are produced. </section> <section> - System will only reliably give an overall summary for speeches shorter than 10 minutes. </section> <br> <b>Updates: </b><span id="updates">{{updates}}</span><br> <br> If you find a bug or anything that can be improved in the app, please report it here: <a href="https://rowan.co1.qualtrics.com/jfe/form/SV_8AhIsft05UgIUqW">Bug/Improvement Report Form</a> <br><br> </div> </section> </footer>
   </div>
 </template>
@@ -159,7 +156,6 @@ export default {
       updates: "", 
       updateNumber: 0, 
       browserUrl: false, 
-      spinner1: false, 
       spinner2: false
     };
   },
@@ -1102,7 +1098,6 @@ export default {
 
     async summarizeData() {
       //collects the most recent batch of raw data and sends to large lanugage model for summary
-      this.spinner1 = true;
       var overallRawData = document.getElementById("rawData").innerHTML;
       const overallSlicedDataArray = JSON.parse(
         "[" + overallRawData.slice(0, -1) + "]"
@@ -1136,7 +1131,6 @@ export default {
         });
 
         const data = await response.json();
-        instance.showFeedback = false;
         instance.dataSummary = instance.dataSummary +=
           "#" + "00:" + actualTime + " " + data.result + "\n\n";
         if (data.result){
@@ -1145,7 +1139,6 @@ export default {
         else{
           instance.feedback = "No specific feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
         }
-        instance.spinner1 = false;
       } catch (error) {
         console.error('Error summarizing data:', error);
         instance.spinner1 = false;
@@ -1167,12 +1160,11 @@ export default {
         },
         body: JSON.stringify({ dataSummary: instance.dataSummary }),
       });
-
-      const data = await response.json();
       instance.showFeedback2 = false;
-
+      const data = await response.json();
+      
       if (data.result){
-        instance.feedback2 = data.result;
+        instance.feedback2 = data.result
       }
       else{
         instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
@@ -1183,7 +1175,7 @@ export default {
       console.error('Error fetching feedback:', error);
       instance.spinner2 = false;
       instance.showFeedback2 = false;
-      instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
+      //instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
     }
   },
 
@@ -1678,7 +1670,6 @@ div {
   padding: 50px;
   white-space: pre-wrap;
   overflow: auto;
-  height: 200px;
 }
 
 #messageThree {
@@ -1898,7 +1889,7 @@ div {
   margin: auto;
   color: #00ffc3;;
   background-color: #222831;
-  width: 40%;
+  width: 39.55%;
   text-align: center;
   height: 30px;
   font-size: 10px;
@@ -2094,6 +2085,10 @@ video {
 }
 
 #specificAndOverallFeedback {
+  color: #71c68b;
+}
+
+#specificAndOverallFeedback2 {
   color: #71c68b;
 }
 
@@ -2402,5 +2397,12 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
 
 #spinner2 {
   color: white;
+}
+
+#showSpecificFeedbackButton{
+  background: #c6ee61;
+  color: black; 
+  font-size: 20px;
+  border-style: none; 
 }
 </style>
