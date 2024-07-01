@@ -493,10 +493,14 @@ export default {
 
           const DG_URL = "wss://api.deepgram.com/v1/listen?language=en";
           const DG_KEY = this.API2;
+          if (this.API2 != null){
           this.socket = new WebSocket(DG_URL, ["token", DG_KEY]);
           this.socket.onopen = () => this.startStreaming();
           this.socket.onmessage = (message) => this.handleResponse(message);
-          this.socket.onerror = () => this.errorMessage()
+          }
+          if (this.API2 == null) {
+            this.errorMessage()
+          }
 
           if (
             this.textEmotionSelected == true ||
