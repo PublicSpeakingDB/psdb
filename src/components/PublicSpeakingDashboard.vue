@@ -2368,7 +2368,7 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
   display: inline-block;
   position: relative;
   width: 80px;
-  height: 18px;
+  height: 19px;
 }
 
 .lds-ellipsis span {
@@ -2440,11 +2440,11 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
 }
 
 #placeHolderForSaveButton  {
-  padding-top: 5px;
+  padding-top: 3px;
   background-color: #c300ff;
   display: inline-block;
   border: none;
-  height: 46px;
+  height: 49px;
   width: 100px;
   font-weight: bold;
   color: white;
