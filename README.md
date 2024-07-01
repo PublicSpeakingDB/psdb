@@ -75,7 +75,7 @@ This guide will walk you through the steps for setting up your own instance of P
           <br>VUE_APP_ROOT_API2=yourMistralAPIKeyCode
           <br>VUE_APP_ROOT_API3=yourDeepGramAPIKeyCode<br>
           <p>
-            <strong>Do not edit the key names</strong>--copy them verbatim. For the value, copy and paste                  your Mistral and DeepGram API keys from the steps above. In the case that you                 are not using DeepGram, you can leave the value blank for VUE_APP_ROOT_API3.
+            <strong>Do not edit the key names</strong>--copy them verbatim. For the value, copy and paste                  your Mistral and DeepGram API keys from the steps above. In the case that you                 are not using DeepGram, you can enter placeHolder as the VUE_APP_ROOT_API3 value.
           </p>
         </li>
       </ul>
