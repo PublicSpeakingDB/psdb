@@ -205,8 +205,8 @@ export default {
       this.showPrinty = false;
       //set up app, while setting desires speaking time
       this.msg=""
-      this.showStart = true;
       this.showStop = false;
+      this.showStart = true;
       var selectedTime = document.getElementById("speakingTime").value;
       if (selectedTime >= 180001)
       {
@@ -973,8 +973,8 @@ export default {
 
     stopVoiceControl: function () {
       //reset speech recognition so it can stop and clear original timers
-      this.showStart = false;
       this.showStop = true;
+      this.showStart = false;
       this.stop = true;
       this.spinner2 = true;
       this.time1 = false;
@@ -996,6 +996,7 @@ export default {
         this.stop = true;
         this.show5 = false;
         this.showTime = false;
+        this.showPrinty = false;
         if (this.android == false) {
           this.voiceInstance.stop();
         }
@@ -1143,7 +1144,6 @@ export default {
         }
       } catch (error) {
         console.error('Error summarizing data:', error);
-        instance.spinner1 = false;
         instance.showFeedback = false;
         instance.feedback = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log.";
       }
@@ -1172,13 +1172,12 @@ export default {
       }
       
       instance.spinner2 = false;
-      this.showPrinty = true;
-      this.show5 = true;
+      instance.showPrinty = true;
+      instance.show5 = true;
     } catch (error) {
       console.error('Error fetching feedback:', error);
-      instance.spinner2 = false;
       instance.showFeedback2 = false;
-      //instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
+      instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
     }
   },
 
