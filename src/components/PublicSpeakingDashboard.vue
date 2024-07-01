@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="body">
     <!-- Initalizing Loader & Modal-->
     <p v-if="!loading" id="loadingContainer" aria-live="polite" aria-busy="true"> Initializing <br /><section id="loader" aria-label="Loading animation"><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></section><br /><span id="initialMessage">(Make sure your webcam is facing you.)</span> </p> <div id="modalBoxSave" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="modalBoxSaveDescription"> <div class="modal-content" tabindex="-1"> <h2 id="modalBoxSaveLabel">Be Sure to Save!</h2> <p>Public Speaking Dashboard does not save user content.<br><br>Clicking the "back" button will clear any dashboard results/analysis. <br><br>To keep a copy of your results, click "save."</p> <button id="modalBoxCloseSave" tabindex="4" class="close2" aria-label="Close instructions to save modal">Got It</button> </div> </div>
     
@@ -10,7 +10,7 @@
     <h1 v-if="showProcess" id="mainTitle" aria-live="polite"><img id="talking" alt="" aria-hidden="true" src="talking.png" />{{ msg }}</h1> <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}<a v-if="browserUrl" href="https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538&sjid=17703533698318943859-NA">here</a></p> <p v-if="showProcess" id="messageThree" aria-live="assertive">{{ msg3 }}</p>
     
     <!-- Controls -->
-    <span id="timeHolder">Time: </span> <span> <span v-if="!show3" id="dropdownWrapper"> <label for="speakingTime" class="sr-only"></label> <select name="speakingTime" id="speakingTime" aria-label="Desired Speaking Time Dropdown Menu" tabindex="0"> <option value="60000" selected>1 Min</option> <option value="120000">2 Min</option> <option value="180000">3 Min</option> <option value="300000">5 Min</option> <option value="360000">6 Min</option> <option value="420000">7 Min</option> <option value="480000">8 Min</option> <option value="540000">9 Min</option> <option value="600000">10 Min</option> </select> </span> <button id="begin" v-if="showBegin" v-on:click="begin(); selectWPM(); selectTextEmotion(); selectVoiceEmotion(); selectFaceEmotion();">Begin</button> <button id="start" v-if="!showStart" v-on:click="begin3">Start</button> <button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">Stop</button> <button id="reset" v-if="!show3" v-on:click="reset">Reset</button> <button id="pdf" v-if="!show5" v-on:click="pdfResults">Save</button></span><br>
+    <span id="timeHolder">Time: </span> <span> <span v-if="!show3" id="dropdownWrapper"> <label for="speakingTime" class="sr-only"></label> <select name="speakingTime" id="speakingTime" aria-label="Desired Speaking Time Dropdown Menu" tabindex="0"> <option value="60000" selected>1 Min</option> <option value="120000">2 Min</option> <option value="180000">3 Min</option> <option value="300000">5 Min</option> <option value="360000">6 Min</option> <option value="420000">7 Min</option> <option value="480000">8 Min</option> <option value="540000">9 Min</option> <option value="600000">10 Min</option> </select> </span> <button id="begin" v-if="showBegin" v-on:click="begin(); selectWPM(); selectTextEmotion(); selectVoiceEmotion(); selectFaceEmotion();">Begin</button> <button id="start" v-if="!showStart" v-on:click="begin3">Start</button> <button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">Stop</button> <button id="reset" v-if="!show3" v-on:click="reset">Reset</button> <button id="pdf" v-if="showPrinty" v-on:click="pdfResults">Save</button><div v-if="!show5" id="placeHolderForSaveButton">Preparing<span class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span></span></div></span>
     
     <!-- Time, Transcript, Volume, and Raw Data -->
     <span id="rawData" aria-live="polite"></span> <div v-if="!showTime" class="title" id="timer" aria-live="polite">{{ time }}<span aria-hidden="true">{{msgTime}}</span> </div> <span v-if="!show3" id="volume-visualizer-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Volume Level" aria-live="polite"><span id="volume-visualizer"></span> <span id="volume-number"></span><span class="sr-only">Visual representation of volume level</span></span> <ul v-if="!show3" id="output" aria-live="polite"></ul> <span><button v-if="!show3" id="dataShowButton" v-on:click="unhideData">View Raw Data</button> <button v-if="!show3" id="dataHideButton" v-on:click="hideData">Hide Raw Data</button></span><br> <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
@@ -156,7 +156,8 @@ export default {
       updates: "", 
       updateNumber: 0, 
       browserUrl: false, 
-      spinner2: false
+      spinner2: false, 
+      showPrinty: false
     };
   },
 
@@ -201,6 +202,7 @@ export default {
 
   methods: {
     begin3: function () {
+      this.showPrinty = false;
       //set up app, while setting desires speaking time
       this.msg=""
       this.showStart = true;
@@ -974,6 +976,7 @@ export default {
       this.showStart = false;
       this.showStop = true;
       this.stop = true;
+      this.spinner2 = true;
       this.time1 = false;
       if (this.time2 == true) {
         this.dataNamer = this.timeDifference;
@@ -993,7 +996,6 @@ export default {
         this.stop = true;
         this.show5 = false;
         this.showTime = false;
-        this.show5 = false;
         if (this.android == false) {
           this.voiceInstance.stop();
         }
@@ -1149,7 +1151,6 @@ export default {
 
   async getFeedback() {
     //collects all of the previous summaries of data and sends them to large language model for summary and feedback
-    this.spinner2 = true;
     const instance = this;
 
     try {
@@ -1170,7 +1171,9 @@ export default {
         instance.feedback2 = "No overall feedback available. A full implementation is necessary for feedback to function. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
       }
       
-      this.spinner2 = false;
+      instance.spinner2 = false;
+      this.showPrinty = true;
+      this.show5 = true;
     } catch (error) {
       console.error('Error fetching feedback:', error);
       instance.spinner2 = false;
@@ -1186,22 +1189,39 @@ export default {
 
     pdfResults: function () {
       //set up page for saving data report in .pdf
-      var feedBackEls = document.getElementsByClassName("feedback");
+      this.showFeedback = false
+      
       document.getElementById("container").style.position = "static"
 
-      document.querySelector('[data-title="Autoscale"]').click()
+      document.getElementById("wpmChart").style.width = "1200px"
+      document.getElementById("volumeChart").style.width = "1200px"
+      document.getElementById("faceEmotionChart").style.width = "1200px"
+      document.getElementById("readabilityChart").style.width = "1200px"
+      
+      const charts = document.querySelectorAll('[data-title="Autoscale"]');
 
-      for(var i=0;i<feedBackEls.length;i++){
-        feedBackEls[i].style.height = 100+"%";
-      }
+      charts.forEach((element) => {
+      element.click()
+      });
 
-      window.print();
+      setTimeout(() => {
+        window.print();
+      },    "50");
 
-      for(var i2=0;i2<feedBackEls.length;i2++){
-        feedBackEls[i2].style.height = 200+"px";
-      }
-       document.getElementById("container").style.position = "fixed"
-       document.querySelector('[data-title="Autoscale"]').click()
+      setTimeout(() => {
+        this.showFeedback = true
+        document.getElementById("container").style.position = "fixed"
+        document.getElementById("wpmChart").style.width = "80%"
+        document.getElementById("volumeChart").style.width = "80%"
+        document.getElementById("faceEmotionChart").style.width = "80%"
+        document.getElementById("readabilityChart").style.width = "80%"
+      
+      const charts = document.querySelectorAll('[data-title="Autoscale"]');
+
+      charts.forEach((element) => {
+      element.click()
+      });
+      },    "1000");
 
     },
 
@@ -2331,12 +2351,12 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
   display: inline-block;
   position: relative;
   width: 80px;
-  height: 80px;
+  height: 18px;
 }
 
 .lds-ellipsis span {
   position: absolute;
-  top: 33.33333px;
+  top: 10.33333px;
   width: 13.33333px;
   height: 13.33333px;
   border-radius: 50%;
@@ -2391,10 +2411,6 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
   }
 }
 
-#spinner1 {
-  color: white;
-}
-
 #spinner2 {
   color: white;
 }
@@ -2405,4 +2421,19 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
   font-size: 20px;
   border-style: none; 
 }
+
+#placeHolderForSaveButton  {
+  padding-top: 5px;
+  background-color: #c300ff;
+  display: inline-block;
+  border: none;
+  height: 46px;
+  width: 100px;
+  font-weight: bold;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 8px;
+  margin: 10px;
+}
+
 </style>
