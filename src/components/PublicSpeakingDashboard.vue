@@ -10,7 +10,7 @@
     <h1 v-if="showProcess" id="mainTitle" aria-live="polite"><img id="talking" alt="" aria-hidden="true" src="talking.png" />{{ msg }}</h1> <p v-if="showProcess" id="messageTwo" aria-live="assertive">{{ msg2 }}<a v-if="browserUrl" href="https://support.google.com/chrome/answer/95346?hl=en&ref_topic=7439538&sjid=17703533698318943859-NA">here</a></p> <p v-if="showProcess" id="messageThree" aria-live="assertive">{{ msg3 }}</p>
     
     <!-- Controls -->
-    <span id="timeHolder">Time: </span> <span> <span v-if="!show3" id="dropdownWrapper"> <label for="speakingTime" class="sr-only"></label> <select name="speakingTime" id="speakingTime" aria-label="Desired Speaking Time Dropdown Menu" tabindex="0"> <option value="60000" selected>1 Min</option> <option value="120000">2 Min</option> <option value="180000">3 Min</option> <option value="300000">5 Min</option> <option value="360000">6 Min</option> <option value="420000">7 Min</option> <option value="480000">8 Min</option> <option value="540000">9 Min</option> <option value="600000">10 Min</option> </select> </span> <button id="begin" v-if="showBegin" v-on:click="begin(); selectWPM(); selectTextEmotion(); selectVoiceEmotion(); selectFaceEmotion();">Begin</button> <button id="start" v-if="!showStart" v-on:click="begin3">Start</button> <button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">Stop</button> <button id="reset" v-if="!show3" v-on:click="reset">Reset</button> <button id="pdf" v-if="showPrinty" v-on:click="pdfResults">Save</button><div v-if="!show5" id="placeHolderForSaveButton">Preparing<span class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span></span></div></span>
+    <span id="timeHolder">Time: </span> <span> <span v-if="!show3" id="dropdownWrapper"> <label for="speakingTime" class="sr-only"></label> <select name="speakingTime" id="speakingTime" aria-label="Desired Speaking Time Dropdown Menu" tabindex="0"> <option value="60000" selected>1 Min</option> <option value="120000">2 Min</option> <option value="180000">3 Min</option> <option value="300000">5 Min</option> <option value="360000">6 Min</option> <option value="420000">7 Min</option> <option value="480000">8 Min</option> <option value="540000">9 Min</option> <option value="600000">10 Min</option> </select> </span> <button id="begin" v-if="showBegin" v-on:click="begin(); selectWPM(); selectTextEmotion(); selectVoiceEmotion(); selectFaceEmotion();">Begin</button> <button id="start" v-if="!showStart" v-on:click="begin3">Start</button> <button id="stop" v-if="!showStop" v-on:click="stopVoiceControl">Stop</button> <button id="reset" v-if="!show3" v-on:click="reset">Reset</button> <button id="pdf" v-if="showPrinty" v-on:click="pdfResults">Save</button><div v-if="!show5" id="placeHolderForSaveButton">Preparing Feedback<span class="lds-ellipsis" aria-live="polite" aria-busy="true"><span></span> <span></span ><span></span> <span></span></span></div></span>
     
     <!-- Time, Transcript, Volume, and Raw Data -->
     <span id="rawData" aria-live="polite"></span> <div v-if="!showTime" class="title" id="timer" aria-live="polite">{{ time }}<span aria-hidden="true">{{msgTime}}</span> </div> <span v-if="!show3" id="volume-visualizer-wrapper" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Volume Level" aria-live="polite"><span id="volume-visualizer"></span> <span id="volume-number"></span><span class="sr-only">Visual representation of volume level</span></span> <ul v-if="!show3" id="output" aria-live="polite"></ul> <span><button v-if="!show3" id="dataShowButton" v-on:click="unhideData">View Raw Data</button> <button v-if="!show3" id="dataHideButton" v-on:click="hideData">Hide Raw Data</button></span><br> <section><button v-if="!showVolume" v-on:click="Overallmodal" class="modalButton" id="modalButtonOverall">How Public Speaking Dashboard Works</button></section>
@@ -496,6 +496,7 @@ export default {
           this.socket = new WebSocket(DG_URL, ["token", DG_KEY]);
           this.socket.onopen = () => this.startStreaming();
           this.socket.onmessage = (message) => this.handleResponse(message);
+          this.socket.onerror = () => this.errorMessage()
 
           if (
             this.textEmotionSelected == true ||
@@ -526,14 +527,24 @@ export default {
               this.show5 = true;
               this.stop = true;
             }
-          } else {
-            this.msg2 =
-              "No input data selected. Try selecting words per minute or another parameter.";
-          }
+          } 
         } catch (error) {
-          alert(error);
+          console.log(error);
         }
       }
+    },
+
+    errorMessage: function () {
+            var node = document.createElement("li");
+            node.appendChild(
+              document.createTextNode(
+                "No Android transcription available. A full implementation is necessary for transcription to function on Android. Find instructions for implementation at this url: https://publicspeakingdashboard.github.io/psd/" + "\n\n" + "If you are using a full implementation, check the console log."
+              )
+            );
+            document.querySelector("ul").appendChild(node);
+            var elem = document.getElementById("output");
+            elem.style.fontSize = "14px";
+            elem.scrollTop = elem.scrollHeight;
     },
 
     startStreaming: function () {
@@ -542,7 +553,7 @@ export default {
           this.socket.send(event.data);
         }
       });
-
+      
       this.mediaRecorder.start(50); 
     },
 
@@ -2218,6 +2229,10 @@ margin-top: 6px;
   -webkit-print-color-adjust: exact !important; 
   color-adjust: exact !important; 
   print-color-adjust: exact !important; 
+}
+
+#body {
+  -webkit-print-color-adjust: exact;
 }
 
 #loader {
