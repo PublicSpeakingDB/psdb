@@ -171,7 +171,10 @@ export default {
     } else {
       if (/Chrome/.test(navigator.userAgent)) {
         console.log("Landing page loaded");
-        console.log("Speech recognition supported in Chrome");
+        console.log("Chrome detected");
+        if (!this.API2){
+          this.API2 = "placeHolder"
+        }
       } 
       else {
         console.log("Landing page loaded");
@@ -2446,7 +2449,7 @@ button:focus, .optionsButton:focus, #begin:focus, #start:focus, #stop:focus, #re
   font-weight: bold;
   color: white;
   font-family: Arial, sans-serif;
-  font-size: 8px;
+  font-size: 9px;
   margin: 10px;
 }
 
